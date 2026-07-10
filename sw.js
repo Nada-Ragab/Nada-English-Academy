@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nada-academy-v17-mobile-1';
-const ASSETS = ['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE_NAME = 'nada-v19-3-refactor';
+const ASSETS = ['./','./index.html','./css/app.css','./js/app.js','./manifest.webmanifest','./assets/data/sentences.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
   self.skipWaiting();
