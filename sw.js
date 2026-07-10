@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nada-english-academy-v20-0-1-0';
+const CACHE_NAME = 'nada-english-academy-v20-0-2-0';
 const ASSETS = ['./','./index.html','./css/app.css','./js/storage.js','./js/app.js','./manifest.webmanifest','./assets/data/sentences.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
