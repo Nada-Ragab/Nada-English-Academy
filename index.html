@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V20.0 - Stable Foundation</title>
+<title>Nada English Academy V21.0 - AI & Cloud</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V20.0.2</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V21.0.0</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -34,6 +34,7 @@
     <div class="navSectionTitle">المحادثة والعمل</div>
     <button class="tab navItem" data-screen="conversation"><span class="navIcon">💬</span><span>محادثة موجّهة</span></button>
     <button class="tab navItem" data-screen="freechat"><span class="navIcon">🗨️</span><span>محادثة حرة</span></button>
+    <button class="tab navItem" data-screen="aiteacher"><span class="navIcon">🤖</span><span>AI Teacher</span></button>
     <button class="tab navItem" data-screen="erp"><span class="navIcon">🏢</span><span>Odoo / ERP</span></button>
 
     <div class="navSectionTitle">التقدّم والأدوات</div>
@@ -47,6 +48,7 @@
     <button class="tab navItem" data-screen="favorites"><span class="navIcon">⭐</span><span>المفضلة</span></button>
     <button class="tab navItem" data-screen="backup"><span class="navIcon">⇅</span><span>استيراد / تصدير</span></button>
     <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
+    <button class="tab navItem" data-screen="account"><span class="navIcon">👤</span><span>الحساب والمزامنة</span></button>
   </nav>
 
   <section class="sidebarTools voiceOnlyTools" aria-label="الأدوات السريعة">
@@ -274,6 +276,61 @@
   </div>
 </section>
 
+
+<section class="screen" id="aiteacher">
+  <h2>🤖 AI Teacher</h2>
+  <div class="aiTeacherLayout">
+    <aside class="box aiSettingsCard">
+      <h3>إعداد المدرّس</h3>
+      <label>وضع التدريب
+        <select id="aiMode">
+          <option value="general">محادثة إنجليزية عامة</option>
+          <option value="work">العمل والاجتماعات</option>
+          <option value="odoo">Odoo / ERP</option>
+          <option value="interview">مقابلة عمل</option>
+        </select>
+      </label>
+      <label>المستوى
+        <select id="aiLevel"><option>A1</option><option selected>A2</option><option>B1</option></select>
+      </label>
+      <label>AI Endpoint<input id="aiEndpoint" dir="ltr" placeholder="https://your-secure-server.com/chat"></label>
+      <label>API Key (اختياري)<input id="aiApiKey" dir="ltr" type="password" placeholder="يُحفظ على هذا الجهاز فقط"></label>
+      <button class="btn blue wide" id="saveAiSettings">💾 حفظ الإعدادات</button>
+      <button class="btn orange wide" id="clearAiChat">مسح المحادثة</button>
+      <p class="note">استخدمي رابط خادم آمن. لا يُنصح بوضع مفتاح OpenAI مباشرة داخل تطبيق منشور.</p>
+    </aside>
+    <div class="box aiChatCard">
+      <div id="aiMessages" class="aiMessages"></div>
+      <div class="aiComposer">
+        <textarea id="aiInput" rows="2" placeholder="اكتبي بالإنجليزية أو ابدئي المحادثة الصوتية..."></textarea>
+        <button class="btn purple" id="aiVoiceBtn">🎙️ محادثة صوتية</button>
+        <button class="btn green" id="aiSendBtn">إرسال</button>
+      </div>
+      <div class="note" id="aiStatus">المدرّس يصحح جملتك ويرد بسؤال بسيط مناسب لمستواك.</div>
+    </div>
+  </div>
+</section>
+<section class="screen" id="account">
+  <h2>👤 الحساب والمزامنة</h2>
+  <div class="accountGrid">
+    <div class="box">
+      <h3>تسجيل الدخول</h3>
+      <div id="authState" class="authState">غير مسجلة الدخول</div>
+      <label>البريد الإلكتروني<input id="authEmail" type="email" dir="ltr" placeholder="name@example.com"></label>
+      <label>كلمة المرور<input id="authPassword" type="password" dir="ltr" minlength="6"></label>
+      <div class="controls"><button class="btn green" id="signInBtn">دخول</button><button class="btn blue" id="signUpBtn">إنشاء حساب</button><button class="btn red" id="signOutBtn">خروج</button></div>
+    </div>
+    <div class="box">
+      <h3>☁️ Firebase Sync</h3>
+      <p class="note">ضعي إعدادات تطبيق الويب من Firebase Console مرة واحدة.</p>
+      <textarea id="firebaseConfig" rows="9" dir="ltr" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'></textarea>
+      <div class="controls"><button class="btn blue" id="saveFirebaseConfig">حفظ وربط Firebase</button><button class="btn green" id="syncUploadBtn">رفع بيانات هذا الجهاز</button><button class="btn purple" id="syncDownloadBtn">تحميل بيانات الحساب</button></div>
+      <label class="syncToggle"><input type="checkbox" id="autoSyncToggle"> مزامنة تلقائية بعد التعديلات</label>
+      <div id="syncStatus" class="note">لم يتم ربط Firebase بعد.</div>
+    </div>
+  </div>
+</section>
+
 <section class="screen" id="grammar">
   <h2>📘 Grammar Trainer</h2>
   <div class="box">
@@ -393,5 +450,6 @@
 <div class="toast" id="toast"></div>
 <script src="js/storage.js"></script>
 <script src="js/app.js"></script>
+<script src="js/cloud-ai.js"></script>
 </body>
 </html>

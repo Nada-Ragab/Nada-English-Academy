@@ -1,4 +1,4 @@
-const APP_VERSION = '20.0.0';
+const APP_VERSION = '21.0.0';
 const APP_DATA_KEY = 'nada_english_academy_v18_data';
 
 function safeParse(value, fallback) {
