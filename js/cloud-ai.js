@@ -65,13 +65,32 @@ function conversationPrompt(text){
   return `${teacherPrompt(s)}\n\nConversation so far:\n${recent||'(new conversation)'}\nStudent: ${text}`;
 }
 function cleanJsonText(raw){
-  return String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+  let text=String(raw||'').trim();
+  text=text.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+  text=text.replace(/[“”]/g,'"').replace(/[‘’]/g,"'");
+  const start=text.indexOf('{');
+  const end=text.lastIndexOf('}');
+  if(start!==-1&&end>start)text=text.slice(start,end+1);
+  return text.trim();
+}
+function extractJsonFields(raw){
+  const text=String(raw||'').replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+  const out={};
+  for(const key of AI_REPLY_FIELDS){
+    const rx=new RegExp(`['\"]?${key}['\"]?\\s*:\s*['\"]([\\s\\S]*?)['\"](?=\\s*,\\s*['\"]?[A-Za-z]|\\s*}\\s*$)`,'i');
+    const m=text.match(rx);
+    if(m)out[key]=m[1].replace(/\\n/g,'\n').replace(/\\"/g,'"').trim();
+  }
+  return out;
 }
 function parseTeacherReply(raw){
   let obj=null;
-  try{obj=JSON.parse(cleanJsonText(raw))}catch{}
-  if(!obj||typeof obj!=='object'){
-    return {display:String(raw||'').replace(/\*+/g,'').trim(),spoken:String(raw||'').replace(/[*#`]/g,'').trim()};
+  const cleaned=cleanJsonText(raw);
+  try{obj=JSON.parse(cleaned)}catch{}
+  if(!obj||typeof obj!=='object')obj=extractJsonFields(raw);
+  if(!obj||typeof obj!=='object'||!AI_REPLY_FIELDS.some(k=>obj[k])){
+    const plain=String(raw||'').replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').replace(/\*+/g,'').trim();
+    return {display:plain,spoken:plain.replace(/[*#`]/g,'').trim()};
   }
   const v=k=>String(obj[k]||'').trim();
   const english=v('englishReply');
@@ -104,7 +123,7 @@ async function ensureAiModel(){
   const ai=m.getAI(firebaseApp,{backend:new m.GoogleAIBackend()});
   aiModel=m.getGenerativeModel(ai,{
     model:GEMINI_MODEL,
-    generationConfig:{temperature:0.7,maxOutputTokens:350,topP:0.9}
+    generationConfig:{temperature:0.55,maxOutputTokens:450,topP:0.9,responseMimeType:'application/json'}
   });
   return aiModel;
 }
