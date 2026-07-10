@@ -6,9 +6,24 @@ const DATA = {"topics": [{"id": 1, "number": "01", "title_en": "Greetings and Po
 let S = [...DATA.sentences];
 let T = [...DATA.topics];
 let customTopics = consolidatedData?.customTopics || safeParse(localStorage.getItem('nada_custom_topics_v1'), []);
+let hiddenBuiltInTopicIds = consolidatedData?.hiddenBuiltInTopicIds || safeParse(localStorage.getItem('nada_hidden_topics_v1'), []);
+let pinnedBuiltInTopicIds = consolidatedData?.pinnedBuiltInTopicIds || safeParse(localStorage.getItem('nada_pinned_topics_v1'), []);
+function saveTopicWorkspace(){
+  localStorage.setItem('nada_hidden_topics_v1',JSON.stringify(hiddenBuiltInTopicIds));
+  localStorage.setItem('nada_pinned_topics_v1',JSON.stringify(pinnedBuiltInTopicIds));
+  saveCustomTopics();
+}
 function rebuildCustomData(){
-  S = [...DATA.sentences];
-  T = [...DATA.topics];
+  const hidden=new Set((hiddenBuiltInTopicIds||[]).map(Number));
+  const pinned=new Set((pinnedBuiltInTopicIds||[]).map(Number));
+  S=[]; T=[];
+  DATA.topics.forEach(base=>{
+    if(hidden.has(Number(base.id))) return;
+    const lines=DATA.sentences.filter(x=>Number(x.topic_id)===Number(base.id));
+    const start=S.length;
+    lines.forEach(x=>S.push({...x,number:S.length+1}));
+    T.push({...base,start_index:start,count:lines.length,pinned:pinned.has(Number(base.id)),built_in:true});
+  });
   customTopics.forEach((ct, idx)=>{
     const topicId = 1000 + idx + 1;
     const start = S.length;
@@ -18,7 +33,7 @@ function rebuildCustomData(){
     lines.forEach(pair=>{
       S.push({number:S.length+1,topic_id:topicId,topic_en:titleEn,topic_ar:titleAr,english:pair.english||'',arabic:pair.arabic||''});
     });
-    T.push({id:topicId,number:topicId,title_en:titleEn,title_ar:titleAr,start_index:start,count:lines.length,custom:true,custom_index:idx});
+    T.push({id:topicId,number:topicId,title_en:titleEn,title_ar:titleAr,start_index:start,count:lines.length,custom:true,custom_index:idx,pinned:Boolean(ct.pinned)});
   });
 }
 function saveCustomTopics(){ localStorage.setItem('nada_custom_topics_v1', JSON.stringify(customTopics)); saveAllData(); }
@@ -26,20 +41,53 @@ rebuildCustomData();
 let state = consolidatedData?.state || safeParse(localStorage.getItem('nada_v12_state'), {i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]});
 let voices = [], currentQuiz = null, currentReview = null, daily = [];
 const $ = id => document.getElementById(id);
-function saveAllData(){ if(!storageAvailable()) return; const payload={version:'19.2',savedAt:new Date().toISOString(),state,customTopics,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
+function saveAllData(){ if(!storageAvailable()) return; const payload={version:'19.5.7',savedAt:new Date().toISOString(),state,customTopics,hiddenBuiltInTopicIds,pinnedBuiltInTopicIds,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
 function save(){ localStorage.setItem('nada_v12_state', JSON.stringify(state)); saveAllData(); }
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1400); }
 function clean(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
 function clampIndex(){ state.i = Math.max(0, Math.min(S.length-1, state.i||0)); }
 function renderTopics(){
-  const tid=S[state.i].topic_id;
-  $('topics').innerHTML=T.map(t=>`<div><button class="topic ${t.id===tid||t.number===tid?'active':''}" data-start="${t.start_index}"><b>${t.custom?'★ ':''}${t.title_en}</b><small>${t.title_ar} (${t.count})</small></button>${t.custom?`<div class="customTopicActions"><button class="topicDelete" data-custom-index="${t.custom_index}">🗑 حذف</button></div>`:''}</div>`).join('');
-  document.querySelectorAll('.topic').forEach(b=>b.onclick=()=>{state.i=Number(b.dataset.start); render();});
-  document.querySelectorAll('.topicDelete').forEach(b=>b.onclick=()=>deleteCustomTopic(Number(b.dataset.customIndex)));
+  const tid=S[state.i]?.topic_id;
+  const query=($('sidebarTopicSearch')?.value||'').trim().toLowerCase();
+  let rows=[...T];
+  rows.sort((a,b)=>Number(Boolean(b.pinned))-Number(Boolean(a.pinned)) || Number(a.start_index)-Number(b.start_index));
+  if(query) rows=rows.filter(t=>String(t.title_en||'').toLowerCase().includes(query)||String(t.title_ar||'').includes(query));
+  if($('topicCountBadge')) $('topicCountBadge').textContent=rows.length;
+  $('topics').innerHTML=rows.map(t=>{
+    const active=t.id===tid||t.number===tid;
+    const known=S.slice(t.start_index,t.start_index+t.count).filter(x=>state.known?.[x.number]).length;
+    const pct=t.count?Math.round(known/t.count*100):0;
+    return `<article class="topicCard ${active?'active':''} ${t.pinned?'pinned':''}" data-start="${t.start_index}">
+      <button class="topic topicMain" data-start="${t.start_index}">
+        <span class="topicTitle"><b>${t.pinned?'📌 ':''}${t.custom?'⭐ ':''}${escapeHtml(t.title_en)}</b><small>${escapeHtml(t.title_ar)} · ${t.count} جملة</small></span>
+        <span class="topicPct">${pct}%</span>
+      </button>
+      <div class="topicMiniProgress"><i style="width:${pct}%"></i></div>
+      <div class="customTopicActions">
+        <button class="topicAction topicManageAny" data-topic-id="${t.id}" title="تعديل الموضوع والجمل">✏️</button>
+        <button class="topicAction topicDuplicateAny" data-topic-id="${t.id}" title="نسخ الموضوع">📋</button>
+        <button class="topicAction topicPinAny" data-topic-id="${t.id}" title="تثبيت">${t.pinned?'📍':'📌'}</button>
+        <button class="topicAction topicDeleteAny" data-topic-id="${t.id}" title="حذف الموضوع">🗑️</button>
+      </div>
+    </article>`;
+  }).join('') || '<div class="topicEmpty">لا توجد موضوعات مطابقة.</div>';
+  document.querySelectorAll('.topicMain').forEach(b=>b.onclick=()=>{state.i=Number(b.dataset.start); render();});
+  document.querySelectorAll('.topicManageAny').forEach(b=>b.onclick=e=>{e.stopPropagation();manageAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
+  document.querySelectorAll('.topicDuplicateAny').forEach(b=>b.onclick=e=>{e.stopPropagation();duplicateAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
+  document.querySelectorAll('.topicPinAny').forEach(b=>b.onclick=e=>{e.stopPropagation();togglePinAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
+  document.querySelectorAll('.topicDeleteAny').forEach(b=>b.onclick=e=>{e.stopPropagation();deleteAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
 }
 function render(){ clampIndex(); const x=S[state.i]; $('badge').textContent = `${x.number} / ${S.length} - ${x.topic_en}`; $('en').textContent=x.english; $('ar').textContent=x.arabic; $('wordSentence').textContent=x.english; renderTopics(); renderWords(); updateStats(); save(); }
 function loadVoices(){ voices = speechSynthesis.getVoices().filter(v=>/en|English/i.test(v.lang+' '+v.name)); $('voice').innerHTML = voices.length ? voices.map((v,i)=>`<option value="${i}">${v.name} - ${v.lang}</option>`).join('') : '<option value="">Default</option>'; }
 loadVoices(); if('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices;
+function updateRateValue(){ const el=$('rateValue'); if(el&&$('rate')) el.textContent=Number($('rate').value||0.85).toFixed(2)+'x'; }
+$('rate') && ($('rate').oninput=()=>{ updateRateValue(); localStorage.setItem('nada_voice_rate',$('rate').value); });
+if($('rate') && localStorage.getItem('nada_voice_rate')) $('rate').value=localStorage.getItem('nada_voice_rate');
+updateRateValue();
+$('voice') && ($('voice').onchange=()=>localStorage.setItem('nada_voice_index',$('voice').value));
+setTimeout(()=>{ if($('voice') && localStorage.getItem('nada_voice_index')!==null) $('voice').value=localStorage.getItem('nada_voice_index'); },300);
+$('voiceTestBtn') && ($('voiceTestBtn').onclick=()=>speak('Hello Nada. This is your selected English voice.'));
+
 function speak(text, rate){ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text || S[state.i].english); u.lang='en-US'; u.rate=rate || Number($('rate').value) || 0.85; const v=voices[Number($('voice').value)]; if(v) u.voice=v; speechSynthesis.speak(u); }
 function markKnown(n){ state.known[n]=Date.now(); delete state.review[n]; state.xp=(state.xp||0)+5; save(); updateStats(); }
 function markReview(n){ state.review[n]=Date.now(); save(); updateStats(); }
@@ -196,12 +244,22 @@ $('pronCopy').onclick=async()=>{
 const stop=new Set('i am is are the a an to for of in on at it this that you we my your and or but do does did can could would should have has with me from'); function wordsOf(s){return [...new Set(clean(s).split(' ').filter(w=>w.length>2&&!stop.has(w)))].slice(0,12);} function renderWords(){const words=wordsOf(S[state.i].english); $('wordList').innerHTML=words.map(w=>`<span class="word">${w}</span>`).join(''); $('savedWords').innerHTML=(state.words||[]).slice(-50).reverse().map(w=>`<span class="word">${w}</span>`).join('');}
 $('saveWords').onclick=()=>{ state.words=[...(state.words||[]),...wordsOf(S[state.i].english)]; state.words=[...new Set(state.words)].slice(-500); if($('wordNote').value.trim()) state.notes.push({sentence:S[state.i].number,note:$('wordNote').value.trim(),date:Date.now()}); save(); renderWords(); toast('تم الحفظ'); };
 $('wordQuiz').onclick=()=>{ const w=rand(wordsOf(S[state.i].english)); alert('استخدمي الكلمة في جملة: '+w); };
-$('exportProgress').onclick=()=>{saveAllData(); const payload=safeParse(localStorage.getItem(APP_DATA_KEY),{version:'19.2',state,customTopics}); download('Nada_English_Academy_Backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(payload,null,2),'application/json'); toast('تم تنزيل النسخة الاحتياطية');}; $('importProgress').onchange=e=>{const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{try{const imported=JSON.parse(r.result); if(!imported||typeof imported!=='object')throw new Error('ملف غير صالح'); state=imported.state||state; customTopics=Array.isArray(imported.customTopics)?imported.customTopics:customTopics; if(imported.dark)localStorage.setItem('nada_v13_dark',imported.dark); if(imported.freeChatScenario)localStorage.setItem('nada_freechat_scenario',imported.freeChatScenario); if(Array.isArray(imported.freeChatHistory))localStorage.setItem('nada_freechat_history',JSON.stringify(imported.freeChatHistory)); localStorage.setItem('nada_custom_topics_v1',JSON.stringify(customTopics)); localStorage.setItem('nada_v12_state',JSON.stringify(state)); saveAllData(); rebuildCustomData(); render(); updateStorageStatus(); toast('تم استرجاع كل البيانات ✅');}catch(err){alert('تعذر استيراد النسخة الاحتياطية: '+err.message);} e.target.value='';}; r.readAsText(f,'UTF-8');}; $('exportCsv').onclick=()=>download('nada_1000_sentences.csv','number,topic,english,arabic\n'+S.map(x=>`"${x.number}","${x.topic_en}","${x.english.replaceAll('"','""')}","${x.arabic.replaceAll('"','""')}"`).join('\n'),'text/csv'); $('resetBtn').onclick=()=>{ if(confirm('مسح كل التقدم؟')){state={i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]}; save(); render();} };
+$('exportProgress').onclick=()=>{saveAllData(); const payload=safeParse(localStorage.getItem(APP_DATA_KEY),{version:'19.5',state,customTopics}); download('Nada_English_Academy_Backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(payload,null,2),'application/json'); toast('تم تنزيل النسخة الاحتياطية');}; $('importProgress').onchange=e=>{const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{try{const imported=JSON.parse(r.result); if(!imported||typeof imported!=='object')throw new Error('ملف غير صالح'); state=imported.state||state; customTopics=Array.isArray(imported.customTopics)?imported.customTopics:customTopics; hiddenBuiltInTopicIds=Array.isArray(imported.hiddenBuiltInTopicIds)?imported.hiddenBuiltInTopicIds:hiddenBuiltInTopicIds; pinnedBuiltInTopicIds=Array.isArray(imported.pinnedBuiltInTopicIds)?imported.pinnedBuiltInTopicIds:pinnedBuiltInTopicIds; if(imported.dark)localStorage.setItem('nada_v13_dark',imported.dark); if(imported.freeChatScenario)localStorage.setItem('nada_freechat_scenario',imported.freeChatScenario); if(Array.isArray(imported.freeChatHistory))localStorage.setItem('nada_freechat_history',JSON.stringify(imported.freeChatHistory)); localStorage.setItem('nada_custom_topics_v1',JSON.stringify(customTopics)); localStorage.setItem('nada_hidden_topics_v1',JSON.stringify(hiddenBuiltInTopicIds)); localStorage.setItem('nada_pinned_topics_v1',JSON.stringify(pinnedBuiltInTopicIds)); localStorage.setItem('nada_v12_state',JSON.stringify(state)); saveAllData(); rebuildCustomData(); render(); updateStorageStatus(); toast('تم استرجاع كل البيانات ✅');}catch(err){alert('تعذر استيراد النسخة الاحتياطية: '+err.message);} e.target.value='';}; r.readAsText(f,'UTF-8');}; $('exportCsv').onclick=()=>download('nada_1000_sentences.csv','number,topic,english,arabic\n'+S.map(x=>`"${x.number}","${x.topic_en}","${x.english.replaceAll('"','""')}","${x.arabic.replaceAll('"','""')}"`).join('\n'),'text/csv'); $('resetBtn').onclick=()=>{ if(confirm('مسح كل التقدم؟')){state={i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]}; save(); render();} };
 function download(name,text,type){const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:type||'text/plain'})); a.download=name; a.click();}
 
 // ===== Custom Topics =====
-function openTopicModal(){ $('topicModal').classList.add('show'); $('newTopicEn').focus(); }
-function closeTopicModal(){ $('topicModal').classList.remove('show'); }
+let editingCustomTopicIndex=null;
+function openTopicModal(index=null){
+  editingCustomTopicIndex=Number.isInteger(index)?index:null;
+  const topic=editingCustomTopicIndex===null?null:customTopics[editingCustomTopicIndex];
+  $('topicModalTitle').textContent=topic?'✏️ تعديل الموضوع':'➕ إضافة موضوع جديد';
+  $('saveTopicBtn').textContent=topic?'💾 حفظ التعديلات':'💾 حفظ الموضوع';
+  $('newTopicEn').value=topic?.title_en||'';
+  $('newTopicAr').value=topic?.title_ar||'';
+  $('newTopicLines').value=topic?(topic.sentences||[]).map(x=>`${x.english||''} | ${x.arabic||''}`).join('\n'):'';
+  $('topicModal').classList.add('show'); $('newTopicEn').focus();
+}
+function closeTopicModal(){ $('topicModal').classList.remove('show'); editingCustomTopicIndex=null; }
 function addCustomTopic(){
   const titleEn=$('newTopicEn').value.trim();
   const titleAr=$('newTopicAr').value.trim();
@@ -215,20 +273,93 @@ function addCustomTopic(){
     if(english) sentences.push({english,arabic});
   }
   if(!sentences.length){ alert('أضيفي جملة واحدة على الأقل بالشكل English | العربية'); return; }
-  customTopics.push({title_en:titleEn,title_ar:titleAr||titleEn,sentences,created_at:Date.now()});
-  saveCustomTopics(); rebuildCustomData(); state.i=T[T.length-1].start_index; save(); render();
-  $('newTopicEn').value=''; $('newTopicAr').value=''; $('newTopicLines').value=''; closeTopicModal(); toast('تمت إضافة الموضوع ✅');
+  if(editingCustomTopicIndex!==null && customTopics[editingCustomTopicIndex]){
+    const current=customTopics[editingCustomTopicIndex];
+    customTopics[editingCustomTopicIndex]={...current,title_en:titleEn,title_ar:titleAr||titleEn,sentences,updated_at:Date.now()};
+  }else{
+    customTopics.push({title_en:titleEn,title_ar:titleAr||titleEn,sentences,created_at:Date.now(),pinned:false});
+  }
+  const targetIndex=editingCustomTopicIndex;
+  saveCustomTopics(); rebuildCustomData();
+  const targetTopic=targetIndex!==null?T.find(t=>t.custom&&t.custom_index===targetIndex):T[T.length-1];
+  if(targetTopic) state.i=targetTopic.start_index;
+  save(); render(); closeTopicModal(); toast(targetIndex!==null?'تم تعديل الموضوع ✅':'تمت إضافة الموضوع ✅');
+}
+function duplicateCustomTopic(index){
+  const topic=customTopics[index]; if(!topic)return;
+  customTopics.push({...JSON.parse(JSON.stringify(topic)),title_en:`${topic.title_en} Copy`,title_ar:`${topic.title_ar} - نسخة`,created_at:Date.now(),pinned:false});
+  saveCustomTopics(); rebuildCustomData(); render(); toast('تم نسخ الموضوع ✅');
+}
+function togglePinCustomTopic(index){
+  const topic=customTopics[index]; if(!topic)return;
+  topic.pinned=!topic.pinned; saveCustomTopics(); rebuildCustomData(); render(); toast(topic.pinned?'تم تثبيت الموضوع 📌':'تم إلغاء التثبيت');
 }
 function deleteCustomTopic(index){
   const topic=customTopics[index]; if(!topic) return;
   if(!confirm(`حذف موضوع: ${topic.title_en}؟`)) return;
   customTopics.splice(index,1); saveCustomTopics(); rebuildCustomData(); state.i=Math.min(state.i,S.length-1); save(); render(); toast('تم حذف الموضوع');
 }
-$('addTopicBtn').onclick=openTopicModal;
+$('addTopicBtn') && ($('addTopicBtn').onclick=openTopicModal);
 $('cancelTopicBtn').onclick=closeTopicModal;
 $('saveTopicBtn').onclick=addCustomTopic;
 $('topicModal').onclick=e=>{if(e.target===$('topicModal')) closeTopicModal();};
+$('sidebarTopicSearch').oninput=renderTopics;
+$('importTopicBtn') && ($('importTopicBtn').onclick=()=>$('topicFileInput')?.click());
+$('exportTopicsBtn') && ($('exportTopicsBtn').onclick=()=>{
+  if(!customTopics.length){toast('لا توجد موضوعات مضافة للتصدير');return;}
+  download('Nada_Topics_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:'19.5',customTopics},null,2),'application/json');
+  toast('تم تصدير الموضوعات');
+});
+document.querySelectorAll('[data-quick-go]').forEach(btn=>btn.onclick=()=>openScreen(btn.dataset.quickGo));
 
+
+
+
+function topicSentencesSnapshot(topic){
+  return S.slice(topic.start_index,topic.start_index+topic.count).map(x=>({english:x.english||'',arabic:x.arabic||''}));
+}
+function duplicateAnyTopic(topic){
+  if(!topic)return;
+  customTopics.push({title_en:`${topic.title_en} Copy`,title_ar:`${topic.title_ar} - نسخة`,sentences:topicSentencesSnapshot(topic),created_at:Date.now(),pinned:false});
+  saveCustomTopics();rebuildCustomData();render();renderPremiumTopics();toast('تم نسخ الموضوع ✅');
+}
+function convertBuiltInToEditable(topic,openEditor=true){
+  if(!topic||topic.custom)return;
+  const sourceId=Number(topic.id);
+  const existing=customTopics.findIndex(x=>Number(x.source_topic_id)===sourceId);
+  let idx=existing;
+  if(idx<0){
+    customTopics.push({title_en:topic.title_en,title_ar:topic.title_ar,sentences:topicSentencesSnapshot(topic),source_topic_id:sourceId,created_at:Date.now(),pinned:Boolean(topic.pinned)});
+    idx=customTopics.length-1;
+  }
+  if(!hiddenBuiltInTopicIds.includes(sourceId))hiddenBuiltInTopicIds.push(sourceId);
+  saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();
+  if(openEditor)openTopicModal(idx);
+}
+function deleteAnyTopic(topic){
+  if(!topic)return;
+  if(topic.custom){deleteCustomTopic(Number(topic.custom_index));return;}
+  if(!confirm(`حذف موضوع: ${topic.title_en}؟ يمكنك استعادته لاحقًا.`))return;
+  const id=Number(topic.id);if(!hiddenBuiltInTopicIds.includes(id))hiddenBuiltInTopicIds.push(id);
+  pinnedBuiltInTopicIds=pinnedBuiltInTopicIds.filter(x=>Number(x)!==id);
+  saveTopicWorkspace();rebuildCustomData();state.i=Math.min(state.i,Math.max(0,S.length-1));render();renderPremiumTopics();toast('تم حذف الموضوع من العرض');
+}
+function togglePinAnyTopic(topic){
+  if(!topic)return;
+  if(topic.custom){togglePinCustomTopic(Number(topic.custom_index));renderPremiumTopics();return;}
+  const id=Number(topic.id);
+  if(pinnedBuiltInTopicIds.map(Number).includes(id))pinnedBuiltInTopicIds=pinnedBuiltInTopicIds.filter(x=>Number(x)!==id);else pinnedBuiltInTopicIds.push(id);
+  saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();toast('تم تحديث التثبيت');
+}
+function manageAnyTopic(topic){
+  if(!topic)return;
+  if(topic.custom)openTopicModal(Number(topic.custom_index));else convertBuiltInToEditable(topic,true);
+}
+function restoreHiddenTopics(){
+  if(!hiddenBuiltInTopicIds.length){toast('لا توجد موضوعات محذوفة');return;}
+  if(!confirm(`استعادة ${hiddenBuiltInTopicIds.length} موضوع؟`))return;
+  hiddenBuiltInTopicIds=[];saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();toast('تمت استعادة الموضوعات ✅');
+}
 
 // ===== Import Topics From File (CSV / JSON / TXT) =====
 function csvCells(line){
@@ -524,7 +655,7 @@ function simpleGrammar(s){
   return notes;
 }
 function explainGrammar(){ const x=S[state.i]; const notes=simpleGrammar(x); $('grammarOut').innerHTML=`<div class="erpCard"><b>${x.english}</b><br><span class="arabic">${x.arabic}</span></div>`+notes.map(n=>`<span class="badge2">${n}</span>`).join(''); }
-function grammarQuiz(){ const x=S[state.i]; const words=x.english.split(' '); const missing=words.find(w=>w.length>3) || words[0]; const q=x.english.replace(missing,'_____'); $('grammarOut').innerHTML=`<h3>اكتبي الكلمة الناقصة:</h3><div class="big">${q}</div><input id="gAns" placeholder="Write the missing word"><button class="btn green" id="gCheck">تحقق</button><div id="gFeed"></div>`; $('gCheck').onclick=()=>{ const ok=clean($('gAns').value)===clean(missing); $('gFeed').innerHTML=ok?'✅ صح':'❌ الإجابة: <b>'+missing+'</b>'; ok?markKnown(x.number):markReview(x.number); }; }
+function grammarQuiz(){ const x=S[state.i]; const words=x.english.split(' '); const missing=words.find(w=>w.length>3) || words[0]; const q=x.english.replace(missing,'_____'); $('grammarOut').innerHTML=`<h3>اكتبي الكلمة الناقصة:</h3><div class="big">${q}</div><input id="gAns" placeholder="Write the missing word"><button class="btn green" id="gCheck">تحقق</button><div id="gFeed"></div>`; const check=$('gCheck'); if(check) check.onclick=()=>{ const ok=clean($('gAns')?.value||'')===clean(missing); if($('gFeed')) $('gFeed').innerHTML=ok?'✅ صح':'❌ الإجابة: <b>'+missing+'</b>'; ok?markKnown(x.number):markReview(x.number); }; }
 function randomErp(){ erpCurrent=rand(ERP_PHRASES); $('erpEn').textContent=erpCurrent.en; $('erpAr').textContent=erpCurrent.ar; }
 function buildMistakesReport(){ const rev=Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean); if(!rev.length){$('mistakesOut').innerHTML='لا توجد جمل في المراجعة حاليًا ✅'; return;} const byTopic={}; rev.forEach(x=>{byTopic[x.topic_en]=(byTopic[x.topic_en]||0)+1;}); const rows=Object.entries(byTopic).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join(''); const sample=rev.slice(0,20).map(x=>`<div class="row"><b>${x.number}. ${x.english}</b><small>${x.arabic}</small></div>`).join(''); $('mistakesOut').innerHTML=`<h3>أكثر موضوعات تحتاج مراجعة</h3><table class="miniTable"><tr><th>الموضوع</th><th>عدد الجمل</th></tr>${rows}</table><h3>أول 20 جملة للمراجعة</h3>${sample}`; }
 $('grammarExplain') && ($('grammarExplain').onclick=explainGrammar);
@@ -720,9 +851,10 @@ function renderPremiumTopics(){
     const pct=t.count?Math.round((t._known/t.count)*100):0;
     const icon=t.custom?'⭐':premiumTopicIcons[(t.id||t._i||i)%premiumTopicIcons.length];
     const accent=premiumTopicAccents[(t.id||t._i||i)%premiumTopicAccents.length];
-    return `<article class="premiumTopicCard" data-topic-start="${t.start_index}" style="--topic-accent:${accent}"><div class="premiumTopicTop"><span class="premiumTopicIcon">${icon}</span><span class="premiumTopicNumber">${t.custom?'CUSTOM':('TOPIC '+(t.number||t.id||i+1))}</span></div><h4>${escapeHtml(t.title_en||'Topic')}</h4><p>${escapeHtml(t.title_ar||'')}</p><div class="premiumTopicMeta"><span>${t._known}/${t.count||0} جملة</span><div class="premiumTopicProgress"><i style="width:${pct}%"></i></div><span>${pct}%</span></div></article>`;
+    return `<article class="premiumTopicCard ${t.pinned?'pinned':''}" data-topic-start="${t.start_index}" data-topic-id="${t.id}" style="--topic-accent:${accent}"><div class="premiumTopicTop"><span class="premiumTopicIcon">${icon}</span><span class="premiumTopicNumber">${t.custom?'CUSTOM':('TOPIC '+(t.number||t.id||i+1))}</span></div><h4>${t.pinned?'📌 ':''}${escapeHtml(t.title_en||'Topic')}</h4><p>${escapeHtml(t.title_ar||'')}</p><div class="premiumTopicMeta"><span>${t._known}/${t.count||0} جملة</span><div class="premiumTopicProgress"><i style="width:${pct}%"></i></div><span>${pct}%</span></div><div class="premiumTopicActions"><button data-topic-action="manage" title="تعديل الموضوع وإضافة جمل">✏️</button><button data-topic-action="delete" title="حذف">🗑️</button><button data-topic-action="duplicate" title="نسخ">📋</button><button data-topic-action="pin" title="تثبيت">${t.pinned?'📍':'📌'}</button></div></article>`;
   }).join(''):'<div class="premiumEmpty">لا توجد موضوعات مطابقة للبحث.</div>';
-  grid.querySelectorAll('[data-topic-start]').forEach(card=>card.addEventListener('click',()=>{state.i=Number(card.dataset.topicStart)||0;render();openScreen('learn');}));
+  grid.querySelectorAll('[data-topic-start]').forEach(card=>card.addEventListener('click',e=>{if(e.target.closest('[data-topic-action]'))return;state.i=Number(card.dataset.topicStart)||0;render();openScreen('learn');}));
+  grid.querySelectorAll('[data-topic-action]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const card=btn.closest('[data-topic-id]');const topic=T.find(t=>String(t.id)===String(card?.dataset.topicId));const action=btn.dataset.topicAction;if(action==='manage')manageAnyTopic(topic);if(action==='delete')deleteAnyTopic(topic);if(action==='duplicate')duplicateAnyTopic(topic);if(action==='pin')togglePinAnyTopic(topic);}));
   const more=document.getElementById('premiumTopicsMore'); if(more){more.style.display=rows.length>premiumTopicLimit?'block':'none';more.textContent=premiumTopicLimit>=rows.length?'تم عرض كل الموضوعات':'عرض المزيد من الموضوعات';}
 }
 function refreshPremiumDashboard(){
@@ -746,4 +878,112 @@ document.getElementById('premiumTopicClear')?.addEventListener('click',()=>{cons
 document.querySelectorAll('[data-topic-filter]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-topic-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');premiumTopicFilter=btn.dataset.topicFilter;premiumTopicLimit=9;renderPremiumTopics();}));
 document.getElementById('premiumTopicsMore')?.addEventListener('click',()=>{premiumTopicLimit+=9;renderPremiumTopics();});
 document.querySelectorAll('.premiumSection [data-go],.premiumMotivation [data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
+document.getElementById('libraryAddTopic')?.addEventListener('click',()=>openTopicModal());
+document.getElementById('libraryImportTopics')?.addEventListener('click',()=>document.getElementById('topicFileInput')?.click());
+document.getElementById('libraryExportTopics')?.addEventListener('click',()=>document.getElementById('exportTopicsBtn')?.click());
+document.getElementById('restoreHiddenTopics')?.addEventListener('click',restoreHiddenTopics);
 setTimeout(refreshPremiumDashboard,450);
+
+
+// ===== V19.4.4 Focus Session =====
+const FOCUS_STORAGE_KEY='nada_focus_session_v1';
+let focusDurationMin=10;
+let focusRemainingSec=focusDurationMin*60;
+let focusTimerHandle=null;
+let focusRunning=false;
+function focusTodayKey(){return new Date().toISOString().slice(0,10);}
+function readFocusStats(){
+  try{return JSON.parse(localStorage.getItem(FOCUS_STORAGE_KEY)||'{}')||{};}catch(e){return {};}
+}
+function writeFocusStats(stats){localStorage.setItem(FOCUS_STORAGE_KEY,JSON.stringify(stats));}
+function focusFormat(sec){const m=Math.floor(sec/60),s=sec%60;return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+function renderFocusTimer(){
+  const text=document.getElementById('focusTimerText');
+  const stateEl=document.getElementById('focusTimerState');
+  const ring=document.getElementById('focusTimerRing');
+  const total=Math.max(1,focusDurationMin*60);
+  const done=Math.max(0,total-focusRemainingSec);
+  if(text)text.textContent=focusFormat(Math.max(0,focusRemainingSec));
+  if(stateEl)stateEl.textContent=focusRunning?'مستمرة':'جاهزة';
+  if(ring){ring.style.setProperty('--timer-pct',Math.min(100,(done/total)*100)+'%');ring.classList.toggle('running',focusRunning);}
+  const stats=readFocusStats();
+  const mins=Math.round(Number(stats[focusTodayKey()]||0));
+  const today=document.getElementById('focusTodayMinutes');if(today)today.textContent=mins+' دقيقة';
+}
+function setFocusDuration(min){
+  if(focusRunning)return;
+  focusDurationMin=Number(min)||10;focusRemainingSec=focusDurationMin*60;
+  document.querySelectorAll('.focusPreset').forEach(b=>b.classList.toggle('active',Number(b.dataset.focusMin)===focusDurationMin));
+  renderFocusTimer();
+}
+function finishFocusSession(){
+  clearInterval(focusTimerHandle);focusTimerHandle=null;focusRunning=false;focusRemainingSec=0;
+  const stats=readFocusStats();const key=focusTodayKey();stats[key]=Number(stats[key]||0)+focusDurationMin;writeFocusStats(stats);
+  state.xp=(state.xp||0)+focusDurationMin;save();renderFocusTimer();refreshDashboard();
+  toast('أحسنتِ! اكتملت جلسة التركيز +'+focusDurationMin+' XP 🎉');
+  if('Notification' in window&&Notification.permission==='granted')new Notification('Nada English Academy',{body:'اكتملت جلسة التركيز بنجاح 🎉'});
+}
+function startFocusTimer(){
+  if(focusRunning)return;
+  if(focusRemainingSec<=0)focusRemainingSec=focusDurationMin*60;
+  focusRunning=true;renderFocusTimer();
+  focusTimerHandle=setInterval(()=>{focusRemainingSec--;if(focusRemainingSec<=0)finishFocusSession();else renderFocusTimer();},1000);
+}
+function pauseFocusTimer(){clearInterval(focusTimerHandle);focusTimerHandle=null;focusRunning=false;renderFocusTimer();}
+function resetFocusTimer(){pauseFocusTimer();focusRemainingSec=focusDurationMin*60;renderFocusTimer();}
+document.querySelectorAll('.focusPreset').forEach(b=>b.addEventListener('click',()=>setFocusDuration(b.dataset.focusMin)));
+document.getElementById('focusTimerStart')?.addEventListener('click',()=>{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission().catch(()=>{});startFocusTimer();});
+document.getElementById('focusTimerPause')?.addEventListener('click',pauseFocusTimer);
+document.getElementById('focusTimerReset')?.addEventListener('click',resetFocusTimer);
+window.addEventListener('beforeunload',()=>{if(focusRunning)pauseFocusTimer();});
+setTimeout(renderFocusTimer,500);
+
+
+// ===== V19.5.5 Sidebar Runtime Fix =====
+function v1955OpenScreen(screen){
+  try{
+    if(typeof openScreen==='function'){ openScreen(screen); return; }
+    const tab=document.querySelector(`.tab[data-screen="${screen}"]`);
+    if(tab) tab.click();
+  }catch(err){ console.error('Navigation error:',err); }
+}
+function v1955BindQuickTools(){
+  document.querySelectorAll('[data-quick-go]').forEach(btn=>{
+    btn.onclick=()=>v1955OpenScreen(btn.dataset.quickGo);
+  });
+}
+function v1955RefreshSidebar(){
+  try{ if(typeof renderTopics==='function') renderTopics(); }catch(err){console.error('Topics render error:',err);}
+  try{ if(typeof renderPremiumTopics==='function') renderPremiumTopics(); }catch(err){console.error('Library render error:',err);}
+  v1955BindQuickTools();
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  v1955RefreshSidebar();
+  setTimeout(v1955RefreshSidebar,250);
+  setTimeout(v1955RefreshSidebar,900);
+});
+
+
+// V19.5.6: defensive sidebar initialization
+setTimeout(()=>{
+  try{
+    renderTopics();
+    loadVoices();
+    updateRateValue();
+    const list=$('topics');
+    if(list && !list.children.length && T.length){ renderTopics(); }
+  }catch(err){ console.error('Sidebar initialization error',err); }
+},120);
+
+// ===== V19.5.7 Favorites screen and clean sidebar =====
+function renderFavoritesScreen(){
+  const out=document.getElementById('favoritesList');
+  if(!out) return;
+  const items=Object.keys(state.fav||{}).map(n=>S[Number(n)-1]).filter(Boolean);
+  out.innerHTML=items.length?items.map(x=>`<article class="favoriteSentence"><div><b>${x.english}</b><small>${x.arabic}</small></div><div class="favActions"><button type="button" data-fav-open="${x.number}" title="فتح">فتح</button><button type="button" data-fav-remove="${x.number}" title="إزالة">🗑️</button></div></article>`).join(''):'<div class="topicEmpty">لا توجد جمل في المفضلة حتى الآن.</div>';
+  out.querySelectorAll('[data-fav-open]').forEach(btn=>btn.onclick=()=>{state.i=Number(btn.dataset.favOpen)-1;render();openScreen('learn');});
+  out.querySelectorAll('[data-fav-remove]').forEach(btn=>btn.onclick=()=>{delete state.fav[btn.dataset.favRemove];save();renderFavoritesScreen();updateStats();});
+}
+const oldOpenScreenV1957=openScreen;
+openScreen=function(screen){oldOpenScreenV1957(screen);if(screen==='favorites')renderFavoritesScreen();};
+document.querySelectorAll('.navItem[data-screen="favorites"]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(renderFavoritesScreen,0)));

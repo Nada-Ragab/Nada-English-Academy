@@ -116,3 +116,554 @@ body.sidebar-collapsed .layout{grid-template-columns:92px minmax(0,1fr)}body.sid
 body.dark .chatMsg.correction{background:#153322!important;border-color:#166534!important}
 @media(max-width:1180px){.skillProgressGrid{grid-template-columns:1fr 1fr}.premiumTopicsGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.premiumSection,.topicExplorer{padding:16px;border-radius:22px}.premiumSectionHead,.topicExplorerHead{display:block}.premiumHeadActions{margin-top:12px}.skillProgressGrid,.premiumTopicsGrid{grid-template-columns:1fr}.topicExplorerTools{min-width:0;margin-top:12px}.premiumMotivation{align-items:flex-start;flex-wrap:wrap}.premiumMotivation .btn{width:100%}.skillProgressCard{grid-template-columns:auto 1fr auto}.premiumTopicCard{min-height:132px}}
+
+
+/* ===== V19.4.4 Focus Session ===== */
+.focusSessionPanel{margin-top:20px;display:grid;grid-template-columns:1.35fr .65fr;gap:22px;align-items:center;padding:24px;background:linear-gradient(135deg,rgba(16,185,129,.09),rgba(37,99,235,.08));border:1px solid rgba(16,185,129,.2);overflow:hidden;position:relative}
+.focusSessionPanel:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 68%);left:-80px;bottom:-110px;pointer-events:none}
+.focusSessionInfo{position:relative;z-index:1}.focusSessionInfo h3{font-size:25px;margin:5px 0 7px}.focusSessionInfo p{margin:0;color:var(--muted)}
+.focusPresetRow,.focusSessionActions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.focusPreset{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font-weight:900;cursor:pointer}.focusPreset.active{background:linear-gradient(135deg,#059669,#2563eb);color:#fff;border-color:transparent}
+.focusTimerCard{display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;z-index:1}.focusTimerRing{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#10b981 var(--timer-pct),rgba(148,163,184,.22) 0);position:relative;box-shadow:0 18px 38px rgba(16,185,129,.16)}.focusTimerRing:before{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--card);border:1px solid var(--line)}.focusTimerRing>div{position:relative;z-index:1;text-align:center}.focusTimerRing b{display:block;font-size:36px;letter-spacing:1px}.focusTimerRing small{display:block;color:var(--muted);font-weight:900;margin-top:4px}.focusTimerRing.running{animation:focusPulse 2s ease-in-out infinite}@keyframes focusPulse{50%{transform:scale(1.025);box-shadow:0 20px 45px rgba(16,185,129,.26)}}
+.focusTodayStat{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;max-width:220px;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.focusTodayStat span{color:var(--muted);font-size:12px}.focusTodayStat b{font-size:14px}
+@media(max-width:760px){.focusSessionPanel{grid-template-columns:1fr;text-align:center;padding:18px}.focusPresetRow,.focusSessionActions{justify-content:center}.focusTimerRing{width:150px;height:150px}.focusTimerRing b{font-size:31px}}
+
+
+/* V19.5 - Topic Manager & Sidebar balance */
+.side{min-height:calc(100vh - 130px)}
+.sidebarNav{max-height:38vh;flex:0 1 auto}
+.sidebarTools{flex:0 0 auto;margin-bottom:6px;padding-bottom:8px}
+.sidebarTopics{display:flex;flex-direction:column;flex:1 1 auto;min-height:310px;margin-top:4px;overflow:hidden}
+.sidebarTopics[open]{overflow:hidden}
+.sidebarTopics summary{flex:0 0 auto}
+.sidebarTopics .topicList{max-height:none;min-height:220px;flex:1 1 auto;overflow:auto;padding-inline-end:3px}
+.quickToolRow{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 0 8px}
+.quickToolRow button{border:1px solid var(--line);background:var(--soft);border-radius:11px;padding:8px;font-size:17px;cursor:pointer;transition:.18s}
+.quickToolRow button:hover{transform:translateY(-2px);background:#dbeafe}
+.quickAdvanced{display:grid;gap:7px}.quickAdvanced input,.quickAdvanced select{margin:0;padding:8px 9px;font-size:12px;border-radius:10px}
+.compactRange{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;font-size:11px;color:var(--muted)}.compactRange input{padding:0}
+.topicCountBadge{display:inline-grid;place-items:center;min-width:24px;height:22px;padding:0 7px;margin-inline-start:6px;border-radius:99px;background:var(--soft);color:var(--blue);font-size:11px}
+.topicToolbar{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:6px;margin:2px 0 7px}.topicTool{border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:10px;padding:7px;cursor:pointer;font-weight:900;font-size:16px}.topicTool.primary{background:var(--green);color:white;border-color:transparent}.topicTool:hover{filter:brightness(.97);transform:translateY(-1px)}
+.topicSearch{margin:0 0 7px!important;padding:9px 10px!important;border-radius:11px!important;font-size:12px!important}
+.topicCard{border:1px solid var(--line);background:var(--soft);border-radius:14px;margin:7px 0;overflow:hidden;transition:.18s}.topicCard:hover{transform:translateY(-1px);box-shadow:0 7px 18px #0f172a12}.topicCard.active{border-color:var(--green);box-shadow:0 0 0 3px #58cc0226}.topicCard.pinned{background:linear-gradient(135deg,#fff7d6,var(--soft))}
+.topicMain{border:0!important;background:transparent!important;margin:0!important;border-radius:0!important;display:flex!important;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px!important}.topicTitle{min-width:0}.topicTitle b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}.topicTitle small{font-size:10px}.topicPct{font-size:10px;font-weight:900;color:var(--blue);direction:ltr}
+.topicMiniProgress{height:4px;background:var(--card)}.topicMiniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px}
+.customTopicActions{display:flex;justify-content:flex-end;gap:4px;padding:5px 7px;border-top:1px solid var(--line)}.topicAction{border:0;background:var(--card);border-radius:8px;padding:5px 7px;cursor:pointer;font-size:12px}.topicAction:hover{background:#dbeafe}.topicDelete:hover{background:#fee2e2}.topicEmpty{text-align:center;color:var(--muted);padding:18px 8px;font-size:12px}
+@media(max-width:900px){.sidebarNav{max-height:34vh}.sidebarTopics{min-height:38vh}.sidebarTopics .topicList{min-height:240px}.quickAdvanced{display:none}.sidebarTools[open] .quickAdvanced{display:grid}}
+
+/* ===== V19.5.1 Sidebar proportional layout fix ===== */
+.side{
+  height:calc(100dvh - 132px);
+  min-height:560px;
+  display:grid;
+  grid-template-rows:auto minmax(150px,32%) auto minmax(260px,1fr) auto;
+  gap:8px;
+  overflow:hidden;
+}
+.sidebarHeader,.sidebarFooter{min-height:0}
+.sidebarNav{
+  min-height:0;
+  max-height:none!important;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+.sidebarTools{
+  min-height:0;
+  max-height:22vh;
+  overflow:auto;
+  margin:0;
+}
+.sidebarTools:not([open]){max-height:52px;overflow:hidden}
+.sidebarTopics{
+  min-height:0!important;
+  height:auto!important;
+  margin:0;
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:auto auto auto minmax(0,1fr);
+  align-content:stretch;
+}
+.sidebarTopics:not([open]){
+  grid-template-rows:auto;
+}
+.sidebarTopics:not([open]) > :not(summary){display:none!important}
+.sidebarTopics summary{min-height:48px;display:flex;align-items:center;justify-content:space-between}
+.sidebarTopics .topicToolbar,.sidebarTopics .topicSearch{min-height:0}
+.sidebarTopics .topicList{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  padding:2px 3px 12px 1px;
+  scrollbar-width:thin;
+}
+.topicCard{flex:0 0 auto}
+.quickToolRow button{min-height:38px}
+
+/* Short screens: preserve the same proportions without hiding actions or topics */
+@media (max-height:760px) and (min-width:901px){
+  .side{
+    height:calc(100dvh - 112px);
+    min-height:470px;
+    grid-template-rows:auto minmax(115px,27%) auto minmax(230px,1fr) auto;
+    gap:5px;
+  }
+  .sidebarNav{font-size:12px}
+  .navItem{padding-block:7px!important}
+  .navSectionTitle{margin-block:5px 2px!important}
+  .sidebarTools{max-height:18vh}
+  .quickAdvanced{display:none}
+  .sidebarTools[open] .quickAdvanced{display:grid}
+}
+
+@media (max-width:900px){
+  .side{
+    height:100dvh;
+    min-height:0;
+    grid-template-rows:auto minmax(130px,28%) auto minmax(280px,1fr) auto;
+  }
+  .sidebarNav{max-height:none!important}
+  .sidebarTools{max-height:20vh}
+  .sidebarTopics{min-height:0!important}
+  .sidebarTopics .topicList{min-height:0!important}
+}
+
+
+/* ===== V19.5.2 Topic Workspace ===== */
+.sidebarTools[open]{display:block;overflow:auto}
+.sidebarTools .quickToolRow{position:sticky;top:0;background:var(--card);z-index:2;padding-top:4px}
+.sidebarTopics .topicList::-webkit-scrollbar{width:7px}
+.sidebarTopics .topicList::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:20px}
+.sidebarTopics .topicList::-webkit-scrollbar-track{background:transparent}
+.topicLibraryToolbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.topicLibraryToolbar .btn{padding:9px 13px}
+.topicExplorerHeadFilters{display:none}
+.premiumTopicCard{padding-bottom:54px}
+.premiumTopicCard.pinned{box-shadow:0 0 0 2px rgba(245,158,11,.28),0 16px 30px rgba(15,23,42,.08)}
+.premiumTopicActions{position:absolute;bottom:12px;inset-inline:14px;display:flex;gap:7px;z-index:3;border-top:1px solid var(--line);padding-top:9px}
+.premiumTopicActions button{width:32px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;font-size:14px;transition:.16s}
+.premiumTopicActions button:hover{transform:translateY(-2px);background:#dbeafe}
+.premiumTopicActions button:nth-child(2):hover{background:#fee2e2}
+.customTopicActions{justify-content:space-between}
+.customTopicActions .topicAction{flex:1}
+@media(max-width:700px){.topicLibraryToolbar{display:grid;grid-template-columns:1fr 1fr}.topicLibraryToolbar .btn:first-child{grid-column:1/-1}.premiumTopicActions button{flex:1;width:auto}}
+
+
+/* ===== V19.5.3 Final Sidebar: quick tools + scrollable topics ===== */
+.side{
+  height:calc(100dvh - 132px);
+  min-height:560px;
+  display:grid;
+  grid-template-rows:auto minmax(150px,30%) auto minmax(300px,1fr) auto;
+  gap:8px;
+  overflow:hidden;
+}
+.sidebarNav{
+  min-height:0;
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.sidebarTools{
+  margin:0 10px;
+  min-height:52px;
+  max-height:22vh;
+  overflow:auto;
+  flex:0 0 auto;
+}
+.sidebarTools[open]{
+  display:block;
+}
+.sidebarTools .quickToolRow{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:var(--card);
+  padding-top:4px;
+}
+.sidebarTopics{
+  margin:0 10px 10px;
+  min-height:0!important;
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+}
+.sidebarTopics summary{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex:0 0 auto;
+}
+/* Keep topic management actions available in TOPIC LIBRARY, not duplicated in sidebar */
+.sidebarTopics .topicToolbar{
+  display:none!important;
+}
+.sidebarTopics .topicSearch{
+  margin:0 0 8px!important;
+  flex:0 0 auto;
+}
+.sidebarTopics .topicList{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  padding:2px 5px 14px 1px;
+  scrollbar-width:thin;
+  scrollbar-color:#94a3b8 transparent;
+}
+.sidebarTopics .topicList::-webkit-scrollbar{width:8px}
+.sidebarTopics .topicList::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:20px}
+.sidebarTopics .topicList::-webkit-scrollbar-track{background:transparent}
+/* Preserve the main TOPIC LIBRARY section exactly as the full management workspace */
+.topicExplorer{display:block}
+.topicLibraryToolbar{display:flex}
+.premiumTopicsGrid{display:grid}
+
+@media (max-height:760px) and (min-width:901px){
+  .side{
+    height:calc(100dvh - 112px);
+    min-height:470px;
+    grid-template-rows:auto minmax(110px,25%) auto minmax(250px,1fr) auto;
+    gap:5px;
+  }
+  .sidebarTools{max-height:18vh}
+}
+@media (max-width:900px){
+  .side{
+    height:100dvh;
+    min-height:0;
+    grid-template-rows:auto minmax(130px,26%) auto minmax(320px,1fr) auto;
+  }
+  .sidebarTools{max-height:20vh}
+  .sidebarTopics .topicList{min-height:0!important}
+}
+
+
+/* V19.5.4 - balanced sidebar: premium quick tools + topics list scroll only */
+.side{
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.sidebarNav{
+  flex:0 1 auto;
+  max-height:34vh;
+  min-height:150px;
+  overflow-y:auto;
+}
+.sidebarTools{
+  flex:0 0 auto;
+  max-height:none;
+  overflow:visible;
+  margin:8px 10px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:linear-gradient(180deg,var(--card),var(--soft));
+  box-shadow:0 8px 22px rgba(15,23,42,.06);
+}
+.sidebarSectionHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:2px 2px 9px;
+  font-weight:900;
+  color:var(--text);
+}
+.sidebarSectionHead small{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+}
+.quickToolGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+.quickToolGrid button{
+  min-width:0;
+  min-height:62px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:13px;
+  padding:9px 7px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  transition:.18s ease;
+  box-shadow:0 4px 12px rgba(15,23,42,.04);
+}
+.quickToolGrid button:hover{
+  transform:translateY(-2px);
+  border-color:#93c5fd;
+  background:#eff6ff;
+  box-shadow:0 8px 18px rgba(37,99,235,.12);
+}
+.quickToolGrid button span{font-size:20px;line-height:1}
+.quickToolGrid button b{
+  width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  line-height:1.2;
+}
+.quickSettings{
+  margin-top:8px;
+  border-top:1px solid var(--line);
+  padding-top:6px;
+}
+.quickSettings summary{
+  cursor:pointer;
+  list-style:none;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+  padding:5px 2px;
+}
+.quickSettings summary::-webkit-details-marker{display:none}
+.quickSettings summary::after{content:'⌄';float:left}
+.quickSettings[open] summary::after{content:'⌃'}
+.quickSettings .quickAdvanced{padding-top:6px}
+
+.sidebarTopics{
+  flex:1 1 0;
+  min-height:210px!important;
+  margin:0 10px 10px;
+  padding:10px 9px 9px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--card);
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  box-shadow:0 8px 22px rgba(15,23,42,.05);
+}
+.topicSectionHead{padding-bottom:8px}
+.sidebarTopics .topicSearch{
+  position:static;
+  margin:0 0 8px!important;
+  padding:9px 10px!important;
+  border:1px solid var(--line)!important;
+  background:var(--soft)!important;
+  border-radius:11px!important;
+  font-size:12px!important;
+}
+.sidebarTopics .topicList{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  padding:1px 5px 12px 0;
+}
+.sidebarTopics .topicList::-webkit-scrollbar{width:7px}
+.sidebarTopics .topicList::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:20px}
+.sidebarTopics .topicList::-webkit-scrollbar-track{background:transparent}
+
+@media(max-width:900px){
+  .sidebarNav{max-height:27vh;min-height:120px}
+  .sidebarTools{margin:7px 9px;padding:9px}
+  .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .quickToolGrid button{min-height:55px;padding:7px 4px}
+  .quickToolGrid button b{font-size:9px}
+  .sidebarTopics{min-height:34vh!important;margin:0 9px 9px}
+}
+
+@media(max-height:760px) and (min-width:901px){
+  .sidebarNav{max-height:29vh}
+  .quickToolGrid button{min-height:52px}
+  .quickSettings{display:none}
+  .sidebarTopics{min-height:190px!important}
+}
+
+
+/* ===== V19.5.5 Final working sidebar ===== */
+.side{
+  display:flex!important;
+  flex-direction:column!important;
+  height:calc(100vh - 112px)!important;
+  min-height:560px!important;
+  overflow:hidden!important;
+}
+.sidebarHeader{flex:0 0 auto!important}
+.sidebarNav{
+  flex:0 1 30%!important;
+  min-height:120px!important;
+  max-height:30%!important;
+  overflow-y:auto!important;
+}
+.sidebarTools{
+  display:block!important;
+  flex:0 0 auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin:7px 10px!important;
+  padding:10px!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.sidebarTools .quickToolGrid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;
+  min-height:198px!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.sidebarTools .quickToolGrid>button{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  min-height:58px!important;
+  position:relative!important;
+  z-index:1!important;
+}
+.sidebarTools .quickSettings{display:none!important}
+.sidebarTopics{
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  flex:1 1 auto!important;
+  min-height:190px!important;
+  overflow:hidden!important;
+  margin:0 10px 10px!important;
+}
+.sidebarTopics .topicList{
+  display:block!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-gutter:stable!important;
+}
+.sidebarTopics .topicCard{display:block!important}
+.premiumTopicsGrid{min-height:160px!important}
+.premiumMoreBtn{display:block;cursor:pointer}
+@media(max-height:820px) and (min-width:901px){
+  .side{height:calc(100vh - 98px)!important;min-height:500px!important}
+  .sidebarNav{flex-basis:23%!important;max-height:23%!important}
+  .sidebarTools .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;min-height:112px!important}
+  .sidebarTools .quickToolGrid>button{min-height:50px!important}
+}
+@media(max-width:900px){
+  .side{height:100dvh!important;min-height:0!important}
+  .sidebarNav{flex-basis:25%!important;max-height:25%!important}
+  .sidebarTools .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;min-height:112px!important}
+  .sidebarTopics{min-height:32vh!important}
+}
+
+
+/* ===== V19.5.6 stable proportional sidebar ===== */
+.side{
+  display:grid!important;
+  grid-template-rows:auto minmax(100px,22vh) auto minmax(230px,1fr) auto!important;
+  height:calc(100vh - 112px)!important;
+  min-height:560px!important;
+  overflow:hidden!important;
+}
+.sidebarHeader{min-height:76px!important}
+.sidebarNav{
+  min-height:100px!important;
+  max-height:none!important;
+  height:auto!important;
+  overflow-y:auto!important;
+  flex:none!important;
+}
+.sidebarTools{
+  display:block!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin:7px 10px!important;
+  padding:10px!important;
+}
+.sidebarTools .quickToolGrid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+  min-height:0!important;
+}
+.sidebarTools .quickToolGrid>button{
+  display:flex!important;
+  min-height:54px!important;
+  padding:7px 4px!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.sidebarTools .quickToolGrid>button b{font-size:10px!important;line-height:1.25!important}
+.voiceSettingsPanel{
+  margin-top:9px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--soft);
+  display:grid;
+  gap:8px;
+}
+.voiceSettingsTitle{display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:13px}
+.voiceSettingsTitle small{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--blue)}
+.voiceField{display:grid;gap:5px;font-size:11px;font-weight:800;color:var(--muted)}
+.voiceField select{width:100%;min-height:38px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);padding:6px 8px}
+.voiceField input[type="range"]{width:100%}
+.voiceTestBtn{min-height:36px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer}
+.hiddenLegacySearch{display:none!important}
+.sidebarTopics{
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  min-height:230px!important;
+  height:auto!important;
+  margin:0 10px 8px!important;
+  overflow:hidden!important;
+  flex:none!important;
+}
+.sidebarTopics .topicList{
+  display:block!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-gutter:stable!important;
+  padding-inline-end:5px!important;
+}
+.sidebarTopics .topicCard{display:block!important}
+.sidebarFooter{min-height:52px!important}
+@media(max-height:820px) and (min-width:901px){
+  .side{grid-template-rows:auto minmax(90px,18vh) auto minmax(180px,1fr) auto!important;height:calc(100vh - 98px)!important;min-height:500px!important}
+  .sidebarTools .quickToolGrid>button{min-height:48px!important}
+  .voiceSettingsPanel{grid-template-columns:1fr 1fr;align-items:end}
+  .voiceSettingsTitle{grid-column:1/-1}
+  .voiceTestBtn{grid-column:1/-1}
+}
+@media(max-width:900px){
+  .side{grid-template-rows:auto minmax(100px,22vh) auto minmax(220px,1fr) auto!important;height:100dvh!important;min-height:0!important}
+  .sidebarTools .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .sidebarTopics{min-height:220px!important}
+}
+
+/* ===== V19.5.7 clean sidebar: voice tools only ===== */
+.voiceOnlyTools{flex:0 0 auto;min-height:auto;overflow:visible}
+.voiceOnlyTools .sidebarSectionHead{margin-bottom:8px}
+.voiceSettingsAlways{display:grid!important;gap:9px;background:linear-gradient(145deg,#f8fbff,#eef6ff);border:1px solid #dbe7f5;border-radius:16px;padding:12px}
+body.dark .voiceSettingsAlways{background:linear-gradient(145deg,#111827,#172033);border-color:#334155}
+.voiceSettingsAlways .voiceField{margin:0}
+.voiceSettingsAlways .voiceTestBtn{width:100%}
+.sidebarTopics{min-height:220px;flex:1 1 auto;overflow:hidden}
+.sidebarTopics .topicList{min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain}
+.favoritesList{display:grid;gap:10px}
+.favoriteSentence{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
+.favoriteSentence b{display:block;font-size:16px;direction:ltr;text-align:left}
+.favoriteSentence small{display:block;color:var(--muted);margin-top:4px}
+.favoriteSentence .favActions{display:flex;gap:6px}
+.favoriteSentence button{border:0;border-radius:10px;padding:8px 10px;cursor:pointer}

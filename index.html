@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V19.4.3 - Premium UI</title>
+<title>Nada English Academy V19.5.7 - Clean Sidebar</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.4.3</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.5.7</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -44,21 +44,27 @@
     <button class="tab navItem" data-screen="lab"><span class="navIcon">🧪</span><span>Practice Lab</span></button>
     <button class="tab navItem" data-screen="playlist"><span class="navIcon">🎵</span><span>Audio Playlist</span></button>
     <button class="tab navItem" data-screen="notes"><span class="navIcon">🗒️</span><span>ملاحظاتي</span></button>
+    <button class="tab navItem" data-screen="favorites"><span class="navIcon">⭐</span><span>المفضلة</span></button>
+    <button class="tab navItem" data-screen="backup"><span class="navIcon">⇅</span><span>استيراد / تصدير</span></button>
     <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
   </nav>
 
-  <details class="sidebarTools" open>
-    <summary>⚙️ أدوات سريعة</summary>
-    <label>بحث سريع</label><input id="search" placeholder="رقم / English / عربي">
-    <label>اختيار الصوت</label><select id="voice"></select>
-    <label>سرعة النطق</label><input type="range" id="rate" min="0.55" max="1.25" value="0.85" step="0.05">
-  </details>
+  <section class="sidebarTools voiceOnlyTools" aria-label="الأدوات السريعة">
+    <div class="sidebarSectionHead"><span>⚡ الأدوات السريعة</span><small>إعدادات النطق</small></div>
+    <div class="voiceSettingsPanel voiceSettingsAlways" aria-label="إعدادات الصوت">
+      <div class="voiceSettingsTitle"><span>🔊 إعدادات الصوت</span><small id="rateValue">0.85x</small></div>
+      <label class="voiceField"><span>اختيار الصوت</span><select id="voice" aria-label="اختيار الصوت"></select></label>
+      <label class="voiceField rangeField"><span>سرعة النطق</span><input type="range" id="rate" min="0.55" max="1.25" value="0.85" step="0.05"></label>
+      <button type="button" class="voiceTestBtn" id="voiceTestBtn">▶ اختبار الصوت</button>
+      <input id="search" class="hiddenLegacySearch" placeholder="بحث سريع: رقم / English / عربي" aria-hidden="true" tabindex="-1">
+    </div>
+  </section>
 
-  <details class="sidebarTopics">
-    <summary>📚 الموضوعات</summary>
-    <button class="btn green" id="addTopicBtn" style="width:100%;margin:10px 0 8px">➕ إضافة موضوع</button>
+  <section class="sidebarTopics" aria-label="قائمة الموضوعات">
+    <div class="sidebarSectionHead topicSectionHead"><span>📚 Topics</span><span class="topicCountBadge" id="topicCountBadge">0</span></div>
+    <input class="topicSearch" id="sidebarTopicSearch" placeholder="🔍 Search topics...">
     <div class="topicList" id="topics"></div>
-  </details>
+  </section>
   <div class="sidebarFooter"><div class="miniGoal"><span>هدف اليوم</span><b id="sideGoal">0%</b></div><div class="miniGoalBar"><span id="sideGoalBar"></span></div></div>
 </aside>
 <main class="main">
@@ -95,6 +101,29 @@
       <div id="recentTopicsList" class="recentTopicsList"></div>
     </div>
   </div>
+  <div class="focusSessionPanel panelCard">
+    <div class="focusSessionInfo">
+      <span class="eyebrow darkEyebrow">FOCUS SESSION</span>
+      <h3>جلسة مذاكرة مركزة</h3>
+      <p>اختاري المدة، ابدئي المؤقت، وركّزي على هدف واحد فقط.</p>
+      <div class="focusPresetRow">
+        <button class="focusPreset active" data-focus-min="10">10 دقائق</button>
+        <button class="focusPreset" data-focus-min="15">15 دقيقة</button>
+        <button class="focusPreset" data-focus-min="25">25 دقيقة</button>
+      </div>
+      <div class="focusSessionActions">
+        <button class="btn green" id="focusTimerStart">▶ ابدئي</button>
+        <button class="btn orange" id="focusTimerPause">⏸ إيقاف مؤقت</button>
+        <button class="btn" id="focusTimerReset">↺ إعادة</button>
+      </div>
+    </div>
+    <div class="focusTimerCard">
+      <div class="focusTimerRing" id="focusTimerRing" style="--timer-pct:0%">
+        <div><b id="focusTimerText">10:00</b><small id="focusTimerState">جاهزة</small></div>
+      </div>
+      <div class="focusTodayStat"><span>وقت اليوم</span><b id="focusTodayMinutes">0 دقيقة</b></div>
+    </div>
+  </div>
   <div class="premiumSection">
     <div class="premiumSectionHead">
       <div><span class="eyebrow darkEyebrow">PREMIUM LEARNING HUB</span><h2>مسارك الذكي اليوم</h2><p>اختاري مهارة أو موضوع وابدئي مباشرة.</p></div>
@@ -111,6 +140,14 @@
     <div class="topicExplorerHead">
       <div><small>TOPIC LIBRARY</small><h3>استكشفي الموضوعات</h3></div>
       <div class="topicExplorerTools"><input id="premiumTopicSearch" placeholder="ابحثي عن موضوع..."><button class="iconAction" id="premiumTopicClear" title="مسح البحث">×</button></div>
+    </div>
+    <div class="topicLibraryToolbar">
+      <button class="btn green" id="libraryAddTopic" type="button">＋ إضافة موضوع جديد</button>
+      <button class="btn blue" id="libraryImportTopics" type="button">⇧ استيراد</button>
+      <button class="btn purple" id="libraryExportTopics" type="button">⇩ تصدير</button>
+      <button class="btn" id="restoreHiddenTopics" type="button">↺ استعادة المحذوف</button>
+    </div>
+    <div class="topicExplorerHead topicExplorerHeadFilters">
     </div>
     <div class="topicChips"><button class="active" data-topic-filter="all">الكل</button><button data-topic-filter="recent">الأخيرة</button><button data-topic-filter="custom">المرفوعة</button><button data-topic-filter="progress">قيد الدراسة</button></div>
     <div class="premiumTopicsGrid" id="premiumTopicsGrid"></div>
@@ -264,6 +301,8 @@
 <section class="screen" id="lab"><h2>🧪 Practice Lab</h2><div class="v15Card"><p>تدريب سريع من 10 جمل: اسمعي، اكتبي، ثم قارني.</p><div class="v15Progress"><span id="labBar"></span></div><div class="en" id="labEn"></div><div class="ar" id="labAr"></div><textarea id="labAnswer" rows="3" placeholder="اكتبي الجملة هنا بالإنجليزي..."></textarea><div id="labResult"></div><div class="controls"><button class="btn green" id="labStart">ابدئي تدريب جديد</button><button class="btn blue" id="labSpeak">🔊 اسمع</button><button class="btn purple" id="labCheck">تحقق</button><button class="btn orange" id="labNext">التالي</button></div></div></section>
 <section class="screen" id="playlist"><h2>🎧 Audio Playlist</h2><div class="v15Card"><p>شغّلي قائمة صوتية للجمل: الموضوع الحالي، المراجعة، أو المفضلة.</p><div class="controls"><button class="btn green" id="playTopic">تشغيل الموضوع الحالي</button><button class="btn orange" id="playReview">تشغيل المراجعة</button><button class="btn purple" id="playFav">تشغيل المفضلة</button><button class="btn red" id="stopPlay">إيقاف</button></div><label>تكرار كل جملة</label><input id="repeatCount" type="number" value="1" min="1" max="5"><label>وقت الانتظار بين الجمل بالثواني</label><input id="gapSeconds" type="number" value="2" min="1" max="10"><div id="playlistOut"></div></div></section>
 <section class="screen" id="notes"><h2>🗒️ ملاحظاتي</h2><div class="v15Card"><div class="en" id="noteSentence"></div><div class="ar" id="noteArabic"></div><textarea id="sentenceNote" rows="4" placeholder="اكتبي ملاحظتك على الجملة الحالية..."></textarea><div class="controls"><button class="btn green" id="saveNote">حفظ الملاحظة</button><button class="btn blue" id="exportNotes">تصدير الملاحظات</button><button class="btn orange" id="showNotes">عرض الملاحظات</button></div><div id="notesOut"></div></div><div class="v15Card"><h3>اختصارات الكيبورد</h3><p><span class="kbd">Space</span> تشغيل الصوت | <span class="kbd">←</span> السابق | <span class="kbd">→</span> التالي | <span class="kbd">K</span> عرفتها | <span class="kbd">R</span> مراجعة</p></div></section>
+<section class="screen" id="favorites"><h2>⭐ المفضلة</h2>
+<div class="v15Card"><p>كل الجمل التي أضفتِها إلى المفضلة تظهر هنا.</p><div id="favoritesList" class="favoritesList"></div></div></section>
 <section class="screen" id="backup"><h2>💾 حفظ البيانات والنسخ الاحتياطي</h2>
 <div class="box"><div class="stat"><b id="storageStatus">✅</b><span>الحفظ التلقائي مفعّل على هذا الجهاز</span><small id="storageDetails" style="display:block;margin-top:8px;color:var(--muted)"></small></div></div>
 <div class="box"><p><b>يتم حفظ التقدم والمواضيع المرفوعة تلقائيًا.</b><br>تحديث ملفات GitHub لا يحذف بياناتك على نفس المتصفح والجهاز.</p><div class="controls"><button class="btn green" id="exportProgress">📥 تنزيل نسخة احتياطية كاملة</button><label class="btn blue" style="width:auto">📤 استرجاع نسخة احتياطية<input id="importProgress" type="file" accept="application/json" hidden></label><button class="btn orange" id="exportCsv">تصدير الجمل CSV</button><button class="btn red" id="resetBtn">مسح التقدم فقط</button></div></div>
@@ -272,7 +311,7 @@
 </div>
 <div class="modalOverlay" id="topicModal">
   <div class="modalCard" dir="rtl">
-    <h2>➕ إضافة موضوع جديد</h2>
+    <h2 id="topicModalTitle">➕ إضافة موضوع جديد</h2>
     <label>اسم الموضوع بالإنجليزية</label>
     <input id="newTopicEn" placeholder="Example: Customer Support">
     <label>اسم الموضوع بالعربية</label>
