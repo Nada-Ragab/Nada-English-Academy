@@ -1096,3 +1096,42 @@ document.querySelectorAll('.navItem[data-screen="favorites"]').forEach(btn=>btn.
   byId('sidebarTopicSearch')?.addEventListener('input',()=>{ try{renderTopics();}catch(err){console.error(err);} });
   window.addEventListener('pageshow',refreshV196);
 })();
+
+// ===== V19.8 Smart Learning Center =====
+function v198SetProgress(name,value){
+  const pct=Math.max(0,Math.min(100,Math.round(value||0)));
+  const label=document.getElementById('module'+name+'Pct');
+  const bar=document.getElementById('module'+name+'Bar');
+  if(label) label.textContent=pct+'%';
+  if(bar) bar.style.width=pct+'%';
+}
+function refreshSmartLearningCenter(){
+  const known=Object.keys(state.known||{}).length;
+  const review=Object.keys(state.review||{}).length;
+  const fav=Object.keys(state.fav||{}).length;
+  const words=(state.words||[]).length;
+  const xp=Number(state.xp||0);
+  const base=Math.max(1,S.length);
+  const overall=(known/base)*100;
+  v198SetProgress('Vocabulary',overall);
+  v198SetProgress('Grammar',Math.min(100,(xp+review*4)/14));
+  v198SetProgress('Conversation',Math.min(100,xp/10));
+  v198SetProgress('Pronunciation',Math.min(100,xp/12));
+  v198SetProgress('Listening',Math.min(100,(known+review)/base*100));
+  v198SetProgress('Flashcards',Math.min(100,(review+fav)*3));
+  const erpTotal=S.filter(x=>/odoo|erp|payroll|invoice|contract/i.test((x.topic_en||'')+' '+(x.english||''))).length||1;
+  const erpKnown=S.filter(x=>/odoo|erp|payroll|invoice|contract/i.test((x.topic_en||'')+' '+(x.english||''))&&state.known?.[x.number]).length;
+  v198SetProgress('Erp',(erpKnown/erpTotal)*100);
+  v198SetProgress('Practice',Math.min(100,(known+review+words)/Math.max(1,base/2)*100));
+  const stats=readFocusStats?readFocusStats():{};
+  const mins=Object.values(stats||{}).reduce((a,b)=>a+Number(b||0),0);
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  set('overviewWords',words);
+  set('overviewMinutes',Math.round(mins));
+  set('overviewTarget',Math.min(100,Math.round(overall))+'%');
+  set('overviewLevel',Math.max(1,Math.floor(xp/100)+1));
+}
+const oldRefreshDashboardV198=refreshDashboard;
+refreshDashboard=function(){oldRefreshDashboardV198();refreshSmartLearningCenter();};
+document.querySelectorAll('.learningModuleCard[data-go]').forEach(btn=>btn.addEventListener('click',()=>openScreen(btn.dataset.go)));
+setTimeout(refreshSmartLearningCenter,700);

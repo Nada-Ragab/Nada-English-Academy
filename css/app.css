@@ -753,3 +753,17 @@ body.dark .voiceSettingsAlways{background:linear-gradient(145deg,#111827,#172033
 .workspaceEmpty{text-align:center;padding:28px;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
 .workspaceFooter{padding-top:12px;border-top:1px solid var(--line);margin-top:4px}
 @media(max-width:800px){.topicWorkspaceCard{padding:15px;max-height:95vh}.workspaceMetaGrid{grid-template-columns:1fr 1fr}.workspaceMetaGrid .btn{width:100%}.workspaceSentenceInputs{grid-template-columns:1fr}.workspaceListHead{display:block}.workspaceListHead input{width:100%;box-sizing:border-box}.workspaceSentenceRow{grid-template-columns:34px 1fr}.workspaceSentenceRow input:nth-of-type(2){grid-column:2}.workspaceSentenceActions{grid-column:1/-1;justify-content:flex-end}}
+
+/* ===== V19.8 Smart Learning Center ===== */
+.learningCenterGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+.learningModuleCard{border:1px solid var(--line);background:linear-gradient(180deg,var(--card),var(--soft));color:var(--text);border-radius:22px;padding:17px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;text-align:start;cursor:pointer;box-shadow:0 9px 24px rgba(15,23,42,.06);transition:.22s;min-height:105px}
+.learningModuleCard:hover{transform:translateY(-4px);border-color:#818cf8;box-shadow:0 16px 34px rgba(15,23,42,.11)}
+.moduleEmoji{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,#eff6ff,#ede9fe);box-shadow:inset 0 0 0 1px rgba(99,102,241,.13)}
+.learningModuleCard b,.learningModuleCard small{display:block}.learningModuleCard small{color:var(--muted);font-size:11px;margin-top:3px}.learningModuleCard em{font-style:normal;font-size:15px;font-weight:1000;color:#4f46e5}
+.moduleProgress{display:block;height:6px;background:rgba(148,163,184,.22);border-radius:99px;overflow:hidden;margin-top:10px}.moduleProgress u{display:block;height:100%;width:0;background:linear-gradient(90deg,#22c55e,#2563eb,#7c3aed);border-radius:99px;text-decoration:none;transition:width .35s ease}
+.learningOverviewRow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.learningOverviewCard{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(12px)}
+.dark .learningOverviewCard{background:rgba(15,23,42,.7)}
+.learningOverviewCard>span{font-size:24px}.learningOverviewCard small,.learningOverviewCard b{display:block}.learningOverviewCard small{color:var(--muted);font-weight:800}.learningOverviewCard b{font-size:21px;margin-top:2px}
+@media(max-width:1180px){.learningCenterGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.learningCenterGrid,.learningOverviewRow{grid-template-columns:1fr}.learningModuleCard{min-height:92px;padding:14px}.learningOverviewRow{grid-template-columns:repeat(2,1fr)}}

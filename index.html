@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V19.6 - Stable Sidebar</title>
+<title>Nada English Academy V19.8 - Smart Learning Center</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.6</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.8</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -133,6 +133,22 @@
       <button class="skillProgressCard" data-go="speak"><span class="skillIcon purpleGlow">🎙️</span><span><b>Speaking</b><small>النطق والطلاقة</small></span><em id="premiumSpeakingPct">0%</em></button>
       <button class="skillProgressCard" data-go="words"><span class="skillIcon orangeGlow">📖</span><span><b>Vocabulary</b><small>الكلمات المحفوظة</small></span><em id="premiumWordsPct">0%</em></button>
       <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
+    </div>
+    <div class="learningCenterGrid" id="learningCenterGrid">
+      <button class="learningModuleCard" data-go="learn" data-module="vocabulary"><span class="moduleEmoji">📚</span><span><b>Vocabulary</b><small>جمل وكلمات جديدة</small><i class="moduleProgress"><u id="moduleVocabularyBar"></u></i></span><em id="moduleVocabularyPct">0%</em></button>
+      <button class="learningModuleCard" data-go="grammar" data-module="grammar"><span class="moduleEmoji">📝</span><span><b>Grammar</b><small>شرح وتطبيق سريع</small><i class="moduleProgress"><u id="moduleGrammarBar"></u></i></span><em id="moduleGrammarPct">0%</em></button>
+      <button class="learningModuleCard" data-go="freechat" data-module="conversation"><span class="moduleEmoji">💬</span><span><b>Free Conversation</b><small>تدريب محادثة حرة</small><i class="moduleProgress"><u id="moduleConversationBar"></u></i></span><em id="moduleConversationPct">0%</em></button>
+      <button class="learningModuleCard" data-go="speak" data-module="pronunciation"><span class="moduleEmoji">🎤</span><span><b>Pronunciation</b><small>تحدثي وراجعي نطقك</small><i class="moduleProgress"><u id="modulePronunciationBar"></u></i></span><em id="modulePronunciationPct">0%</em></button>
+      <button class="learningModuleCard" data-go="dictation" data-module="listening"><span class="moduleEmoji">🎧</span><span><b>Listening</b><small>استمعي واكتبي</small><i class="moduleProgress"><u id="moduleListeningBar"></u></i></span><em id="moduleListeningPct">0%</em></button>
+      <button class="learningModuleCard" data-go="flashcards" data-module="flashcards"><span class="moduleEmoji">🃏</span><span><b>Flashcards</b><small>مراجعة سريعة وذكية</small><i class="moduleProgress"><u id="moduleFlashcardsBar"></u></i></span><em id="moduleFlashcardsPct">0%</em></button>
+      <button class="learningModuleCard" data-go="erp" data-module="erp"><span class="moduleEmoji">💼</span><span><b>ERP English</b><small>مصطلحات Odoo والعمل</small><i class="moduleProgress"><u id="moduleErpBar"></u></i></span><em id="moduleErpPct">0%</em></button>
+      <button class="learningModuleCard" data-go="lab" data-module="practice"><span class="moduleEmoji">🧪</span><span><b>Practice Lab</b><small>تدريب عملي متنوع</small><i class="moduleProgress"><u id="modulePracticeBar"></u></i></span><em id="modulePracticePct">0%</em></button>
+    </div>
+    <div class="learningOverviewRow">
+      <div class="learningOverviewCard"><span>📖</span><div><small>Words learned</small><b id="overviewWords">0</b></div></div>
+      <div class="learningOverviewCard"><span>⏱️</span><div><small>Study minutes</small><b id="overviewMinutes">0</b></div></div>
+      <div class="learningOverviewCard"><span>🎯</span><div><small>Daily target</small><b id="overviewTarget">0%</b></div></div>
+      <div class="learningOverviewCard"><span>🏆</span><div><small>Current level</small><b id="overviewLevel">1</b></div></div>
     </div>
   </div>
   <div class="topicExplorer panelCard">
