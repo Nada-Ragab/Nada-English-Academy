@@ -71,7 +71,21 @@ async function initFirebase(){
   try{
     const m=await loadFirebaseModules();firebaseApp=m.getApps().length?m.getApp():m.initializeApp(cfg);auth=m.getAuth(firebaseApp);db=m.getFirestore(firebaseApp);
     await m.setPersistence(auth,m.browserLocalPersistence);
-    m.onAuthStateChanged(auth,u=>{currentUser=u;updateAuthUI();if(u)downloadCloud(false)});
+    m.onAuthStateChanged(auth,u=>{
+      currentUser=u;
+      updateAuthUI();
+      const sessionKey='nada_cloud_loaded_uid_v1';
+      if(u){
+        // تحميل بيانات الحساب مرة واحدة فقط في جلسة المتصفح.
+        // وضع العلامة قبل التحميل يمنع حلقة إعادة تحميل لا نهائية بعد location.reload().
+        if(sessionStorage.getItem(sessionKey)!==u.uid){
+          sessionStorage.setItem(sessionKey,u.uid);
+          downloadCloud(false);
+        }
+      }else{
+        sessionStorage.removeItem(sessionKey);
+      }
+    });
     setNote('syncStatus','تم ربط Firebase بنجاح.');return true;
   }catch(e){setNote('syncStatus','تعذر ربط Firebase: '+e.message);return false}
 }
