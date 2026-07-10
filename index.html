@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V21.0.0</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V21.1.0</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -320,13 +320,13 @@
       <label>كلمة المرور<input id="authPassword" type="password" dir="ltr" minlength="6"></label>
       <div class="controls"><button class="btn green" id="signInBtn">دخول</button><button class="btn blue" id="signUpBtn">إنشاء حساب</button><button class="btn red" id="signOutBtn">خروج</button></div>
     </div>
-    <div class="box">
-      <h3>☁️ Firebase Sync</h3>
-      <p class="note">ضعي إعدادات تطبيق الويب من Firebase Console مرة واحدة.</p>
-      <textarea id="firebaseConfig" rows="9" dir="ltr" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'></textarea>
-      <div class="controls"><button class="btn blue" id="saveFirebaseConfig">حفظ وربط Firebase</button><button class="btn green" id="syncUploadBtn">رفع بيانات هذا الجهاز</button><button class="btn purple" id="syncDownloadBtn">تحميل بيانات الحساب</button></div>
-      <label class="syncToggle"><input type="checkbox" id="autoSyncToggle"> مزامنة تلقائية بعد التعديلات</label>
-      <div id="syncStatus" class="note">لم يتم ربط Firebase بعد.</div>
+    <div class="box cloudReadyCard">
+      <h3>☁️ المزامنة السحابية</h3>
+      <p class="note">Firebase متصل تلقائيًا. بعد تسجيل الدخول تُحفظ التعديلات وتنتقل بين الكمبيوتر والموبايل دون إدخال أي إعدادات.</p>
+      <div class="cloudReadyBadge">✓ متصل تلقائيًا</div>
+      <div class="controls"><button class="btn green" id="syncUploadBtn">حفظ الآن على السحابة</button><button class="btn purple" id="syncDownloadBtn">استعادة بيانات الحساب</button></div>
+      <label class="syncToggle"><input type="checkbox" id="autoSyncToggle" checked> مزامنة تلقائية بعد التعديلات</label>
+      <div id="syncStatus" class="note">جاري الاتصال بـ Firebase...</div>
     </div>
   </div>
 </section>

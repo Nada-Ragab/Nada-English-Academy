@@ -4,6 +4,15 @@ const el=id=>document.getElementById(id);
 const AI_SETTINGS_KEY='nada_ai_settings_v1';
 const AI_HISTORY_KEY='nada_ai_history_v1';
 const FIREBASE_CONFIG_KEY='nada_firebase_config_v1';
+const BUILTIN_FIREBASE_CONFIG={
+  apiKey:'AIzaSyBbljF4Vw1Zy5cA2VVG3zrK_UPZ0xxftYg',
+  authDomain:'nada-english-academy.firebaseapp.com',
+  projectId:'nada-english-academy',
+  storageBucket:'nada-english-academy.firebasestorage.app',
+  messagingSenderId:'924578443227',
+  appId:'1:924578443227:web:68fa7c009392d10fe401fe',
+  measurementId:'G-MQ7YMLPBXD'
+};
 const AUTO_SYNC_KEY='nada_auto_sync_v1';
 let aiHistory=[];
 let voiceRecognition=null;
@@ -58,10 +67,11 @@ async function loadFirebaseModules(){
   firebaseModules={...app,...au,...fs};return firebaseModules;
 }
 async function initFirebase(){
-  const cfg=readJson(FIREBASE_CONFIG_KEY,null);if(!cfg){setNote('syncStatus','أدخلي إعدادات Firebase أولًا.');return false}
+  const cfg=BUILTIN_FIREBASE_CONFIG;
   try{
     const m=await loadFirebaseModules();firebaseApp=m.getApps().length?m.getApp():m.initializeApp(cfg);auth=m.getAuth(firebaseApp);db=m.getFirestore(firebaseApp);
-    m.onAuthStateChanged(auth,u=>{currentUser=u;updateAuthUI();if(u&&el('autoSyncToggle')&&el('autoSyncToggle').checked)downloadCloud(false)});
+    await m.setPersistence(auth,m.browserLocalPersistence);
+    m.onAuthStateChanged(auth,u=>{currentUser=u;updateAuthUI();if(u)downloadCloud(false)});
     setNote('syncStatus','تم ربط Firebase بنجاح.');return true;
   }catch(e){setNote('syncStatus','تعذر ربط Firebase: '+e.message);return false}
 }
@@ -70,17 +80,18 @@ function localPayload(){if(typeof saveAllData==='function')saveAllData();return 
 async function ensureFirebase(){return auth&&db?true:initFirebase()}
 async function uploadCloud(silent){if(!await ensureFirebase()||!currentUser){if(!silent)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;await m.setDoc(m.doc(db,'users',currentUser.uid),{academyData:localPayload(),updatedAt:m.serverTimestamp(),email:currentUser.email},{merge:true});setNote('syncStatus','آخر رفع: '+new Date().toLocaleString('ar-EG'))}catch(e){setNote('syncStatus','فشل الرفع: '+e.message)}}
 async function downloadCloud(show){if(!await ensureFirebase()||!currentUser){if(show)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;const snap=await m.getDoc(m.doc(db,'users',currentUser.uid));if(!snap.exists()||!snap.data().academyData){setNote('syncStatus','لا توجد بيانات محفوظة لهذا الحساب.');return}const data=snap.data().academyData;localStorage.setItem('nada_english_academy_v18_data',JSON.stringify(data));if(data.state)localStorage.setItem('nada_v12_state',JSON.stringify(data.state));if(data.customTopics)localStorage.setItem('nada_custom_topics_v1',JSON.stringify(data.customTopics));setNote('syncStatus','تم تحميل البيانات. يتم تحديث التطبيق...');setTimeout(()=>location.reload(),600)}catch(e){setNote('syncStatus','فشل التحميل: '+e.message)}}
-function scheduleAutoSync(){if(localStorage.getItem(AUTO_SYNC_KEY)!=='1'||!currentUser)return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>uploadCloud(true),1200)}
+function scheduleAutoSync(){if(localStorage.getItem(AUTO_SYNC_KEY)==='0'||!currentUser)return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>uploadCloud(true),1200)}
 function bind(){
   if(!el('aiMessages'))return;
   const s=getAiSettings();el('aiEndpoint').value=s.endpoint||'';el('aiApiKey').value=s.apiKey||'';el('aiMode').value=s.mode||'general';el('aiLevel').value=s.level||'A2';
   aiHistory=readJson(AI_HISTORY_KEY,[]);if(!aiHistory.length)addAi('teacher','Hello Nada! I am your AI English teacher. What would you like to practice today?');else renderAi();
   el('saveAiSettings').onclick=saveAiSettings;el('aiSendBtn').onclick=()=>{const t=el('aiInput').value.trim();if(t){el('aiInput').value='';askAi(t)}};el('aiInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el('aiSendBtn').click()}};el('aiVoiceBtn').onclick=startAiVoice;el('clearAiChat').onclick=()=>{aiHistory=[];localStorage.removeItem(AI_HISTORY_KEY);addAi('teacher','Hello Nada! Let us start a new conversation.')};
-  el('firebaseConfig').value=localStorage.getItem(FIREBASE_CONFIG_KEY)||'';el('autoSyncToggle').checked=localStorage.getItem(AUTO_SYNC_KEY)==='1';el('autoSyncToggle').onchange=e=>localStorage.setItem(AUTO_SYNC_KEY,e.target.checked?'1':'0');
-  el('saveFirebaseConfig').onclick=()=>{try{const cfg=JSON.parse(el('firebaseConfig').value);localStorage.setItem(FIREBASE_CONFIG_KEY,JSON.stringify(cfg));initFirebase()}catch{setNote('syncStatus','إعدادات Firebase ليست JSON صحيحة.')}};
-  el('signUpBtn').onclick=async()=>{if(!await ensureFirebase())return;try{await firebaseModules.createUserWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);setNote('syncStatus','تم إنشاء الحساب.')}catch(e){setNote('syncStatus','تعذر إنشاء الحساب: '+e.message)}};
-  el('signInBtn').onclick=async()=>{if(!await ensureFirebase())return;try{await firebaseModules.signInWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);setNote('syncStatus','تم تسجيل الدخول.')}catch(e){setNote('syncStatus','تعذر الدخول: '+e.message)}};
-  el('signOutBtn').onclick=async()=>{if(auth)await firebaseModules.signOut(auth)};el('syncUploadBtn').onclick=()=>uploadCloud(false);el('syncDownloadBtn').onclick=()=>downloadCloud(true);updateAuthUI();if(localStorage.getItem(FIREBASE_CONFIG_KEY))initFirebase();window.addEventListener('nada:data-changed',scheduleAutoSync);
+  localStorage.setItem(FIREBASE_CONFIG_KEY,JSON.stringify(BUILTIN_FIREBASE_CONFIG));
+  if(localStorage.getItem(AUTO_SYNC_KEY)===null)localStorage.setItem(AUTO_SYNC_KEY,'1');
+  if(el('autoSyncToggle')){el('autoSyncToggle').checked=localStorage.getItem(AUTO_SYNC_KEY)!=='0';el('autoSyncToggle').onchange=e=>localStorage.setItem(AUTO_SYNC_KEY,e.target.checked?'1':'0')}
+  el('signUpBtn').onclick=async()=>{if(!await ensureFirebase())return;try{await firebaseModules.createUserWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);await uploadCloud(true);setNote('syncStatus','تم إنشاء الحساب وتفعيل المزامنة تلقائيًا.')}catch(e){setNote('syncStatus','تعذر إنشاء الحساب: '+e.message)}};
+  el('signInBtn').onclick=async()=>{if(!await ensureFirebase())return;try{await firebaseModules.signInWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);setNote('syncStatus','تم تسجيل الدخول والمزامنة تعمل تلقائيًا.')}catch(e){setNote('syncStatus','تعذر الدخول: '+e.message)}};
+  el('signOutBtn').onclick=async()=>{if(auth)await firebaseModules.signOut(auth)};el('syncUploadBtn').onclick=()=>uploadCloud(false);el('syncDownloadBtn').onclick=()=>downloadCloud(true);updateAuthUI();initFirebase();window.addEventListener('nada:data-changed',scheduleAutoSync);
 }
 window.addEventListener('load',bind);window.NadaCloud={scheduleAutoSync,uploadCloud,downloadCloud};
 })();
