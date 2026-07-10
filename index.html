@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V19.9 - Progress Insights</title>
+<title>Nada English Academy V20.0 - Stable Foundation</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.8</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V20.0</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -45,7 +45,8 @@
     <button class="tab navItem" data-screen="playlist"><span class="navIcon">🎵</span><span>Audio Playlist</span></button>
     <button class="tab navItem" data-screen="notes"><span class="navIcon">🗒️</span><span>ملاحظاتي</span></button>
     <button class="tab navItem" data-screen="favorites"><span class="navIcon">⭐</span><span>المفضلة</span></button>
-    <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ والاستيراد والتصدير</span></button>
+    <button class="tab navItem" data-screen="backup"><span class="navIcon">⇅</span><span>استيراد / تصدير</span></button>
+    <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
   </nav>
 
   <section class="sidebarTools voiceOnlyTools" aria-label="الأدوات السريعة">
@@ -134,22 +135,6 @@
       <button class="skillProgressCard" data-go="words"><span class="skillIcon orangeGlow">📖</span><span><b>Vocabulary</b><small>الكلمات المحفوظة</small></span><em id="premiumWordsPct">0%</em></button>
       <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
     </div>
-    <div class="learningCenterGrid" id="learningCenterGrid">
-      <button class="learningModuleCard" data-go="learn" data-module="vocabulary"><span class="moduleEmoji">📚</span><span><b>Vocabulary</b><small>جمل وكلمات جديدة</small><i class="moduleProgress"><u id="moduleVocabularyBar"></u></i></span><em id="moduleVocabularyPct">0%</em></button>
-      <button class="learningModuleCard" data-go="grammar" data-module="grammar"><span class="moduleEmoji">📝</span><span><b>Grammar</b><small>شرح وتطبيق سريع</small><i class="moduleProgress"><u id="moduleGrammarBar"></u></i></span><em id="moduleGrammarPct">0%</em></button>
-      <button class="learningModuleCard" data-go="freechat" data-module="conversation"><span class="moduleEmoji">💬</span><span><b>Free Conversation</b><small>تدريب محادثة حرة</small><i class="moduleProgress"><u id="moduleConversationBar"></u></i></span><em id="moduleConversationPct">0%</em></button>
-      <button class="learningModuleCard" data-go="speak" data-module="pronunciation"><span class="moduleEmoji">🎤</span><span><b>Pronunciation</b><small>تحدثي وراجعي نطقك</small><i class="moduleProgress"><u id="modulePronunciationBar"></u></i></span><em id="modulePronunciationPct">0%</em></button>
-      <button class="learningModuleCard" data-go="dictation" data-module="listening"><span class="moduleEmoji">🎧</span><span><b>Listening</b><small>استمعي واكتبي</small><i class="moduleProgress"><u id="moduleListeningBar"></u></i></span><em id="moduleListeningPct">0%</em></button>
-      <button class="learningModuleCard" data-go="flashcards" data-module="flashcards"><span class="moduleEmoji">🃏</span><span><b>Flashcards</b><small>مراجعة سريعة وذكية</small><i class="moduleProgress"><u id="moduleFlashcardsBar"></u></i></span><em id="moduleFlashcardsPct">0%</em></button>
-      <button class="learningModuleCard" data-go="erp" data-module="erp"><span class="moduleEmoji">💼</span><span><b>ERP English</b><small>مصطلحات Odoo والعمل</small><i class="moduleProgress"><u id="moduleErpBar"></u></i></span><em id="moduleErpPct">0%</em></button>
-      <button class="learningModuleCard" data-go="lab" data-module="practice"><span class="moduleEmoji">🧪</span><span><b>Practice Lab</b><small>تدريب عملي متنوع</small><i class="moduleProgress"><u id="modulePracticeBar"></u></i></span><em id="modulePracticePct">0%</em></button>
-    </div>
-    <div class="learningOverviewRow">
-      <div class="learningOverviewCard"><span>📖</span><div><small>Words learned</small><b id="overviewWords">0</b></div></div>
-      <div class="learningOverviewCard"><span>⏱️</span><div><small>Study minutes</small><b id="overviewMinutes">0</b></div></div>
-      <div class="learningOverviewCard"><span>🎯</span><div><small>Daily target</small><b id="overviewTarget">0%</b></div></div>
-      <div class="learningOverviewCard"><span>🏆</span><div><small>Current level</small><b id="overviewLevel">1</b></div></div>
-    </div>
   </div>
   <div class="topicExplorer panelCard">
     <div class="topicExplorerHead">
@@ -171,18 +156,6 @@
   <div class="premiumMotivation">
     <div class="motivationIcon">🚀</div><div><b>خطوة صغيرة كل يوم تصنع فرقًا كبيرًا.</b><span id="premiumMotivationText">ابدئي الآن بجملة واحدة فقط.</span></div>
     <button class="btn green" data-go="learn">ابدئي التعلّم</button>
-  </div>
-
-  <div class="progressInsightsPanel panelCard">
-    <div class="panelHead"><div><small>PROGRESS INSIGHTS</small><h3>ملخص التعلّم</h3></div><span class="panelIcon">📈</span></div>
-    <div class="insightStatsRow">
-      <div class="insightMiniCard"><span>✅</span><div><small>تم إتقانها اليوم</small><b id="insightKnownToday">0</b></div></div>
-      <div class="insightMiniCard"><span>🔁</span><div><small>أضيفت للمراجعة</small><b id="insightReviewToday">0</b></div></div>
-      <div class="insightMiniCard"><span>⏱️</span><div><small>وقت المذاكرة اليوم</small><b id="insightMinutesToday">0 د</b></div></div>
-      <div class="insightMiniCard"><span>🔥</span><div><small>سلسلة النشاط</small><b id="insightStreak">1 يوم</b></div></div>
-    </div>
-    <div class="weeklyTimeline" id="weeklyTimeline"></div>
-    <div class="insightActions"><button class="btn blue" id="insightOpenStats">📊 عرض التقرير الكامل</button><button class="btn purple" id="insightStartReview">🔁 بدء مراجعة اليوم</button></div>
   </div>
 </section>
 <section class="screen" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
@@ -361,43 +334,6 @@
     </div>
   </div>
 </div>
-
-<div class="modalOverlay" id="topicWorkspaceModal">
-  <div class="modalCard topicWorkspaceCard" dir="rtl">
-    <div class="workspaceHeader">
-      <div>
-        <small>TOPIC WORKSPACE</small>
-        <h2 id="workspaceTitle">إدارة الموضوع</h2>
-        <p id="workspaceSubtitle" class="note"></p>
-      </div>
-      <button class="iconAction" id="closeTopicWorkspace" type="button" aria-label="إغلاق">×</button>
-    </div>
-    <div class="workspaceMetaGrid">
-      <label>اسم الموضوع بالإنجليزية<input id="workspaceTitleEn" dir="ltr"></label>
-      <label>اسم الموضوع بالعربية<input id="workspaceTitleAr"></label>
-      <button class="btn green" id="workspaceSaveMeta" type="button">💾 حفظ الاسم</button>
-      <button class="btn blue" id="workspaceOpenLearn" type="button">▶ فتح للتعلّم</button>
-    </div>
-    <div class="workspaceAddSentence">
-      <h3>➕ إضافة جملة داخل الموضوع</h3>
-      <div class="workspaceSentenceInputs">
-        <input id="workspaceNewEnglish" dir="ltr" placeholder="English sentence">
-        <input id="workspaceNewArabic" placeholder="الترجمة العربية">
-        <button class="btn green" id="workspaceAddSentence" type="button">إضافة</button>
-      </div>
-    </div>
-    <div class="workspaceListHead">
-      <h3>الجمل <span id="workspaceSentenceCount">0</span></h3>
-      <input id="workspaceSentenceSearch" placeholder="🔍 بحث داخل الجمل...">
-    </div>
-    <div class="workspaceSentenceList" id="workspaceSentenceList"></div>
-    <div class="controls workspaceFooter">
-      <button class="btn purple" id="workspaceExportTopic" type="button">📤 تصدير الموضوع</button>
-      <button class="btn" id="workspaceCloseBottom" type="button">إغلاق</button>
-    </div>
-  </div>
-</div>
-
 <nav class="mobileBottomNav" aria-label="التنقل السريع">
   <button data-go="dashboard"><span>🏠</span><small>الرئيسية</small></button>
   <button data-go="learn"><span>📚</span><small>التعلّم</small></button>
@@ -406,6 +342,7 @@
   <button id="mobileMoreBtn"><span>☰</span><small>المزيد</small></button>
 </nav>
 <div class="toast" id="toast"></div>
+<script src="js/storage.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
