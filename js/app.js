@@ -350,13 +350,98 @@ function togglePinAnyTopic(topic){
 }
 function manageAnyTopic(topic){
   if(!topic)return;
-  if(topic.custom)openTopicModal(Number(topic.custom_index));else convertBuiltInToEditable(topic,true);
+  openTopicWorkspace(topic);
 }
 function restoreHiddenTopics(){
   if(!hiddenBuiltInTopicIds.length){toast('لا توجد موضوعات محذوفة');return;}
   if(!confirm(`استعادة ${hiddenBuiltInTopicIds.length} موضوع؟`))return;
   hiddenBuiltInTopicIds=[];saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();toast('تمت استعادة الموضوعات ✅');
 }
+
+// ===== V19.7 Topic Workspace Pro =====
+let workspaceCustomTopicIndex=null;
+function ensureEditableTopic(topic){
+  if(!topic)return null;
+  if(topic.custom)return Number(topic.custom_index);
+  const sourceId=Number(topic.id);
+  let idx=customTopics.findIndex(x=>Number(x.source_topic_id)===sourceId);
+  if(idx<0){
+    customTopics.push({title_en:topic.title_en,title_ar:topic.title_ar,sentences:topicSentencesSnapshot(topic),source_topic_id:sourceId,created_at:Date.now(),pinned:Boolean(topic.pinned)});
+    idx=customTopics.length-1;
+  }
+  if(!hiddenBuiltInTopicIds.includes(sourceId))hiddenBuiltInTopicIds.push(sourceId);
+  saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();
+  return idx;
+}
+function openTopicWorkspace(topic){
+  const idx=ensureEditableTopic(topic); if(idx===null||!customTopics[idx])return;
+  workspaceCustomTopicIndex=idx;
+  const modal=$('topicWorkspaceModal'); if(!modal)return;
+  modal.classList.add('show');
+  $('workspaceSentenceSearch').value='';
+  renderTopicWorkspace();
+}
+function closeTopicWorkspace(){ $('topicWorkspaceModal')?.classList.remove('show'); workspaceCustomTopicIndex=null; }
+function workspaceTopic(){return Number.isInteger(workspaceCustomTopicIndex)?customTopics[workspaceCustomTopicIndex]:null;}
+function persistWorkspace(message){
+  saveCustomTopics();rebuildCustomData();render();renderPremiumTopics();renderTopicWorkspace();
+  if(message)toast(message);
+}
+function renderTopicWorkspace(){
+  const topic=workspaceTopic(); if(!topic)return;
+  const lines=Array.isArray(topic.sentences)?topic.sentences:(topic.sentences=[]);
+  $('workspaceTitle').textContent=topic.title_ar||topic.title_en||'إدارة الموضوع';
+  $('workspaceSubtitle').textContent=(topic.title_en||'')+' · '+lines.length+' جملة';
+  $('workspaceTitleEn').value=topic.title_en||''; $('workspaceTitleAr').value=topic.title_ar||'';
+  $('workspaceSentenceCount').textContent=lines.length;
+  const q=($('workspaceSentenceSearch').value||'').trim().toLowerCase();
+  const rows=lines.map((line,index)=>({...line,index})).filter(x=>!q||String(x.english||'').toLowerCase().includes(q)||String(x.arabic||'').includes(q));
+  $('workspaceSentenceList').innerHTML=rows.length?rows.map(x=>`<div class="workspaceSentenceRow" data-workspace-row="${x.index}">
+    <span class="workspaceSentenceNumber">${x.index+1}</span>
+    <input class="workspaceEnglish" dir="ltr" value="${escapeHtml(x.english||'')}">
+    <input class="workspaceArabic" value="${escapeHtml(x.arabic||'')}">
+    <div class="workspaceSentenceActions">
+      <button data-workspace-action="speak" title="استماع">🔊</button>
+      <button data-workspace-action="save" title="حفظ الجملة">💾</button>
+      <button data-workspace-action="up" title="لأعلى">↑</button>
+      <button data-workspace-action="down" title="لأسفل">↓</button>
+      <button class="danger" data-workspace-action="delete" title="حذف">🗑️</button>
+    </div></div>`).join(''):'<div class="workspaceEmpty">لا توجد جمل مطابقة. أضيفي جملة جديدة من الأعلى.</div>';
+  $('workspaceSentenceList').querySelectorAll('[data-workspace-action]').forEach(btn=>btn.onclick=()=>{
+    const row=btn.closest('[data-workspace-row]'); const index=Number(row.dataset.workspaceRow); const action=btn.dataset.workspaceAction;
+    if(action==='speak'){speak(lines[index]?.english||'');return;}
+    if(action==='save'){
+      const english=row.querySelector('.workspaceEnglish').value.trim(); const arabic=row.querySelector('.workspaceArabic').value.trim();
+      if(!english){toast('الجملة الإنجليزية مطلوبة');return;} lines[index]={english,arabic};persistWorkspace('تم حفظ الجملة ✅');return;
+    }
+    if(action==='delete'){if(confirm('حذف هذه الجملة؟')){lines.splice(index,1);persistWorkspace('تم حذف الجملة');}return;}
+    const target=action==='up'?index-1:index+1;
+    if(target>=0&&target<lines.length){[lines[index],lines[target]]=[lines[target],lines[index]];persistWorkspace();}
+  });
+}
+$('workspaceSaveMeta') && ($('workspaceSaveMeta').onclick=()=>{
+  const topic=workspaceTopic(); if(!topic)return;
+  const en=$('workspaceTitleEn').value.trim(), ar=$('workspaceTitleAr').value.trim();
+  if(!en){toast('اسم الموضوع بالإنجليزية مطلوب');return;}
+  topic.title_en=en;topic.title_ar=ar||en;topic.updated_at=Date.now();persistWorkspace('تم حفظ اسم الموضوع ✅');
+});
+$('workspaceAddSentence') && ($('workspaceAddSentence').onclick=()=>{
+  const topic=workspaceTopic(); if(!topic)return;
+  const english=$('workspaceNewEnglish').value.trim(),arabic=$('workspaceNewArabic').value.trim();
+  if(!english){toast('اكتبي الجملة الإنجليزية');return;}
+  (topic.sentences||(topic.sentences=[])).push({english,arabic});$('workspaceNewEnglish').value='';$('workspaceNewArabic').value='';persistWorkspace('تمت إضافة الجملة ✅');
+});
+$('workspaceSentenceSearch') && ($('workspaceSentenceSearch').oninput=renderTopicWorkspace);
+$('workspaceOpenLearn') && ($('workspaceOpenLearn').onclick=()=>{
+  const topic=workspaceTopic(); if(!topic)return; const current=T.find(t=>t.custom&&Number(t.custom_index)===workspaceCustomTopicIndex);
+  if(current){state.i=current.start_index;save();render();closeTopicWorkspace();openScreen('learn');}
+});
+$('workspaceExportTopic') && ($('workspaceExportTopic').onclick=()=>{const topic=workspaceTopic();if(topic)download((topic.title_en||'Topic').replace(/[^a-z0-9_-]+/gi,'_')+'.json',JSON.stringify(topic,null,2),'application/json');});
+$('closeTopicWorkspace') && ($('closeTopicWorkspace').onclick=closeTopicWorkspace);
+$('workspaceCloseBottom') && ($('workspaceCloseBottom').onclick=closeTopicWorkspace);
+$('topicWorkspaceModal') && ($('topicWorkspaceModal').onclick=e=>{if(e.target===$('topicWorkspaceModal'))closeTopicWorkspace();});
+
+
 
 // ===== Import Topics From File (CSV / JSON / TXT) =====
 function csvCells(line){
@@ -984,3 +1069,30 @@ function renderFavoritesScreen(){
 const oldOpenScreenV1957=openScreen;
 openScreen=function(screen){oldOpenScreenV1957(screen);if(screen==='favorites')renderFavoritesScreen();};
 document.querySelectorAll('.navItem[data-screen="favorites"]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(renderFavoritesScreen,0)));
+
+
+// ===== V20.0.1 Learning Summary restored =====
+const V2001_ACTIVITY_KEY='nada_v2001_daily_activity';
+function v2001DateKey(date=new Date()){return date.toISOString().slice(0,10);}
+function v2001ReadActivity(){try{return JSON.parse(localStorage.getItem(V2001_ACTIVITY_KEY)||localStorage.getItem('nada_v199_daily_activity')||'{}')||{};}catch(_){return {};}}
+function v2001WriteActivity(data){localStorage.setItem(V2001_ACTIVITY_KEY,JSON.stringify(data));}
+function v2001Track(type,amount=1){const data=v2001ReadActivity();const key=v2001DateKey();data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};data[key][type]=Number(data[key][type]||0)+Number(amount||0);data[key].visits=Math.max(1,Number(data[key].visits||0));v2001WriteActivity(data);refreshLearningSummary();}
+function v2001EnsureVisit(){const data=v2001ReadActivity();const key=v2001DateKey();data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};if(!data[key].visits)data[key].visits=1;v2001WriteActivity(data);}
+function v2001Streak(data){let count=0;const d=new Date();for(let i=0;i<365;i++){const k=v2001DateKey(d);const x=data[k];if(x&&(Number(x.known||0)+Number(x.review||0)+Number(x.minutes||0)+Number(x.visits||0)>0)){count++;d.setDate(d.getDate()-1);}else if(i===0){d.setDate(d.getDate()-1);}else break;}return Math.max(1,count);}
+function refreshLearningSummary(){
+  const data=v2001ReadActivity(),today=data[v2001DateKey()]||{};
+  const focusStats=(typeof readFocusStats==='function'?readFocusStats():{})||{};
+  const todayMinutes=Math.round(Number(today.minutes||0)+Number(focusStats[v2001DateKey()]||0));
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  set('insightKnownToday',Number(today.known||0));set('insightReviewToday',Number(today.review||0));set('insightMinutesToday',todayMinutes+' د');set('insightStreak',v2001Streak(data)+' يوم');
+  const labels=['أحد','اثن','ثلا','أرب','خمي','جمع','سبت'];const wrap=document.getElementById('weeklyTimeline');
+  if(wrap){const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=v2001DateKey(d),x=data[k]||{};const mins=Number(x.minutes||0)+Number(focusStats[k]||0);const score=Math.min(100,Number(x.known||0)*18+Number(x.review||0)*10+mins*3+Number(x.visits||0)*8);days.push(`<div class="weekDayCard ${i===0?'today':''}"><strong>${labels[d.getDay()]}</strong><small>${Number(x.known||0)} جملة · ${Math.round(mins)}د</small><div class="dayActivity"><span style="width:${score}%"></span></div></div>`);}wrap.innerHTML=days.join('');}
+}
+if(typeof markKnown==='function'){const v2001OldMarkKnown=markKnown;markKnown=function(n){const before=Boolean(state.known?.[n]);v2001OldMarkKnown(n);if(!before)v2001Track('known',1);};}
+if(typeof markReview==='function'){const v2001OldMarkReview=markReview;markReview=function(n){const before=Boolean(state.review?.[n]);v2001OldMarkReview(n);if(!before)v2001Track('review',1);};}
+document.getElementById('insightOpenStats')?.addEventListener('click',()=>openScreen('stats'));
+document.getElementById('insightStartReview')?.addEventListener('click',()=>openScreen('review'));
+v2001EnsureVisit();
+const v2001OldRefreshDashboard=refreshDashboard;refreshDashboard=function(){v2001OldRefreshDashboard();refreshLearningSummary();};
+window.addEventListener('focus',refreshLearningSummary);
+setTimeout(refreshLearningSummary,700);
