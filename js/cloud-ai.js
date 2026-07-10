@@ -65,46 +65,59 @@ function conversationPrompt(text){
   return `${teacherPrompt(s)}\n\nConversation so far:\n${recent||'(new conversation)'}\nStudent: ${text}`;
 }
 function cleanJsonText(raw){
-  let text=String(raw||'').trim();
+  let text=String(raw??'').replace(/^\uFEFF/,'').trim();
   text=text.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
-  text=text.replace(/[“”]/g,'"').replace(/[‘’]/g,"'");
   const start=text.indexOf('{');
   const end=text.lastIndexOf('}');
   if(start!==-1&&end>start)text=text.slice(start,end+1);
   return text.trim();
 }
-function extractJsonFields(raw){
-  const text=String(raw||'').replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+function normalizeTeacherObject(value){
+  if(!value||typeof value!=='object'||Array.isArray(value))return null;
   const out={};
   for(const key of AI_REPLY_FIELDS){
-    const rx=new RegExp(`['\"]?${key}['\"]?\\s*:\s*['\"]([\\s\\S]*?)['\"](?=\\s*,\\s*['\"]?[A-Za-z]|\\s*}\\s*$)`,'i');
-    const m=text.match(rx);
-    if(m)out[key]=m[1].replace(/\\n/g,'\n').replace(/\\"/g,'"').trim();
+    const field=value[key];
+    out[key]=field==null?'':String(field).trim();
   }
-  return out;
+  return AI_REPLY_FIELDS.some(key=>out[key])?out:null;
 }
 function parseTeacherReply(raw){
-  let obj=null;
   const cleaned=cleanJsonText(raw);
-  try{obj=JSON.parse(cleaned)}catch{}
-  if(!obj||typeof obj!=='object')obj=extractJsonFields(raw);
-  if(!obj||typeof obj!=='object'||!AI_REPLY_FIELDS.some(k=>obj[k])){
-    const plain=String(raw||'').replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').replace(/\*+/g,'').trim();
-    return {display:plain,spoken:plain.replace(/[*#`]/g,'').trim()};
+  let obj=null;
+  try{
+    obj=normalizeTeacherObject(JSON.parse(cleaned));
+  }catch(firstError){
+    try{
+      const repaired=cleaned
+        .replace(/,\s*([}\]])/g,'$1')
+        .replace(/[\u201c\u201d]/g,'"')
+        .replace(/[\u2018\u2019]/g,"'");
+      obj=normalizeTeacherObject(JSON.parse(repaired));
+    }catch(secondError){
+      console.error('Unable to parse Gemini teacher JSON.',{raw,cleaned,firstError,secondError});
+    }
   }
-  const v=k=>String(obj[k]||'').trim();
-  const english=v('englishReply');
-  const arabic=v('arabicTranslation');
-  const correction=v('correction');
-  const explanation=v('explanationArabic');
-  const next=v('nextQuestion');
+  if(!obj){
+    return {
+      display:'تعذر قراءة رد المدرّس بشكل صحيح. حاولي إرسال الرسالة مرة أخرى.',
+      spoken:''
+    };
+  }
+  const english=obj.englishReply;
+  const arabic=obj.arabicTranslation;
+  const correction=obj.correction;
+  const explanation=obj.explanationArabic;
+  const next=obj.nextQuestion;
   const parts=[];
   if(english)parts.push(`🗣 English\n${english}`);
   if(arabic)parts.push(`🇪🇬 العربية\n${arabic}`);
   if(correction)parts.push(`✍️ التصحيح\n${correction}`);
   if(explanation)parts.push(`💡 الشرح\n${explanation}`);
   if(next)parts.push(`❓ السؤال التالي\n${next}`);
-  return {display:parts.join('\n\n')||String(raw||'').trim(),spoken:[english,next].filter(Boolean).join(' ')};
+  return {
+    display:parts.join('\n\n'),
+    spoken:[english,next].filter(Boolean).join(' ')
+  };
 }
 async function loadFirebaseModules(){
   if(firebaseModules)return firebaseModules;
