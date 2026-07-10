@@ -614,3 +614,40 @@ document.getElementById('dashReview')?.addEventListener('click',()=>openScreen('
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
 document.querySelectorAll('.navItem').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.screen==='dashboard')setTimeout(refreshDashboard,0);}));
 setTimeout(refreshDashboard,350);
+
+
+// ===== V19.4.1 Visible UI Upgrade =====
+const sidebarCollapseBtn=document.getElementById('sidebarCollapse');
+function applySidebarState(){
+  const collapsed=localStorage.getItem('nea_sidebar_collapsed')==='1';
+  document.body.classList.toggle('sidebar-collapsed',collapsed && window.innerWidth>900);
+}
+sidebarCollapseBtn?.addEventListener('click',()=>{
+  const next=!document.body.classList.contains('sidebar-collapsed');
+  localStorage.setItem('nea_sidebar_collapsed',next?'1':'0');
+  applySidebarState();
+});
+window.addEventListener('resize',applySidebarState);applySidebarState();
+
+const globalSearch=document.getElementById('globalSearch');
+function runGlobalSearch(){
+  const q=(globalSearch?.value||'').trim();
+  if(!q)return;
+  const old=document.getElementById('search');
+  if(old){old.value=q;old.dispatchEvent(new Event('input',{bubbles:true}));old.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));}
+  const match=S.findIndex(x=>String(x.number)===q||x.english.toLowerCase().includes(q.toLowerCase())||x.arabic.includes(q)||x.topic_en.toLowerCase().includes(q.toLowerCase()));
+  if(match>=0){state.i=match;save();openScreen('learn');render();document.querySelector('#learn .card')?.classList.add('searchFlash');setTimeout(()=>document.querySelector('#learn .card')?.classList.remove('searchFlash'),1200);}
+  else toast('لم يتم العثور على نتيجة');
+}
+globalSearch?.addEventListener('keydown',e=>{if(e.key==='Enter')runGlobalSearch();});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();globalSearch?.focus();globalSearch?.select();}});
+
+const oldRefreshDashboardV1941=refreshDashboard;
+refreshDashboard=function(){
+  oldRefreshDashboardV1941();
+  const known=Object.keys(state.known||{}).length;
+  const pct=S.length?Math.round((known/S.length)*100):0;
+  const sg=document.getElementById('sideGoal');if(sg)sg.textContent=Math.min(100,pct)+'%';
+  const sgb=document.getElementById('sideGoalBar');if(sgb)sgb.style.width=Math.min(100,pct)+'%';
+};
+setTimeout(refreshDashboard,500);
