@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V18.1 - Safe Data</title>
+<title>Nada English Academy V19.2 - Voice Correction</title>
 <style>
 :root{--green:#58cc02;--blue:#1cb0f6;--orange:#ff9600;--red:#ff4b4b;--purple:#8b5cf6;--bg:#f6fbff;--card:#ffffff;--text:#102033;--muted:#667085;--line:#d8e6f3;--soft:#f1f7ff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:linear-gradient(135deg,#effcff,#fff7ed);color:var(--text)}body.dark{--bg:#0b1220;--card:#101827;--text:#f8fafc;--muted:#cbd5e1;--line:#344155;--soft:#0f172a;background:linear-gradient(135deg,#020617,#111827)}
@@ -31,27 +31,112 @@ input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:13px;pad
 .modalOverlay{position:fixed;inset:0;background:#0f172acc;display:none;align-items:center;justify-content:center;z-index:100;padding:18px}.modalOverlay.show{display:flex}.modalCard{width:min(720px,96vw);max-height:92vh;overflow:auto;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 24px 80px #0006}.modalCard h2{margin-top:0}.modalCard textarea{min-height:170px}.customTopicActions{display:flex;gap:6px;margin-top:6px}.topicDelete{background:#fee2e2;color:#991b1b;border:0;border-radius:10px;padding:6px 9px;cursor:pointer;font-weight:800}
 
 .freeChatWrap{display:grid;grid-template-columns:220px 1fr;gap:12px}.freeChatSide,.freeChatMain{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:12px}.freeChatMessages{height:360px;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:9px}.chatMsg{max-width:82%;padding:10px 13px;border-radius:16px;line-height:1.55}.chatMsg.bot{align-self:flex-start;background:#e0f2fe;color:#0c4a6e;direction:ltr;text-align:left}.chatMsg.user{align-self:flex-end;background:#dcfce7;color:#14532d;direction:ltr;text-align:left}.chatMsg small{display:block;color:inherit;opacity:.72;margin-top:4px;direction:rtl;text-align:right}.freeChatInput{display:flex;gap:8px;margin-top:10px}.freeChatInput input{flex:1}.scenarioBtn{width:100%;margin:5px 0;text-align:right}.scenarioBtn.active{background:var(--purple);color:#fff}@media(max-width:750px){.freeChatWrap{grid-template-columns:1fr}.freeChatMessages{height:320px}}
+
+/* V19.1 Free Pronunciation */
+.brand span{font-size:12px;background:var(--purple);color:#fff;border-radius:999px;padding:4px 8px;margin-inline-start:5px;vertical-align:middle}
+.layout{grid-template-columns:280px minmax(0,1fr);gap:18px;align-items:start}
+.side{padding:0;overflow:hidden;max-height:calc(100vh - 96px);display:flex;flex-direction:column;background:linear-gradient(180deg,var(--card),var(--soft))}
+.sidebarHeader{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid var(--line)}
+.sidebarLogo{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#dcfce7,#dbeafe);font-size:24px}
+.sidebarHeader strong{display:block;font-size:15px}.sidebarHeader small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.sidebarClose{display:none;margin-inline-start:auto;border:0;background:transparent;color:var(--text);font-size:28px;cursor:pointer}
+.sidebarNav{padding:10px;overflow:auto;max-height:52vh;scrollbar-width:thin}
+.navSectionTitle{font-size:11px;font-weight:900;color:var(--muted);padding:12px 10px 5px;text-transform:uppercase;letter-spacing:.5px}
+.tab.navItem{width:100%;display:flex;align-items:center;gap:11px;margin:3px 0;padding:10px 12px;border-radius:13px;background:transparent;color:var(--text);text-align:right;justify-content:flex-start;transition:.18s}
+.tab.navItem:hover{background:var(--soft);transform:translateX(-2px)}
+.tab.navItem.active{background:linear-gradient(135deg,var(--green),#22c55e);color:#fff;box-shadow:0 8px 18px rgba(34,197,94,.22)}
+.navIcon{width:26px;text-align:center;font-size:18px;flex:0 0 26px}.navItem span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebarTools,.sidebarTopics{margin:8px 10px 10px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:0 10px 10px}
+.sidebarTools summary,.sidebarTopics summary{cursor:pointer;padding:11px 2px;font-weight:900;list-style:none}.sidebarTools summary::-webkit-details-marker,.sidebarTopics summary::-webkit-details-marker{display:none}
+.sidebarTools summary::after,.sidebarTopics summary::after{content:'⌄';float:left;color:var(--muted)}details[open]>summary::after{content:'⌃'}
+.sidebarTopics{min-height:0}.sidebarTopics[open]{overflow:auto}.sidebarTopics .topicList{max-height:260px}
+.main{min-width:0}.mobileMenuBtn{display:none;border:0;border-radius:12px;background:var(--card);color:var(--text);font-size:22px;padding:7px 10px;cursor:pointer}.sidebarBackdrop{display:none}
+.focus .side{display:none}.focus .layout{grid-template-columns:1fr}
+@media(max-width:900px){
+  .mobileMenuBtn{display:inline-grid;place-items:center}.layout{display:block;padding:10px}.main{border-radius:18px;padding:12px}
+  .side{position:fixed;top:0;right:0;height:100vh;max-height:none;width:min(310px,88vw);z-index:80;border-radius:0;transform:translateX(105%);transition:transform .25s ease;box-shadow:-18px 0 40px #0f172a38}
+  .side.open{transform:translateX(0)}.sidebarClose{display:block}.sidebarNav{max-height:45vh}
+  .sidebarBackdrop{position:fixed;inset:0;background:#0f172a99;z-index:70}.sidebarBackdrop.show{display:block}
+  .topin{padding:9px 12px}.brand{font-size:17px;width:auto;margin-left:auto}.brand span{font-size:10px}.progress{order:5;width:100%}
+}
+@media(max-width:520px){.pill{padding:6px 9px;font-size:11px}.brand{font-size:15px}.main{border:0;box-shadow:none}.card{padding:16px;border-radius:20px}.en{font-size:26px}.ar{font-size:18px}}
 </style>
 </head>
 <body>
-<header class="top"><div class="topin"><div class="brand">Nada English Academy V18.1 - Safe Data</div><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span><button class="btn small" id="darkBtn">🌙</button><div class="progress"><span id="progressBar"></span></div></div></header>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brand">Nada English Academy <span>V19.2</span></div><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span><button class="btn small" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="progress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
-<aside class="side">
-<label>بحث سريع</label><input id="search" placeholder="رقم / English / عربي">
-<label>اختيار الصوت</label><select id="voice"></select>
-<label>سرعة النطق</label><input type="range" id="rate" min="0.55" max="1.25" value="0.85" step="0.05">
-<label>الموضوعات</label><button class="btn green" id="addTopicBtn" style="width:100%;margin-bottom:8px">➕ إضافة موضوع</button><div class="topicList" id="topics"></div>
+<aside class="side" id="appSidebar">
+  <div class="sidebarHeader">
+    <div class="sidebarLogo">🦉</div>
+    <div><strong>Nada Academy</strong><small>Learn English smarter</small></div>
+    <button class="sidebarClose" id="sidebarClose" aria-label="إغلاق القائمة">×</button>
+  </div>
+
+  <nav class="sidebarNav" aria-label="القائمة الرئيسية">
+    <div class="navSectionTitle">التعلّم</div>
+    <button class="tab navItem active" data-screen="learn"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
+    <button class="tab navItem" data-screen="daily"><span class="navIcon">📅</span><span>درس اليوم</span></button>
+    <button class="tab navItem" data-screen="review"><span class="navIcon">🔁</span><span>المراجعة</span></button>
+    <button class="tab navItem" data-screen="flashcards"><span class="navIcon">🃏</span><span>Flashcards</span></button>
+    <button class="tab navItem" data-screen="quiz"><span class="navIcon">📝</span><span>الاختبارات</span></button>
+
+    <div class="navSectionTitle">المهارات</div>
+    <button class="tab navItem" data-screen="dictation"><span class="navIcon">🎧</span><span>الاستماع والكتابة</span></button>
+    <button class="tab navItem" data-screen="speak"><span class="navIcon">🎤</span><span>تدريب النطق</span></button>
+    <button class="tab navItem" data-screen="words"><span class="navIcon">🧠</span><span>Word Coach</span></button>
+    <button class="tab navItem" data-screen="grammar"><span class="navIcon">📘</span><span>Grammar</span></button>
+
+    <div class="navSectionTitle">المحادثة والعمل</div>
+    <button class="tab navItem" data-screen="conversation"><span class="navIcon">💬</span><span>محادثة موجّهة</span></button>
+    <button class="tab navItem" data-screen="freechat"><span class="navIcon">🗨️</span><span>محادثة حرة</span></button>
+    <button class="tab navItem" data-screen="erp"><span class="navIcon">🏢</span><span>Odoo / ERP</span></button>
+
+    <div class="navSectionTitle">التقدّم والأدوات</div>
+    <button class="tab navItem" data-screen="stats"><span class="navIcon">📊</span><span>الإحصائيات</span></button>
+    <button class="tab navItem" data-screen="achievements"><span class="navIcon">🏆</span><span>الإنجازات</span></button>
+    <button class="tab navItem" data-screen="planner"><span class="navIcon">🗓️</span><span>خطة الدراسة</span></button>
+    <button class="tab navItem" data-screen="mistakes"><span class="navIcon">🧯</span><span>أخطائي</span></button>
+    <button class="tab navItem" data-screen="lab"><span class="navIcon">🧪</span><span>Practice Lab</span></button>
+    <button class="tab navItem" data-screen="playlist"><span class="navIcon">🎵</span><span>Audio Playlist</span></button>
+    <button class="tab navItem" data-screen="notes"><span class="navIcon">🗒️</span><span>ملاحظاتي</span></button>
+    <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
+  </nav>
+
+  <details class="sidebarTools" open>
+    <summary>⚙️ أدوات سريعة</summary>
+    <label>بحث سريع</label><input id="search" placeholder="رقم / English / عربي">
+    <label>اختيار الصوت</label><select id="voice"></select>
+    <label>سرعة النطق</label><input type="range" id="rate" min="0.55" max="1.25" value="0.85" step="0.05">
+  </details>
+
+  <details class="sidebarTopics">
+    <summary>📚 الموضوعات</summary>
+    <button class="btn green" id="addTopicBtn" style="width:100%;margin:10px 0 8px">➕ إضافة موضوع</button>
+    <div class="topicList" id="topics"></div>
+  </details>
 </aside>
 <main class="main">
-<div class="tabs">
-<button class="tab active" data-screen="learn">تعلم</button><button class="tab" data-screen="daily">درس اليوم</button><button class="tab" data-screen="review">مراجعة</button><button class="tab" data-screen="quiz">اختبار</button><button class="tab" data-screen="dictation">استمع واكتب</button><button class="tab" data-screen="speak">نطق</button><button class="tab" data-screen="words">Word Coach</button><button class="tab" data-screen="stats">إحصائيات</button><button class="tab" data-screen="achievements">إنجازات</button><button class="tab" data-screen="flashcards">Flashcards</button><button class="tab" data-screen="planner">خطة</button><button class="tab" data-screen="conversation">محادثة</button><button class="tab" data-screen="freechat">محادثة حرة</button><button class="tab" data-screen="grammar">Grammar</button><button class="tab" data-screen="erp">ERP English</button><button class="tab" data-screen="mistakes">أخطائي</button><button class="tab" data-screen="lab">Practice Lab</button><button class="tab" data-screen="playlist">Audio Playlist</button><button class="tab" data-screen="notes">ملاحظاتي</button><button class="tab" data-screen="backup">تصدير</button>
-</div>
 <section class="screen active" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
 <section class="screen" id="daily"><h2>📅 درس اليوم</h2><div class="grid"><div class="stat"><b id="dNew">0</b>جمل جديدة</div><div class="stat"><b id="dRev">0</b>مراجعة</div><div class="stat"><b>15</b>دقيقة</div></div><div class="controls"><button class="btn green" id="buildDaily">تجهيز درس اليوم</button><button class="btn blue" id="startDaily">ابدئي الدرس</button><button class="btn orange" id="printDaily">طباعة</button></div><div class="resultBox" id="dailyList"></div></section>
 <section class="screen" id="review"><h2>🔁 مراجعة ذكية</h2><div class="box"><div class="en" id="revEn"></div><div class="ar" id="revAr"></div><div class="controls"><button class="btn blue" id="revSpeak">🔊</button><button class="btn green" id="revOk">عرفتها</button><button class="btn orange" id="revBad">لسه صعبة</button></div></div></section>
 <section class="screen" id="quiz"><h2>📝 اختبار الترجمة</h2><div class="box"><div class="en" id="qText"></div><div id="choices"></div><div id="qFeedback"></div><button class="btn purple" id="newQuiz">سؤال جديد</button></div></section>
 <section class="screen" id="dictation"><h2>🎧 استمعي واكتبي</h2><div class="box"><button class="btn blue" id="dictSpeak">🔊 اسمع الجملة</button><textarea id="dictInput" rows="4" placeholder="Write what you hear..."></textarea><div class="controls"><button class="btn green" id="dictCheck">تحقق</button><button class="btn" id="dictClear">مسح</button></div><div id="dictOut"></div></div></section>
-<section class="screen" id="speak"><h2>🎙️ تدريب النطق</h2><div class="box"><p>التقييم تقريبي ويعتمد على متصفح Chrome/Edge والميكروفون.</p><button class="btn red" id="micBtn">🎙️ ابدأ التسجيل</button><div class="box" id="heard"></div><div id="speechScore"></div></div></section>
+<section class="screen" id="speak">
+  <h2>🎙️ تدريب النطق الحر</h2>
+  <div class="box">
+    <p>اتكلمي بحرية بالإنجليزية. التدريب غير مرتبط بالجملة الحالية.</p>
+    <label for="pronTarget"><b>نص اختياري للمقارنة</b></label>
+    <textarea id="pronTarget" rows="3" placeholder="اكتبي كلمة أو جملة من اختيارك، أو اتركيه فارغًا للتحدث الحر..."></textarea>
+    <div class="controls">
+      <button class="btn red" id="micBtn">🎙️ ابدأ التحدث الحر</button>
+      <button class="btn" id="pronClear">🗑️ مسح</button>
+      <button class="btn blue" id="pronListen">🔊 اسمعي النص</button>
+      <button class="btn green" id="pronCopy">📋 نسخ كلامي</button>
+    </div>
+    <div class="box" id="heard">سيظهر كلامك هنا...</div>
+    <div id="speechScore"></div>
+  </div>
+</section>
 <section class="screen" id="words"><h2>🔤 Word Coach</h2><div class="box"><div class="en" id="wordSentence"></div><div id="wordList"></div><textarea id="wordNote" rows="3" placeholder="ملاحظتك على الكلمات..."></textarea><div class="controls"><button class="btn green" id="saveWords">حفظ الكلمات</button><button class="btn blue" id="wordQuiz">اختبار كلمة</button></div><h3>الكلمات المحفوظة</h3><div id="savedWords"></div></div></section>
 <section class="screen" id="stats"><h2>📊 إحصائيات</h2><div class="grid"><div class="stat"><b id="sKnown">0</b>محفوظة</div><div class="stat"><b id="sReview">0</b>مراجعة</div><div class="stat"><b id="sFav">0</b>مفضلة</div><div class="stat"><b id="sPct">0%</b>إنجاز</div></div><div id="topicStats"></div></section>
 
@@ -118,15 +203,18 @@ input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:13px;pad
       <button class="btn scenarioBtn" data-scenario="interview">مقابلة عمل</button>
       <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
       <button class="btn blue" id="freeChatSpeak" style="width:100%">🔊 اسمعي الرد</button>
+      <button class="btn green" id="freeChatSpeakCorrection" style="width:100%;margin-top:7px" disabled>✅ اسمعي التصحيح</button>
       <button class="btn orange" id="freeChatHint" style="width:100%;margin-top:7px">💡 اقتراح رد</button>
       <button class="btn red" id="freeChatClear" style="width:100%;margin-top:7px">مسح المحادثة</button>
     </div>
     <div class="freeChatMain">
       <div class="freeChatMessages" id="freeChatMessages"></div>
       <div class="freeChatInput">
-        <input id="freeChatText" placeholder="اكتبي ردك بالإنجليزية...">
-        <button class="btn green" id="freeChatSend">إرسال</button>
+        <input id="freeChatText" placeholder="اكتبي ردك بالإنجليزية أو استخدمي الميكروفون...">
+        <button class="btn purple" id="freeChatMic" type="button">🎤 اتكلمي</button>
+        <button class="btn green" id="freeChatSend" type="button">إرسال</button>
       </div>
+      <div class="note" id="freeChatMicStatus">اضغطي 🎤 اتكلمي، ثم قولي ردك بالإنجليزية.</div>
       <div class="note" id="freeChatFeedback">اكتبي جملة بالإنجليزية، وسأرد عليكِ وأعطيكِ ملاحظة بسيطة.</div>
     </div>
   </div>
@@ -232,7 +320,7 @@ rebuildCustomData();
 let state = consolidatedData?.state || safeParse(localStorage.getItem('nada_v12_state'), {i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]});
 let voices = [], currentQuiz = null, currentReview = null, daily = [];
 const $ = id => document.getElementById(id);
-function saveAllData(){ if(!storageAvailable()) return; const payload={version:'18.1',savedAt:new Date().toISOString(),state,customTopics,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
+function saveAllData(){ if(!storageAvailable()) return; const payload={version:'19.2',savedAt:new Date().toISOString(),state,customTopics,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
 function save(){ localStorage.setItem('nada_v12_state', JSON.stringify(state)); saveAllData(); }
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1400); }
 function clean(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
@@ -264,21 +352,24 @@ function rand(a){return a[Math.floor(Math.random()*a.length)];} function shuffle
 function newQuiz(){ currentQuiz=rand(S); $('qText').textContent=currentQuiz.english; let options=shuffle([currentQuiz,...shuffle(S.filter(x=>x.topic_id===currentQuiz.topic_id && x.number!==currentQuiz.number)).slice(0,3)]); $('choices').innerHTML=options.map(x=>`<button class="choice" data-ok="${x.number===currentQuiz.number}">${x.arabic}</button>`).join(''); $('qFeedback').textContent=''; document.querySelectorAll('#choices .choice').forEach(c=>c.onclick=()=>{const ok=c.dataset.ok==='true'; c.classList.add(ok?'ok':'bad'); $('qFeedback').textContent=ok?'صح ✅':'غلط. الإجابة: '+currentQuiz.arabic; if(ok) markKnown(currentQuiz.number); else markReview(currentQuiz.number);}); }
 $('newQuiz').onclick=newQuiz;
 $('dictSpeak').onclick=()=>speak(); $('dictClear').onclick=()=>$('dictInput').value=''; $('dictCheck').onclick=()=>{ const target=clean(S[state.i].english).split(' '), ans=clean($('dictInput').value).split(' '); const hit=target.filter((w,k)=>w===ans[k]).length; const score=Math.round(hit/Math.max(target.length,1)*100); $('dictOut').innerHTML=`<h3>${score}%</h3><div class="compare">${target.map((w,k)=>`<span class="${w===ans[k]?'good':'miss'}">${w}</span>`).join('')}</div>`; score>=75?markKnown(S[state.i].number):markReview(S[state.i].number); };
-// ===== Pronunciation recording / speech recognition =====
+// ===== Free pronunciation / speech recognition =====
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let activeRecognition = null;
 let micStream = null;
+let freeTranscript = '';
+let recognitionStartedAt = 0;
+let confidenceValues = [];
 
 function micErrorMessage(errorName){
   const messages = {
     NotAllowedError: 'تم رفض إذن الميكروفون. اضغطي على رمز القفل بجوار العنوان واسمحي باستخدام الميكروفون.',
-    NotFoundError: 'لم يجد المتصفح ميكروفونًا. تأكدي من اختيار Microphone Array في إعدادات الصوت.',
-    NotReadableError: 'الميكروفون مستخدم في برنامج آخر. أغلقي Teams أو Zoom أو أي برنامج تسجيل ثم حاولي مرة أخرى.',
-    AbortError: 'تم إيقاف تشغيل الميكروفون. حاولي مرة أخرى.',
-    SecurityError: 'شغّلي البرنامج من localhost باستخدام ملف run_local_server.bat، وليس مباشرة من داخل ملف ZIP.',
-    'no-speech': 'لم يتم سماع كلام. اقتربي من الميكروفون وتحدثي بوضوح ثم حاولي مرة أخرى.',
+    NotFoundError: 'لم يجد المتصفح ميكروفونًا. تأكدي من اختيار الميكروفون في إعدادات الصوت.',
+    NotReadableError: 'الميكروفون مستخدم في برنامج آخر. أغلقي Teams أو Zoom ثم حاولي مرة أخرى.',
+    AbortError: 'تم إيقاف الميكروفون.',
+    SecurityError: 'افتحي الأكاديمية من رابط GitHub Pages الآمن HTTPS.',
+    'no-speech': 'لم يتم سماع كلام. اقتربي من الميكروفون وتحدثي بوضوح.',
     'audio-capture': 'تعذر التقاط الصوت من الميكروفون.',
-    network: 'خدمة التعرف على الكلام تحتاج اتصال إنترنت. تأكدي من الإنترنت ثم حاولي مرة أخرى.',
+    network: 'خدمة التعرف على الكلام تحتاج اتصال إنترنت.',
     'not-allowed': 'تم رفض إذن الميكروفون من المتصفح.',
     'service-not-allowed': 'خدمة التعرف على الكلام غير متاحة في هذا المتصفح.'
   };
@@ -286,98 +377,120 @@ function micErrorMessage(errorName){
 }
 
 async function verifyMicrophone(){
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    throw new Error('SecurityError');
-  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('SecurityError');
   micStream = await navigator.mediaDevices.getUserMedia({audio:true});
   return true;
 }
-
 function stopMicStream(){
-  if(micStream){
-    micStream.getTracks().forEach(track=>track.stop());
-    micStream = null;
+  if(micStream){ micStream.getTracks().forEach(track=>track.stop()); micStream=null; }
+}
+function pronunciationStats(){
+  const text=freeTranscript.trim();
+  const words=text ? text.split(/\s+/).filter(Boolean) : [];
+  const seconds=Math.max(1,Math.round((Date.now()-recognitionStartedAt)/1000));
+  const avgConfidence=confidenceValues.length ? Math.round(confidenceValues.reduce((a,b)=>a+b,0)/confidenceValues.length*100) : null;
+  const target=$('pronTarget').value.trim();
+  let html='<div class="grid">'+
+    '<div class="stat"><b>'+words.length+'</b>كلمة</div>'+
+    '<div class="stat"><b>'+seconds+'</b>ثانية</div>'+
+    '<div class="stat"><b>'+(avgConfidence===null?'—':avgConfidence+'%')+'</b>وضوح التعرف</div>'+
+    '</div>';
+  if(target && text){
+    const tw=clean(target).split(' ').filter(Boolean);
+    const hw=clean(text).split(' ').filter(Boolean);
+    const matched=tw.filter(w=>hw.includes(w)).length;
+    const score=Math.round(matched/Math.max(tw.length,1)*100);
+    html+='<div class="box"><h3>درجة المقارنة: '+score+'%</h3><small>النص المختار: '+target+'</small></div>';
+  }else{
+    html+='<small>الوضع الحر: لا توجد جملة ثابتة أو إجابة مطلوبة.</small>';
   }
+  $('speechScore').innerHTML=html;
 }
 
 if(!SR){
-  $('micBtn').disabled = true;
-  $('heard').textContent = 'التعرف على الكلام غير مدعوم. استخدمي Google Chrome أو Microsoft Edge.';
+  $('micBtn').disabled=true;
+  $('heard').textContent='التعرف على الكلام غير مدعوم. استخدمي Google Chrome أو Microsoft Edge.';
 }
 
-$('micBtn').onclick = async ()=>{
+$('micBtn').onclick=async()=>{
   if(!SR) return;
   if(activeRecognition){
-    try{ activeRecognition.stop(); }catch(e){}
+    try{activeRecognition.stop();}catch(e){}
     return;
   }
-
-  $('heard').textContent = 'جاري فحص الميكروفون...';
-  $('speechScore').innerHTML = '';
-  $('micBtn').disabled = true;
-
+  $('heard').textContent='جاري فحص الميكروفون...';
+  $('speechScore').innerHTML='';
+  $('micBtn').disabled=true;
+  freeTranscript='';
+  confidenceValues=[];
+  recognitionStartedAt=Date.now();
   try{
     await verifyMicrophone();
     stopMicStream();
-
-    const rec = new SR();
-    activeRecognition = rec;
-    rec.lang = 'en-US';
-    rec.continuous = false;
-    rec.interimResults = true;
-    rec.maxAlternatives = 1;
-
-    rec.onstart = ()=>{
-      $('heard').textContent = '🎤 أتكلمي الآن...';
-      $('micBtn').textContent = '⏹️ إيقاف التسجيل';
-      $('micBtn').disabled = false;
-      toast('الميكروفون يعمل — أتكلمي الآن');
+    const rec=new SR();
+    activeRecognition=rec;
+    rec.lang='en-US';
+    rec.continuous=true;
+    rec.interimResults=true;
+    rec.maxAlternatives=1;
+    rec.onstart=()=>{
+      $('heard').textContent='🎤 اتكلمي الآن بأي موضوع...';
+      $('micBtn').textContent='⏹️ إيقاف';
+      $('micBtn').disabled=false;
+      toast('بدأ التدريب الحر');
     };
-
-    rec.onresult = e=>{
-      let heard = '';
-      for(let i=e.resultIndex; i<e.results.length; i++){
-        heard += e.results[i][0].transcript + ' ';
+    rec.onresult=e=>{
+      let interim='';
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const result=e.results[i];
+        const piece=result[0].transcript.trim();
+        if(result.isFinal){
+          freeTranscript+=(freeTranscript?' ':'')+piece;
+          if(typeof result[0].confidence==='number' && result[0].confidence>0) confidenceValues.push(result[0].confidence);
+        }else interim+=(interim?' ':'')+piece;
       }
-      heard = heard.trim();
-      $('heard').textContent = heard || 'جاري الاستماع...';
-
-      const finalResult = Array.from(e.results).some(r=>r.isFinal);
-      if(finalResult && heard){
-        const words = clean(S[state.i].english).split(' ').filter(Boolean);
-        const hw = clean(heard).split(' ').filter(Boolean);
-        const matched = words.filter(w=>hw.includes(w)).length;
-        const score = Math.round(matched / Math.max(words.length,1) * 100);
-        $('speechScore').innerHTML = '<h3>'+score+'%</h3><small>الجملة الصحيحة: '+S[state.i].english+'</small>';
-        score>=65 ? markKnown(S[state.i].number) : markReview(S[state.i].number);
-      }
+      $('heard').innerHTML='<b>كلامك:</b><br>'+((freeTranscript+(interim?' '+interim:'')).trim()||'جاري الاستماع...');
     };
-
-    rec.onerror = e=>{
-      $('heard').textContent = micErrorMessage(e.error);
-      $('speechScore').innerHTML = '<small>جرّبي تشغيل البرنامج من localhost باستخدام run_local_server.bat.</small>';
+    rec.onerror=e=>{
+      $('heard').textContent=micErrorMessage(e.error);
     };
-
-    rec.onend = ()=>{
-      activeRecognition = null;
+    rec.onend=()=>{
+      activeRecognition=null;
       stopMicStream();
-      $('micBtn').textContent = '🎙️ ابدأ التسجيل';
-      $('micBtn').disabled = false;
+      $('micBtn').textContent='🎙️ ابدأ التحدث الحر';
+      $('micBtn').disabled=false;
+      if(freeTranscript){
+        $('heard').innerHTML='<b>كلامك:</b><br>'+freeTranscript;
+        pronunciationStats();
+      }
     };
-
     rec.start();
   }catch(err){
-    const name = err && (err.name || err.message) ? (err.name || err.message) : 'UnknownError';
-    $('heard').textContent = micErrorMessage(name);
-    $('speechScore').innerHTML = '<small>شغّلي البرنامج من localhost، وليس مباشرة من داخل ZIP.</small>';
-    $('micBtn').disabled = false;
+    const name=err&&(err.name||err.message)?(err.name||err.message):'UnknownError';
+    $('heard').textContent=micErrorMessage(name);
+    $('micBtn').disabled=false;
     stopMicStream();
   }
 };
+$('pronClear').onclick=()=>{
+  freeTranscript=''; confidenceValues=[]; $('pronTarget').value='';
+  $('heard').textContent='سيظهر كلامك هنا...'; $('speechScore').innerHTML='';
+};
+$('pronListen').onclick=()=>{
+  const text=$('pronTarget').value.trim()||freeTranscript.trim();
+  if(!text){toast('اكتبي نصًا أو سجلي كلامك أولًا');return;}
+  speak(text,0.82);
+};
+$('pronCopy').onclick=async()=>{
+  if(!freeTranscript.trim()){toast('لا يوجد كلام لنسخه');return;}
+  try{await navigator.clipboard.writeText(freeTranscript);toast('تم نسخ كلامك');}
+  catch(e){toast('تعذر النسخ');}
+};
+
 const stop=new Set('i am is are the a an to for of in on at it this that you we my your and or but do does did can could would should have has with me from'); function wordsOf(s){return [...new Set(clean(s).split(' ').filter(w=>w.length>2&&!stop.has(w)))].slice(0,12);} function renderWords(){const words=wordsOf(S[state.i].english); $('wordList').innerHTML=words.map(w=>`<span class="word">${w}</span>`).join(''); $('savedWords').innerHTML=(state.words||[]).slice(-50).reverse().map(w=>`<span class="word">${w}</span>`).join('');}
 $('saveWords').onclick=()=>{ state.words=[...(state.words||[]),...wordsOf(S[state.i].english)]; state.words=[...new Set(state.words)].slice(-500); if($('wordNote').value.trim()) state.notes.push({sentence:S[state.i].number,note:$('wordNote').value.trim(),date:Date.now()}); save(); renderWords(); toast('تم الحفظ'); };
 $('wordQuiz').onclick=()=>{ const w=rand(wordsOf(S[state.i].english)); alert('استخدمي الكلمة في جملة: '+w); };
-$('exportProgress').onclick=()=>{saveAllData(); const payload=safeParse(localStorage.getItem(APP_DATA_KEY),{version:'18.1',state,customTopics}); download('Nada_English_Academy_Backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(payload,null,2),'application/json'); toast('تم تنزيل النسخة الاحتياطية');}; $('importProgress').onchange=e=>{const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{try{const imported=JSON.parse(r.result); if(!imported||typeof imported!=='object')throw new Error('ملف غير صالح'); state=imported.state||state; customTopics=Array.isArray(imported.customTopics)?imported.customTopics:customTopics; if(imported.dark)localStorage.setItem('nada_v13_dark',imported.dark); if(imported.freeChatScenario)localStorage.setItem('nada_freechat_scenario',imported.freeChatScenario); if(Array.isArray(imported.freeChatHistory))localStorage.setItem('nada_freechat_history',JSON.stringify(imported.freeChatHistory)); localStorage.setItem('nada_custom_topics_v1',JSON.stringify(customTopics)); localStorage.setItem('nada_v12_state',JSON.stringify(state)); saveAllData(); rebuildCustomData(); render(); updateStorageStatus(); toast('تم استرجاع كل البيانات ✅');}catch(err){alert('تعذر استيراد النسخة الاحتياطية: '+err.message);} e.target.value='';}; r.readAsText(f,'UTF-8');}; $('exportCsv').onclick=()=>download('nada_1000_sentences.csv','number,topic,english,arabic\n'+S.map(x=>`"${x.number}","${x.topic_en}","${x.english.replaceAll('"','""')}","${x.arabic.replaceAll('"','""')}"`).join('\n'),'text/csv'); $('resetBtn').onclick=()=>{ if(confirm('مسح كل التقدم؟')){state={i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]}; save(); render();} };
+$('exportProgress').onclick=()=>{saveAllData(); const payload=safeParse(localStorage.getItem(APP_DATA_KEY),{version:'19.2',state,customTopics}); download('Nada_English_Academy_Backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(payload,null,2),'application/json'); toast('تم تنزيل النسخة الاحتياطية');}; $('importProgress').onchange=e=>{const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{try{const imported=JSON.parse(r.result); if(!imported||typeof imported!=='object')throw new Error('ملف غير صالح'); state=imported.state||state; customTopics=Array.isArray(imported.customTopics)?imported.customTopics:customTopics; if(imported.dark)localStorage.setItem('nada_v13_dark',imported.dark); if(imported.freeChatScenario)localStorage.setItem('nada_freechat_scenario',imported.freeChatScenario); if(Array.isArray(imported.freeChatHistory))localStorage.setItem('nada_freechat_history',JSON.stringify(imported.freeChatHistory)); localStorage.setItem('nada_custom_topics_v1',JSON.stringify(customTopics)); localStorage.setItem('nada_v12_state',JSON.stringify(state)); saveAllData(); rebuildCustomData(); render(); updateStorageStatus(); toast('تم استرجاع كل البيانات ✅');}catch(err){alert('تعذر استيراد النسخة الاحتياطية: '+err.message);} e.target.value='';}; r.readAsText(f,'UTF-8');}; $('exportCsv').onclick=()=>download('nada_1000_sentences.csv','number,topic,english,arabic\n'+S.map(x=>`"${x.number}","${x.topic_en}","${x.english.replaceAll('"','""')}","${x.arabic.replaceAll('"','""')}"`).join('\n'),'text/csv'); $('resetBtn').onclick=()=>{ if(confirm('مسح كل التقدم؟')){state={i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]}; save(); render();} };
 function download(name,text,type){const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:type||'text/plain'})); a.download=name; a.click();}
 
 // ===== Custom Topics =====
@@ -539,20 +652,145 @@ const FREE_CHAT_SCENARIOS={
 let freeChatScenario=localStorage.getItem('nada_freechat_scenario')||'general';
 let freeChatHistory=JSON.parse(localStorage.getItem('nada_freechat_history')||'[]');
 let freeChatLastBot='';
+let freeChatLastCorrection='';
 function saveFreeChat(){localStorage.setItem('nada_freechat_scenario',freeChatScenario);localStorage.setItem('nada_freechat_history',JSON.stringify(freeChatHistory.slice(-100)));}
 function freeChatAdd(role,text,note=''){freeChatHistory.push({role,text,note,time:Date.now()});freeChatLastBot=role==='bot'?text:freeChatLastBot;saveFreeChat();renderFreeChat();}
 function renderFreeChat(){const box=$('freeChatMessages');if(!box)return;if(!freeChatHistory.length){const sc=FREE_CHAT_SCENARIOS[freeChatScenario];freeChatHistory=[{role:'bot',text:sc.start,note:'ابدئي بالرد بالإنجليزية',time:Date.now()}];freeChatLastBot=sc.start;saveFreeChat();}box.innerHTML=freeChatHistory.map(m=>`<div class="chatMsg ${m.role}">${escapeHtml(m.text)}${m.note?`<small>${escapeHtml(m.note)}</small>`:''}</div>`).join('');box.scrollTop=box.scrollHeight;document.querySelectorAll('.scenarioBtn').forEach(b=>b.classList.toggle('active',b.dataset.scenario===freeChatScenario));}
 function escapeHtml(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
-function freeChatFeedback(text){const words=text.trim().split(/\s+/).filter(Boolean);let note='';if(words.length<3)note='حاولي كتابة جملة كاملة من 3 كلمات أو أكثر.';else if(!/^[A-Z]/.test(text.trim()))note='ممتاز. ابدئي الجملة بحرف كبير.';else if(!/[.!?]$/.test(text.trim()))note='إجابة جيدة. أضيفي نقطة أو علامة سؤال في النهاية.';else note='Excellent! Your sentence is clear.';return note;}
+function correctFreeChatSentence(rawText){
+  const original=String(rawText||'').trim();
+  let corrected=original;
+  const reasons=[];
+  const apply=(pattern,replacement,reason)=>{const before=corrected;corrected=corrected.replace(pattern,replacement);if(corrected!==before&&reason)reasons.push(reason);};
+
+  apply(/\bi am agree\b/gi,'I agree','نقول I agree بدون am.');
+  apply(/\bi am understand\b/gi,'I understand','نقول I understand بدون am.');
+  apply(/\bi am know\b/gi,'I know','نقول I know بدون am.');
+  apply(/\bi has\b/gi,'I have','مع I نستخدم have.');
+  apply(/\b(he|she|it) have\b/gi,(m,p)=>p+' has','مع he / she / it نستخدم has.');
+  apply(/\b(he|she|it) don't\b/gi,(m,p)=>p+" doesn't",'مع he / she / it نستخدم doesn’t.');
+  apply(/\bi didn't went\b/gi,"I didn't go",'بعد didn’t نستخدم المصدر go.');
+  apply(/\bi didn't saw\b/gi,"I didn't see",'بعد didn’t نستخدم المصدر see.');
+  apply(/\bi can to\b/gi,'I can','بعد can نستخدم الفعل مباشرة بدون to.');
+  apply(/\bi am work\b/gi,'I am working','بعد am نستخدم صيغة -ing.');
+  apply(/\bi am study\b/gi,'I am studying','بعد am نستخدم صيغة -ing.');
+  apply(/\bi have (\d+) years old\b/gi,'I am $1 years old','للعمر نستخدم am وليس have.');
+  apply(/\bpeople is\b/gi,'people are','People جمع، لذلك نستخدم are.');
+  apply(/\bthere is (two|three|four|five|many|several|a lot of)\b/gi,'there are $1','مع الجمع نستخدم there are.');
+
+  const pastMarker=/\b(yesterday|last night|last week|last month|last year|ago)\b/i;
+  if(pastMarker.test(corrected)){
+    apply(/\bI go\b/g,'I went','مع زمن ماضٍ مثل yesterday نستخدم went.');
+    apply(/\bI come\b/g,'I came','مع زمن ماضٍ نستخدم came.');
+    apply(/\bI see\b/g,'I saw','مع زمن ماضٍ نستخدم saw.');
+    apply(/\bI work\b/g,'I worked','مع زمن ماضٍ نستخدم worked.');
+    apply(/\bI visit\b/g,'I visited','مع زمن ماضٍ نستخدم visited.');
+    apply(/\bI finish\b/g,'I finished','مع زمن ماضٍ نستخدم finished.');
+  }
+
+  corrected=corrected.replace(/\bi\b/g,'I').replace(/\s+/g,' ').trim();
+  if(corrected){corrected=corrected.charAt(0).toUpperCase()+corrected.slice(1);if(!/[.!?]$/.test(corrected))corrected+='.';}
+  const changed=corrected!==original;
+  if(!changed&&original&&reasons.length===0)reasons.push('الجملة واضحة. راجعي فقط النطق وعلامة النهاية.');
+  return {original,corrected,changed,reasons};
+}
+function freeChatFeedback(text){const result=correctFreeChatSentence(text);return result.changed?'تم اكتشاف تصحيح للجملة.':'Excellent! Your sentence is clear.';}
 function freeChatReply(text){const sc=FREE_CHAT_SCENARIOS[freeChatScenario];const lower=text.toLowerCase();if(/hello|hi|good morning|good evening/.test(lower))return 'Hello! It is nice to talk with you. '+rand(sc.questions);if(/thank/.test(lower))return 'You are welcome. '+rand(sc.questions);if(/don.t understand|do not understand/.test(lower))return 'No problem. I will ask a simpler question. '+sc.questions[0];if(/yes|sure|of course/.test(lower))return 'Great! '+rand(sc.questions);if(/no|not really/.test(lower))return 'That is okay. '+rand(sc.questions);return rand(sc.questions);}
-function sendFreeChat(){const input=$('freeChatText');const text=(input.value||'').trim();if(!text)return;freeChatAdd('user',text,freeChatFeedback(text));input.value='';setTimeout(()=>freeChatAdd('bot',freeChatReply(text),'يمكنكِ الرد بحرية أو استخدام زر اقتراح رد'),350);}
+function sendFreeChat(source='typed'){
+  const input=$('freeChatText');
+  const text=(input.value||'').trim();
+  if(!text)return;
+  const correction=correctFreeChatSentence(text);
+  freeChatAdd('user',text,source==='voice'?'🎤 الجملة المنطوقة':'الجملة المكتوبة');
+  if(correction.changed){
+    freeChatLastCorrection=correction.corrected;
+    freeChatAdd('correction','✅ Correct: '+correction.corrected,'💡 '+correction.reasons.join(' '));
+  }else{
+    freeChatLastCorrection=correction.corrected;
+    freeChatAdd('correction','✅ Your sentence is correct: '+correction.corrected,'ممتاز، الجملة واضحة.');
+  }
+  const correctionBtn=$('freeChatSpeakCorrection');
+  if(correctionBtn)correctionBtn.disabled=!freeChatLastCorrection;
+  input.value='';
+  saveAllData();
+  setTimeout(()=>freeChatAdd('bot',freeChatReply(correction.corrected),'استمري في المحادثة بالإنجليزية'),350);
+}
 function setFreeChatScenario(name){freeChatScenario=name;freeChatHistory=[];saveFreeChat();renderFreeChat();}
 document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>setFreeChatScenario(b.dataset.scenario));
 $('freeChatSend')&&($('freeChatSend').onclick=sendFreeChat);
 $('freeChatText')&&($('freeChatText').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();sendFreeChat();}});
 $('freeChatSpeak')&&($('freeChatSpeak').onclick=()=>{if(freeChatLastBot)speak(freeChatLastBot);});
+$('freeChatSpeakCorrection')&&($('freeChatSpeakCorrection').onclick=()=>{if(freeChatLastCorrection)speak(freeChatLastCorrection);});
 $('freeChatHint')&&($('freeChatHint').onclick=()=>{const sc=FREE_CHAT_SCENARIOS[freeChatScenario];const hint=rand(sc.hints);$('freeChatText').value=hint;$('freeChatText').focus();});
 $('freeChatClear')&&($('freeChatClear').onclick=()=>{if(confirm('مسح المحادثة الحالية؟')){freeChatHistory=[];saveFreeChat();renderFreeChat();}});
+
+// Voice input for Free Conversation
+let freeChatRecognition=null;
+function setFreeChatMicStatus(message){const el=$('freeChatMicStatus');if(el)el.textContent=message;}
+function resetFreeChatMicButton(){const btn=$('freeChatMic');if(btn){btn.disabled=false;btn.textContent='🎤 اتكلمي';}}
+async function startFreeChatVoice(){
+  if(!SR){
+    setFreeChatMicStatus('التعرف على الكلام غير مدعوم. استخدمي Chrome أو Edge.');
+    return;
+  }
+  if(freeChatRecognition){
+    try{freeChatRecognition.stop();}catch(e){}
+    return;
+  }
+  const btn=$('freeChatMic');
+  if(btn){btn.disabled=true;btn.textContent='جاري الفحص...';}
+  setFreeChatMicStatus('جاري فحص الميكروفون...');
+  try{
+    await verifyMicrophone();
+    stopMicStream();
+    const rec=new SR();
+    freeChatRecognition=rec;
+    rec.lang='en-US';
+    rec.continuous=false;
+    rec.interimResults=true;
+    rec.maxAlternatives=1;
+    rec.onstart=()=>{
+      if(btn){btn.disabled=false;btn.textContent='⏹ إيقاف';}
+      setFreeChatMicStatus('🎤 أتكلمي الآن بالإنجليزية...');
+    };
+    rec.onresult=e=>{
+      let transcript='';
+      let finalText='';
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const part=e.results[i][0].transcript.trim();
+        transcript+=(transcript?' ':'')+part;
+        if(e.results[i].isFinal)finalText+=(finalText?' ':'')+part;
+      }
+      if($('freeChatText'))$('freeChatText').value=transcript;
+      setFreeChatMicStatus(transcript?'سمعت: '+transcript:'جاري الاستماع...');
+      if(finalText){
+        if($('freeChatText'))$('freeChatText').value=finalText;
+        setFreeChatMicStatus('تم سماع الجملة. يتم الآن تصحيحها وإرسالها...');
+        setTimeout(()=>sendFreeChat('voice'),250);
+      }
+    };
+    rec.onerror=e=>{
+      setFreeChatMicStatus(micErrorMessage(e.error));
+    };
+    rec.onend=()=>{
+      freeChatRecognition=null;
+      resetFreeChatMicButton();
+    };
+    rec.start();
+  }catch(err){
+    stopMicStream();
+    const name=err&&err.name?err.name:(err&&err.message?err.message:'UnknownError');
+    setFreeChatMicStatus(micErrorMessage(name));
+    freeChatRecognition=null;
+    resetFreeChatMicButton();
+  }
+}
+$('freeChatMic')&&($('freeChatMic').onclick=startFreeChatVoice);
+if(!SR&&$('freeChatMic')){
+  $('freeChatMic').disabled=true;
+  setFreeChatMicStatus('التعرف على الكلام غير مدعوم. استخدمي Chrome أو Edge.');
+}
+
 document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{if(tab.dataset.screen==='freechat')setTimeout(renderFreeChat,0);}));
 
 // ===== V15 enhancements =====
@@ -626,6 +864,20 @@ function updateStorageStatus(){
 window.addEventListener('beforeunload',saveAllData);
 setInterval(saveAllData,15000);
 setTimeout(()=>{saveAllData();updateStorageStatus();},300);
+
+
+// V19 mobile sidebar controls
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const appSidebar = document.getElementById('appSidebar');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+const sidebarClose = document.getElementById('sidebarClose');
+function openSidebar(){ appSidebar?.classList.add('open'); sidebarBackdrop?.classList.add('show'); document.body.style.overflow='hidden'; }
+function closeSidebar(){ appSidebar?.classList.remove('open'); sidebarBackdrop?.classList.remove('show'); document.body.style.overflow=''; }
+mobileMenuBtn?.addEventListener('click', openSidebar);
+sidebarClose?.addEventListener('click', closeSidebar);
+sidebarBackdrop?.addEventListener('click', closeSidebar);
+document.querySelectorAll('.navItem').forEach(btn=>btn.addEventListener('click',()=>{ if(window.innerWidth<=900) closeSidebar(); }));
+window.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSidebar(); });
 </script>
 </body>
 </html>
