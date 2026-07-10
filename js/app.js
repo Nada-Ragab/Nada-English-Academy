@@ -584,3 +584,33 @@ sidebarClose?.addEventListener('click', closeSidebar);
 sidebarBackdrop?.addEventListener('click', closeSidebar);
 document.querySelectorAll('.navItem').forEach(btn=>btn.addEventListener('click',()=>{ if(window.innerWidth<=900) closeSidebar(); }));
 window.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSidebar(); });
+
+// ===== V19.4 Modern Dashboard =====
+function openScreen(screen){
+  const btn=document.querySelector(`.navItem[data-screen="${screen}"]`);
+  if(btn){ btn.click(); return; }
+  document.querySelectorAll('.tab,.screen').forEach(e=>e.classList.remove('active'));
+  const target=document.getElementById(screen); if(target) target.classList.add('active');
+}
+function refreshDashboard(){
+  const known=Object.keys(state.known||{}).length;
+  const review=Object.keys(state.review||{}).length;
+  const fav=Object.keys(state.fav||{}).length;
+  const xp=state.xp||0;
+  const pct=S.length?Math.round((known/S.length)*100):0;
+  const cur=S[state.i]||{};
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('dashXP',xp); set('dashKnown',known); set('dashReviewCount',review); set('dashFav',fav);
+  set('dashGoalPct',Math.min(100,pct)+'%'); set('dashProgressText',pct+'%');
+  set('dashSentence',cur.english||'ابدئي رحلتك الآن'); set('dashSentenceAr',cur.arabic||'');
+  set('streakPill','🔥 '+(state.streak||1)+' يوم');
+  const bar=document.getElementById('dashProgressBar'); if(bar) bar.style.width=pct+'%';
+}
+const oldUpdateStatsV194=updateStats;
+updateStats=function(){ oldUpdateStatsV194(); refreshDashboard(); };
+['dashContinue','dashResume'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openScreen('learn')));
+document.getElementById('dashDaily')?.addEventListener('click',()=>openScreen('daily'));
+document.getElementById('dashReview')?.addEventListener('click',()=>openScreen('review'));
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
+document.querySelectorAll('.navItem').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.screen==='dashboard')setTimeout(refreshDashboard,0);}));
+setTimeout(refreshDashboard,350);

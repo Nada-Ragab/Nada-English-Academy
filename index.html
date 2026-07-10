@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V19.2 - Voice Correction</title>
+<title>Nada English Academy V19.4 - Modern UI</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brand">Nada English Academy <span>V19.2</span></div><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span><button class="btn small" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="progress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.4</span></div><small>Modern Learning Workspace</small></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="btn small headerAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -18,7 +18,8 @@
 
   <nav class="sidebarNav" aria-label="القائمة الرئيسية">
     <div class="navSectionTitle">التعلّم</div>
-    <button class="tab navItem active" data-screen="learn"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
+    <button class="tab navItem active" data-screen="dashboard"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
+    <button class="tab navItem" data-screen="learn"><span class="navIcon">📚</span><span>التعلّم</span></button>
     <button class="tab navItem" data-screen="daily"><span class="navIcon">📅</span><span>درس اليوم</span></button>
     <button class="tab navItem" data-screen="review"><span class="navIcon">🔁</span><span>المراجعة</span></button>
     <button class="tab navItem" data-screen="flashcards"><span class="navIcon">🃏</span><span>Flashcards</span></button>
@@ -60,7 +61,29 @@
   </details>
 </aside>
 <main class="main">
-<section class="screen active" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
+<section class="screen active" id="dashboard">
+  <div class="dashboardHero">
+    <div>
+      <span class="eyebrow">WELCOME BACK, NADA</span>
+      <h1>كمّلي رحلتك في الإنجليزية بثقة ✨</h1>
+      <p>اختاري درسًا، راجعي الكلمات الصعبة، أو ابدئي تدريبًا سريعًا من مكان واحد.</p>
+      <div class="heroActions"><button class="btn green" id="dashContinue">▶ متابعة التعلّم</button><button class="btn blue" id="dashDaily">📅 درس اليوم</button><button class="btn purple" id="dashReview">🔁 مراجعة ذكية</button></div>
+    </div>
+    <div class="heroBadge"><span>🎯</span><b id="dashGoalPct">0%</b><small>الهدف اليومي</small></div>
+  </div>
+  <div class="dashboardGrid">
+    <div class="dashCard"><div class="dashIcon green">⭐</div><div><small>XP المكتسب</small><b id="dashXP">0</b><span>استمري في التعلّم</span></div></div>
+    <div class="dashCard"><div class="dashIcon blue">✅</div><div><small>جمل متقنة</small><b id="dashKnown">0</b><span>من إجمالي المحتوى</span></div></div>
+    <div class="dashCard"><div class="dashIcon orange">🔁</div><div><small>تحتاج مراجعة</small><b id="dashReviewCount">0</b><span>جاهزة للتدريب</span></div></div>
+    <div class="dashCard"><div class="dashIcon purple">❤️</div><div><small>المفضلة</small><b id="dashFav">0</b><span>جملك المهمة</span></div></div>
+  </div>
+  <div class="dashboardColumns">
+    <div class="panelCard"><div class="panelHead"><div><small>CONTINUE LEARNING</small><h3>آخر درس</h3></div><span class="panelIcon">📖</span></div><div class="continueSentence" id="dashSentence">ابدئي رحلتك الآن</div><div class="mutedText" id="dashSentenceAr"></div><button class="btn green wide" id="dashResume">متابعة من آخر نقطة</button></div>
+    <div class="panelCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="freechat">💬<span>محادثة حرة</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
+  </div>
+  <div class="panelCard goalPanel"><div class="panelHead"><div><small>WEEKLY PROGRESS</small><h3>تقدمك الحالي</h3></div><b id="dashProgressText">0%</b></div><div class="modernProgress"><span id="dashProgressBar"></span></div><p class="mutedText">كل جملة تتقنيها تقرّبك خطوة من هدفك.</p></div>
+</section>
+<section class="screen" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
 <section class="screen" id="daily"><h2>📅 درس اليوم</h2><div class="grid"><div class="stat"><b id="dNew">0</b>جمل جديدة</div><div class="stat"><b id="dRev">0</b>مراجعة</div><div class="stat"><b>15</b>دقيقة</div></div><div class="controls"><button class="btn green" id="buildDaily">تجهيز درس اليوم</button><button class="btn blue" id="startDaily">ابدئي الدرس</button><button class="btn orange" id="printDaily">طباعة</button></div><div class="resultBox" id="dailyList"></div></section>
 <section class="screen" id="review"><h2>🔁 مراجعة ذكية</h2><div class="box"><div class="en" id="revEn"></div><div class="ar" id="revAr"></div><div class="controls"><button class="btn blue" id="revSpeak">🔊</button><button class="btn green" id="revOk">عرفتها</button><button class="btn orange" id="revBad">لسه صعبة</button></div></div></section>
 <section class="screen" id="quiz"><h2>📝 اختبار الترجمة</h2><div class="box"><div class="en" id="qText"></div><div id="choices"></div><div id="qFeedback"></div><button class="btn purple" id="newQuiz">سؤال جديد</button></div></section>
