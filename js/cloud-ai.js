@@ -16,6 +16,7 @@ const BUILTIN_FIREBASE_CONFIG={
 const AUTO_SYNC_KEY='nada_auto_sync_v1';
 const FIREBASE_SDK_VERSION='12.16.0';
 const GEMINI_MODEL='gemini-3.5-flash';
+const AI_REPLY_FIELDS=['englishReply','arabicTranslation','correction','explanationArabic','nextQuestion'];
 let aiHistory=[];
 let voiceRecognition=null;
 let voiceMode=false;
@@ -35,21 +36,56 @@ function saveAiSettings(){
 function renderAi(){const box=el('aiMessages');if(!box)return;box.innerHTML=aiHistory.map(m=>`<div class="aiMsg ${m.role}">${escapeHtml(m.text)}</div>`).join('');box.scrollTop=box.scrollHeight}
 function addAi(role,text){aiHistory.push({role,text,time:Date.now()});aiHistory=aiHistory.slice(-60);localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(aiHistory));renderAi()}
 function teacherPrompt(s){
-  const labels={general:'daily English conversation',work:'work meetings and professional communication',odoo:'Odoo and ERP functional consulting',interview:'job interviews'};
+  const labels={
+    general:'daily English conversation',
+    work:'work meetings and professional communication',
+    business:'business English and workplace communication',
+    odoo:'Odoo and ERP functional consulting',
+    hr:'HR, payroll, leave, loans, and end-of-service discussions',
+    accounting:'accounting and finance conversations',
+    interview:'job interviews',
+    travel:'travel, airport, hotel, and restaurant situations'
+  };
   return [
     `You are Nada's friendly private English teacher. Her CEFR level is ${s.level}.`,
     `Practice ${labels[s.mode]||labels.general}.`,
-    'Reply mainly in simple English suitable for her level.',
-    'When her sentence has an error, show: Correct sentence, then one very short Arabic explanation.',
-    'Then continue the conversation with exactly one natural question.',
-    'Be encouraging, practical, and concise. Keep the whole reply under 100 words.',
-    'Do not use markdown tables.'
+    'Use short, natural English suitable for her level.',
+    'Correct only real mistakes. If her sentence is correct, say that it is correct.',
+    'Explain the correction in very simple Arabic.',
+    'Continue with exactly one natural question in English.',
+    'Return ONLY valid JSON. Do not use markdown, code fences, asterisks, or instruction labels.',
+    'Use exactly these JSON keys:',
+    '{"englishReply":"natural English reply","arabicTranslation":"Arabic translation of the reply","correction":"correct sentence or الجملة صحيحة","explanationArabic":"very short Arabic explanation","nextQuestion":"one simple English question"}',
+    'Never output phrases such as A1 friendly response, explanation, placeholder, or template.'
   ].join(' ');
 }
 function conversationPrompt(text){
   const s=getAiSettings();
-  const recent=aiHistory.slice(-10).map(m=>`${m.role==='teacher'?'Teacher':m.role==='user'?'Student':'System'}: ${m.text}`).join('\n');
-  return `${teacherPrompt(s)}\n\nConversation so far:\n${recent}\nStudent: ${text}\nTeacher:`;
+  const recent=aiHistory.slice(-20).map(m=>`${m.role==='teacher'?'Teacher':m.role==='user'?'Student':'System'}: ${m.text}`).join('\n');
+  return `${teacherPrompt(s)}\n\nConversation so far:\n${recent||'(new conversation)'}\nStudent: ${text}`;
+}
+function cleanJsonText(raw){
+  return String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+}
+function parseTeacherReply(raw){
+  let obj=null;
+  try{obj=JSON.parse(cleanJsonText(raw))}catch{}
+  if(!obj||typeof obj!=='object'){
+    return {display:String(raw||'').replace(/\*+/g,'').trim(),spoken:String(raw||'').replace(/[*#`]/g,'').trim()};
+  }
+  const v=k=>String(obj[k]||'').trim();
+  const english=v('englishReply');
+  const arabic=v('arabicTranslation');
+  const correction=v('correction');
+  const explanation=v('explanationArabic');
+  const next=v('nextQuestion');
+  const parts=[];
+  if(english)parts.push(`🗣 English\n${english}`);
+  if(arabic)parts.push(`🇪🇬 العربية\n${arabic}`);
+  if(correction)parts.push(`✍️ التصحيح\n${correction}`);
+  if(explanation)parts.push(`💡 الشرح\n${explanation}`);
+  if(next)parts.push(`❓ السؤال التالي\n${next}`);
+  return {display:parts.join('\n\n')||String(raw||'').trim(),spoken:[english,next].filter(Boolean).join(' ')};
 }
 async function loadFirebaseModules(){
   if(firebaseModules)return firebaseModules;
@@ -74,18 +110,20 @@ async function ensureAiModel(){
 }
 async function askAi(text){
   if(aiBusy||!text)return;
+  const prompt=conversationPrompt(text);
   addAi('user',text);
   setNote('aiStatus','يفكر المدرّس...');
   aiBusy=true;
   if(el('aiSendBtn'))el('aiSendBtn').disabled=true;
   try{
     const model=await ensureAiModel();
-    const result=await model.generateContent(conversationPrompt(text));
-    const reply=result&&result.response&&typeof result.response.text==='function'?result.response.text().trim():'';
-    if(!reply)throw new Error('لم يصل رد من Gemini');
-    addAi('teacher',reply);
-    setNote('aiStatus','تم الرد عبر Firebase AI Logic.');
-    if(voiceMode)await speakAi(reply);
+    const result=await model.generateContent(prompt);
+    const raw=result&&result.response&&typeof result.response.text==='function'?result.response.text().trim():'';
+    if(!raw)throw new Error('لم يصل رد من Gemini');
+    const reply=parseTeacherReply(raw);
+    addAi('teacher',reply.display);
+    setNote('aiStatus','تم التصحيح والرد عبر Firebase AI Logic.');
+    if(voiceMode)await speakAi(reply.spoken||reply.display);
   }catch(e){
     const msg=String(e&&e.message||e);
     addAi('system','تعذر الاتصال بالمدرّس الذكي: '+msg);
