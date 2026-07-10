@@ -651,3 +651,45 @@ refreshDashboard=function(){
   const sgb=document.getElementById('sideGoalBar');if(sgb)sgb.style.width=Math.min(100,pct)+'%';
 };
 setTimeout(refreshDashboard,500);
+
+
+// ===== V19.4.2 Dashboard Intelligence + Mobile Navigation =====
+function refreshDashboardInsights(){
+  const reviewCount=Object.keys(state.review||{}).length;
+  const knownCount=Object.keys(state.known||{}).length;
+  const focusCount=document.getElementById('focusCount');
+  const focusTitle=document.getElementById('focusTitle');
+  const focusText=document.getElementById('focusText');
+  const focusAction=document.getElementById('focusAction');
+  const ring=document.querySelector('.focusRing');
+  let count=0,title='',desc='',screen='learn';
+  if(reviewCount>0){count=Math.min(reviewCount,12);title='راجعي الجمل الصعبة';desc='لديكِ '+reviewCount+' جملة تحتاج مراجعة اليوم.';screen='review';}
+  else if(knownCount<10){count=Math.min(10,Math.max(1,S.length-knownCount));title='ابدئي 10 جمل جديدة';desc='خطوة صغيرة اليوم ستصنع فرقًا كبيرًا.';screen='learn';}
+  else{count=5;title='تدريب نطق سريع';desc='اختاري 5 جمل وتدرّبي عليها بصوتك.';screen='speak';}
+  if(focusCount)focusCount.textContent=count;
+  if(focusTitle)focusTitle.textContent=title;
+  if(focusText)focusText.textContent=desc;
+  if(ring)ring.style.setProperty('--focus-pct',Math.min(100,count*8)+'%');
+  if(focusAction)focusAction.onclick=()=>openScreen(screen);
+
+  const list=document.getElementById('recentTopicsList');
+  if(list){
+    const current=S[state.i]||{};
+    const seen=new Set();
+    const recent=[];
+    [current,...S.slice(Math.max(0,state.i-20),state.i).reverse()].forEach(item=>{
+      if(!item||seen.has(item.topic_en))return;
+      seen.add(item.topic_en);recent.push(item);
+    });
+    list.innerHTML=recent.slice(0,4).map((item,i)=>`<button class="recentTopicItem" data-topic-id="${item.topic_id}"><span class="recentTopicIcon">${['📚','💼','🌍','🗣️'][i%4]}</span><span><strong>${item.topic_en||'Topic'}</strong><small>${item.topic_ar||''}</small></span></button>`).join('')||'<p class="mutedText">ابدئي أي درس ليظهر هنا.</p>';
+    list.querySelectorAll('[data-topic-id]').forEach(btn=>btn.addEventListener('click',()=>{
+      const idx=S.findIndex(x=>String(x.topic_id)===String(btn.dataset.topicId));
+      if(idx>=0){state.i=idx;save();openScreen('learn');render();}
+    }));
+  }
+}
+const oldRefreshDashboardV1942=refreshDashboard;
+refreshDashboard=function(){oldRefreshDashboardV1942();refreshDashboardInsights();};
+document.getElementById('mobileMoreBtn')?.addEventListener('click',openSidebar);
+document.querySelectorAll('.mobileBottomNav [data-go]').forEach(btn=>btn.addEventListener('click',()=>openScreen(btn.dataset.go)));
+setTimeout(refreshDashboardInsights,650);

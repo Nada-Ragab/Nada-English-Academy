@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V19.4.1 - Modern UI</title>
+<title>Nada English Academy V19.4.2 - Modern UI</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.4.1</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.4.2</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -84,6 +84,17 @@
   </div>
   <div class="panelCard goalPanel"><div class="panelHead"><div><small>WEEKLY PROGRESS</small><h3>تقدمك الحالي</h3></div><b id="dashProgressText">0%</b></div><div class="modernProgress"><span id="dashProgressBar"></span></div><p class="mutedText">كل جملة تتقنيها تقرّبك خطوة من هدفك.</p></div>
   <div class="activityCard"><div class="panelHead"><div><small>THIS WEEK</small><h3>نشاطك الأسبوعي</h3></div><span class="activityBadge">7 DAYS</span></div><div class="activityBars" id="activityBars"><div><span style="--h:38%"></span><small>س</small></div><div><span style="--h:55%"></span><small>ح</small></div><div><span style="--h:30%"></span><small>ن</small></div><div><span style="--h:74%"></span><small>ث</small></div><div><span style="--h:62%"></span><small>ر</small></div><div><span style="--h:86%"></span><small>خ</small></div><div class="today"><span style="--h:48%"></span><small>ج</small></div></div></div>
+  <div class="insightGrid">
+    <div class="panelCard focusCard">
+      <div class="panelHead"><div><small>SMART FOCUS</small><h3>تركيز اليوم</h3></div><span class="panelIcon">🎯</span></div>
+      <div class="focusSummary"><div class="focusRing"><b id="focusCount">0</b><small>جمل</small></div><div><strong id="focusTitle">ابدئي مراجعة ذكية</strong><p id="focusText" class="mutedText">سنختار لكِ أفضل خطوة بناءً على تقدمك.</p></div></div>
+      <button class="btn purple wide" id="focusAction">ابدئي الآن</button>
+    </div>
+    <div class="panelCard recentTopicsCard">
+      <div class="panelHead"><div><small>RECENT TOPICS</small><h3>موضوعاتك الأخيرة</h3></div><span class="panelIcon">🕘</span></div>
+      <div id="recentTopicsList" class="recentTopicsList"></div>
+    </div>
+  </div>
 </section>
 <section class="screen" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
 <section class="screen" id="daily"><h2>📅 درس اليوم</h2><div class="grid"><div class="stat"><b id="dNew">0</b>جمل جديدة</div><div class="stat"><b id="dRev">0</b>مراجعة</div><div class="stat"><b>15</b>دقيقة</div></div><div class="controls"><button class="btn green" id="buildDaily">تجهيز درس اليوم</button><button class="btn blue" id="startDaily">ابدئي الدرس</button><button class="btn orange" id="printDaily">طباعة</button></div><div class="resultBox" id="dailyList"></div></section>
@@ -259,6 +270,13 @@
     </div>
   </div>
 </div>
+<nav class="mobileBottomNav" aria-label="التنقل السريع">
+  <button data-go="dashboard"><span>🏠</span><small>الرئيسية</small></button>
+  <button data-go="learn"><span>📚</span><small>التعلّم</small></button>
+  <button data-go="speak"><span>🎤</span><small>النطق</small></button>
+  <button data-go="freechat"><span>💬</span><small>محادثة</small></button>
+  <button id="mobileMoreBtn"><span>☰</span><small>المزيد</small></button>
+</nav>
 <div class="toast" id="toast"></div>
 <script src="js/app.js"></script>
 </body>
