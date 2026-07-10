@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V19.5.7 - Clean Sidebar</title>
+<title>Nada English Academy V19.6 - Stable Sidebar</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.5.7</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V19.6</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -45,8 +45,7 @@
     <button class="tab navItem" data-screen="playlist"><span class="navIcon">🎵</span><span>Audio Playlist</span></button>
     <button class="tab navItem" data-screen="notes"><span class="navIcon">🗒️</span><span>ملاحظاتي</span></button>
     <button class="tab navItem" data-screen="favorites"><span class="navIcon">⭐</span><span>المفضلة</span></button>
-    <button class="tab navItem" data-screen="backup"><span class="navIcon">⇅</span><span>استيراد / تصدير</span></button>
-    <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
+    <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ والاستيراد والتصدير</span></button>
   </nav>
 
   <section class="sidebarTools voiceOnlyTools" aria-label="الأدوات السريعة">
@@ -334,6 +333,43 @@
     </div>
   </div>
 </div>
+
+<div class="modalOverlay" id="topicWorkspaceModal">
+  <div class="modalCard topicWorkspaceCard" dir="rtl">
+    <div class="workspaceHeader">
+      <div>
+        <small>TOPIC WORKSPACE</small>
+        <h2 id="workspaceTitle">إدارة الموضوع</h2>
+        <p id="workspaceSubtitle" class="note"></p>
+      </div>
+      <button class="iconAction" id="closeTopicWorkspace" type="button" aria-label="إغلاق">×</button>
+    </div>
+    <div class="workspaceMetaGrid">
+      <label>اسم الموضوع بالإنجليزية<input id="workspaceTitleEn" dir="ltr"></label>
+      <label>اسم الموضوع بالعربية<input id="workspaceTitleAr"></label>
+      <button class="btn green" id="workspaceSaveMeta" type="button">💾 حفظ الاسم</button>
+      <button class="btn blue" id="workspaceOpenLearn" type="button">▶ فتح للتعلّم</button>
+    </div>
+    <div class="workspaceAddSentence">
+      <h3>➕ إضافة جملة داخل الموضوع</h3>
+      <div class="workspaceSentenceInputs">
+        <input id="workspaceNewEnglish" dir="ltr" placeholder="English sentence">
+        <input id="workspaceNewArabic" placeholder="الترجمة العربية">
+        <button class="btn green" id="workspaceAddSentence" type="button">إضافة</button>
+      </div>
+    </div>
+    <div class="workspaceListHead">
+      <h3>الجمل <span id="workspaceSentenceCount">0</span></h3>
+      <input id="workspaceSentenceSearch" placeholder="🔍 بحث داخل الجمل...">
+    </div>
+    <div class="workspaceSentenceList" id="workspaceSentenceList"></div>
+    <div class="controls workspaceFooter">
+      <button class="btn purple" id="workspaceExportTopic" type="button">📤 تصدير الموضوع</button>
+      <button class="btn" id="workspaceCloseBottom" type="button">إغلاق</button>
+    </div>
+  </div>
+</div>
+
 <nav class="mobileBottomNav" aria-label="التنقل السريع">
   <button data-go="dashboard"><span>🏠</span><small>الرئيسية</small></button>
   <button data-go="learn"><span>📚</span><small>التعلّم</small></button>

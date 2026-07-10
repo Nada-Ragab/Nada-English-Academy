@@ -667,3 +667,89 @@ body.dark .voiceSettingsAlways{background:linear-gradient(145deg,#111827,#172033
 .favoriteSentence small{display:block;color:var(--muted);margin-top:4px}
 .favoriteSentence .favActions{display:flex;gap:6px}
 .favoriteSentence button{border:0;border-radius:10px;padding:8px 10px;cursor:pointer}
+
+/* ===== V19.6 Stable Sidebar Layout ===== */
+.layout{grid-template-columns:300px minmax(0,1fr)}
+.side{
+  height:calc(100dvh - 108px)!important;
+  min-height:620px!important;
+  display:grid!important;
+  grid-template-rows:auto minmax(180px,34%) auto minmax(260px,1fr) auto!important;
+  gap:8px!important;
+  overflow:hidden!important;
+  padding:0!important;
+}
+.sidebarHeader{min-height:0}
+.sidebarNav{
+  min-height:0!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  padding:8px 10px!important;
+}
+.sidebarTools{
+  flex:none!important;
+  margin:0 10px!important;
+  padding:10px!important;
+  overflow:visible!important;
+}
+.sidebarSectionHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-weight:900}
+.sidebarSectionHead small{font-size:10px;color:var(--muted)}
+.voiceSettingsPanel{display:grid!important;gap:8px!important}
+.voiceSettingsTitle{display:flex;align-items:center;justify-content:space-between;font-weight:900}
+.voiceField{margin:0!important}
+.voiceField span{display:block;margin-bottom:5px;font-size:11px;color:var(--muted)}
+.voiceField select,.voiceField input{margin:0!important}
+.voiceTestBtn{width:100%;border:0;border-radius:11px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:9px 10px;font-weight:900;cursor:pointer}
+.hiddenLegacySearch{display:none!important}
+.sidebarTopics{
+  min-height:0!important;
+  margin:0 10px!important;
+  padding:10px!important;
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  overflow:hidden!important;
+}
+.sidebarTopics .topicSearch{margin:0 0 8px!important;position:sticky;top:0;z-index:2;background:var(--card)}
+.sidebarTopics .topicList{
+  min-height:0!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  padding-inline-end:4px;
+}
+.sidebarTopics .topicList::-webkit-scrollbar,.sidebarNav::-webkit-scrollbar{width:7px}
+.sidebarTopics .topicList::-webkit-scrollbar-thumb,.sidebarNav::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:99px}
+.sidebarFooter{min-height:0}
+.topicCard{margin:6px 0!important}
+.topicMain{cursor:pointer}
+.topicMain:focus-visible,.topicAction:focus-visible,.voiceTestBtn:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
+@media(max-width:900px){
+  .side{position:fixed!important;top:0!important;right:0!important;bottom:0!important;height:100dvh!important;min-height:0!important;width:min(330px,92vw)!important;border-radius:0!important;z-index:80!important;grid-template-rows:auto minmax(170px,31%) auto minmax(240px,1fr) auto!important}
+  .sidebarNav{padding-top:4px!important}
+  .sidebarTopics{min-height:0!important}
+}
+
+
+/* ===== V19.7 Topic Workspace Pro ===== */
+.topicWorkspaceCard{width:min(1040px,96vw);max-height:92vh;overflow:hidden;display:flex;flex-direction:column;padding:22px}
+.workspaceHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding-bottom:14px}
+.workspaceHeader h2{margin:4px 0}.workspaceHeader small{font-weight:1000;letter-spacing:1px;color:var(--muted)}
+.workspaceMetaGrid{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;padding:14px 0;border-bottom:1px solid var(--line)}
+.workspaceMetaGrid label{display:grid;gap:6px;font-size:12px;font-weight:900;color:var(--muted)}
+.workspaceMetaGrid input,.workspaceSentenceInputs input,.workspaceListHead input,.workspaceSentenceRow input{border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:12px;padding:10px 12px;font:inherit}
+.workspaceAddSentence{padding:14px 0}.workspaceAddSentence h3,.workspaceListHead h3{margin:0 0 9px}
+.workspaceSentenceInputs{display:grid;grid-template-columns:1fr 1fr auto;gap:9px}
+.workspaceListHead{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+.workspaceListHead input{width:min(340px,48%)}
+.workspaceSentenceList{min-height:160px;overflow:auto;padding:8px 3px 8px 0;display:grid;gap:9px;flex:1}
+.workspaceSentenceRow{display:grid;grid-template-columns:42px minmax(180px,1fr) minmax(180px,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:15px;padding:9px}
+.workspaceSentenceNumber{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--soft);font-weight:1000;color:var(--muted)}
+.workspaceSentenceActions{display:flex;gap:5px;flex-wrap:wrap}.workspaceSentenceActions button{border:1px solid var(--line);background:var(--soft);border-radius:9px;width:34px;height:34px;cursor:pointer}
+.workspaceSentenceActions button:hover{background:#dbeafe}.workspaceSentenceActions .danger:hover{background:#fee2e2}
+.workspaceEmpty{text-align:center;padding:28px;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
+.workspaceFooter{padding-top:12px;border-top:1px solid var(--line);margin-top:4px}
+@media(max-width:800px){.topicWorkspaceCard{padding:15px;max-height:95vh}.workspaceMetaGrid{grid-template-columns:1fr 1fr}.workspaceMetaGrid .btn{width:100%}.workspaceSentenceInputs{grid-template-columns:1fr}.workspaceListHead{display:block}.workspaceListHead input{width:100%;box-sizing:border-box}.workspaceSentenceRow{grid-template-columns:34px 1fr}.workspaceSentenceRow input:nth-of-type(2){grid-column:2}.workspaceSentenceActions{grid-column:1/-1;justify-content:flex-end}}

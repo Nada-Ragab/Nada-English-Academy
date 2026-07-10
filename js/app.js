@@ -41,7 +41,7 @@ rebuildCustomData();
 let state = consolidatedData?.state || safeParse(localStorage.getItem('nada_v12_state'), {i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]});
 let voices = [], currentQuiz = null, currentReview = null, daily = [];
 const $ = id => document.getElementById(id);
-function saveAllData(){ if(!storageAvailable()) return; const payload={version:'19.5.7',savedAt:new Date().toISOString(),state,customTopics,hiddenBuiltInTopicIds,pinnedBuiltInTopicIds,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
+function saveAllData(){ if(!storageAvailable()) return; const payload={version:'19.7',savedAt:new Date().toISOString(),state,customTopics,hiddenBuiltInTopicIds,pinnedBuiltInTopicIds,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
 function save(){ localStorage.setItem('nada_v12_state', JSON.stringify(state)); saveAllData(); }
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1400); }
 function clean(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
@@ -71,7 +71,7 @@ function renderTopics(){
       </div>
     </article>`;
   }).join('') || '<div class="topicEmpty">لا توجد موضوعات مطابقة.</div>';
-  document.querySelectorAll('.topicMain').forEach(b=>b.onclick=()=>{state.i=Number(b.dataset.start); render();});
+  document.querySelectorAll('.topicMain').forEach(b=>b.onclick=()=>{state.i=Number(b.dataset.start); render(); if(typeof openScreen==='function') openScreen('learn'); else document.querySelector('.tab[data-screen="learn"]')?.click();});
   document.querySelectorAll('.topicManageAny').forEach(b=>b.onclick=e=>{e.stopPropagation();manageAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
   document.querySelectorAll('.topicDuplicateAny').forEach(b=>b.onclick=e=>{e.stopPropagation();duplicateAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
   document.querySelectorAll('.topicPinAny').forEach(b=>b.onclick=e=>{e.stopPropagation();togglePinAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
@@ -353,13 +353,99 @@ function togglePinAnyTopic(topic){
 }
 function manageAnyTopic(topic){
   if(!topic)return;
-  if(topic.custom)openTopicModal(Number(topic.custom_index));else convertBuiltInToEditable(topic,true);
+  openTopicWorkspace(topic);
 }
 function restoreHiddenTopics(){
   if(!hiddenBuiltInTopicIds.length){toast('لا توجد موضوعات محذوفة');return;}
   if(!confirm(`استعادة ${hiddenBuiltInTopicIds.length} موضوع؟`))return;
   hiddenBuiltInTopicIds=[];saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();toast('تمت استعادة الموضوعات ✅');
 }
+
+
+
+// ===== V19.7 Topic Workspace Pro =====
+let workspaceCustomTopicIndex=null;
+function ensureEditableTopic(topic){
+  if(!topic)return null;
+  if(topic.custom)return Number(topic.custom_index);
+  const sourceId=Number(topic.id);
+  let idx=customTopics.findIndex(x=>Number(x.source_topic_id)===sourceId);
+  if(idx<0){
+    customTopics.push({title_en:topic.title_en,title_ar:topic.title_ar,sentences:topicSentencesSnapshot(topic),source_topic_id:sourceId,created_at:Date.now(),pinned:Boolean(topic.pinned)});
+    idx=customTopics.length-1;
+  }
+  if(!hiddenBuiltInTopicIds.includes(sourceId))hiddenBuiltInTopicIds.push(sourceId);
+  saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();
+  return idx;
+}
+function openTopicWorkspace(topic){
+  const idx=ensureEditableTopic(topic); if(idx===null||!customTopics[idx])return;
+  workspaceCustomTopicIndex=idx;
+  const modal=$('topicWorkspaceModal'); if(!modal)return;
+  modal.classList.add('show');
+  $('workspaceSentenceSearch').value='';
+  renderTopicWorkspace();
+}
+function closeTopicWorkspace(){ $('topicWorkspaceModal')?.classList.remove('show'); workspaceCustomTopicIndex=null; }
+function workspaceTopic(){return Number.isInteger(workspaceCustomTopicIndex)?customTopics[workspaceCustomTopicIndex]:null;}
+function persistWorkspace(message){
+  saveCustomTopics();rebuildCustomData();render();renderPremiumTopics();renderTopicWorkspace();
+  if(message)toast(message);
+}
+function renderTopicWorkspace(){
+  const topic=workspaceTopic(); if(!topic)return;
+  const lines=Array.isArray(topic.sentences)?topic.sentences:(topic.sentences=[]);
+  $('workspaceTitle').textContent=topic.title_ar||topic.title_en||'إدارة الموضوع';
+  $('workspaceSubtitle').textContent=(topic.title_en||'')+' · '+lines.length+' جملة';
+  $('workspaceTitleEn').value=topic.title_en||''; $('workspaceTitleAr').value=topic.title_ar||'';
+  $('workspaceSentenceCount').textContent=lines.length;
+  const q=($('workspaceSentenceSearch').value||'').trim().toLowerCase();
+  const rows=lines.map((line,index)=>({...line,index})).filter(x=>!q||String(x.english||'').toLowerCase().includes(q)||String(x.arabic||'').includes(q));
+  $('workspaceSentenceList').innerHTML=rows.length?rows.map(x=>`<div class="workspaceSentenceRow" data-workspace-row="${x.index}">
+    <span class="workspaceSentenceNumber">${x.index+1}</span>
+    <input class="workspaceEnglish" dir="ltr" value="${escapeHtml(x.english||'')}">
+    <input class="workspaceArabic" value="${escapeHtml(x.arabic||'')}">
+    <div class="workspaceSentenceActions">
+      <button data-workspace-action="speak" title="استماع">🔊</button>
+      <button data-workspace-action="save" title="حفظ الجملة">💾</button>
+      <button data-workspace-action="up" title="لأعلى">↑</button>
+      <button data-workspace-action="down" title="لأسفل">↓</button>
+      <button class="danger" data-workspace-action="delete" title="حذف">🗑️</button>
+    </div></div>`).join(''):'<div class="workspaceEmpty">لا توجد جمل مطابقة. أضيفي جملة جديدة من الأعلى.</div>';
+  $('workspaceSentenceList').querySelectorAll('[data-workspace-action]').forEach(btn=>btn.onclick=()=>{
+    const row=btn.closest('[data-workspace-row]'); const index=Number(row.dataset.workspaceRow); const action=btn.dataset.workspaceAction;
+    if(action==='speak'){speak(lines[index]?.english||'');return;}
+    if(action==='save'){
+      const english=row.querySelector('.workspaceEnglish').value.trim(); const arabic=row.querySelector('.workspaceArabic').value.trim();
+      if(!english){toast('الجملة الإنجليزية مطلوبة');return;} lines[index]={english,arabic};persistWorkspace('تم حفظ الجملة ✅');return;
+    }
+    if(action==='delete'){if(confirm('حذف هذه الجملة؟')){lines.splice(index,1);persistWorkspace('تم حذف الجملة');}return;}
+    const target=action==='up'?index-1:index+1;
+    if(target>=0&&target<lines.length){[lines[index],lines[target]]=[lines[target],lines[index]];persistWorkspace();}
+  });
+}
+$('workspaceSaveMeta') && ($('workspaceSaveMeta').onclick=()=>{
+  const topic=workspaceTopic(); if(!topic)return;
+  const en=$('workspaceTitleEn').value.trim(), ar=$('workspaceTitleAr').value.trim();
+  if(!en){toast('اسم الموضوع بالإنجليزية مطلوب');return;}
+  topic.title_en=en;topic.title_ar=ar||en;topic.updated_at=Date.now();persistWorkspace('تم حفظ اسم الموضوع ✅');
+});
+$('workspaceAddSentence') && ($('workspaceAddSentence').onclick=()=>{
+  const topic=workspaceTopic(); if(!topic)return;
+  const english=$('workspaceNewEnglish').value.trim(),arabic=$('workspaceNewArabic').value.trim();
+  if(!english){toast('اكتبي الجملة الإنجليزية');return;}
+  (topic.sentences||(topic.sentences=[])).push({english,arabic});$('workspaceNewEnglish').value='';$('workspaceNewArabic').value='';persistWorkspace('تمت إضافة الجملة ✅');
+});
+$('workspaceSentenceSearch') && ($('workspaceSentenceSearch').oninput=renderTopicWorkspace);
+$('workspaceOpenLearn') && ($('workspaceOpenLearn').onclick=()=>{
+  const topic=workspaceTopic(); if(!topic)return; const current=T.find(t=>t.custom&&Number(t.custom_index)===workspaceCustomTopicIndex);
+  if(current){state.i=current.start_index;save();render();closeTopicWorkspace();openScreen('learn');}
+});
+$('workspaceExportTopic') && ($('workspaceExportTopic').onclick=()=>{const topic=workspaceTopic();if(topic)download((topic.title_en||'Topic').replace(/[^a-z0-9_-]+/gi,'_')+'.json',JSON.stringify(topic,null,2),'application/json');});
+$('closeTopicWorkspace') && ($('closeTopicWorkspace').onclick=closeTopicWorkspace);
+$('workspaceCloseBottom') && ($('workspaceCloseBottom').onclick=closeTopicWorkspace);
+$('topicWorkspaceModal') && ($('topicWorkspaceModal').onclick=e=>{if(e.target===$('topicWorkspaceModal'))closeTopicWorkspace();});
+
 
 // ===== Import Topics From File (CSV / JSON / TXT) =====
 function csvCells(line){
@@ -987,3 +1073,26 @@ function renderFavoritesScreen(){
 const oldOpenScreenV1957=openScreen;
 openScreen=function(screen){oldOpenScreenV1957(screen);if(screen==='favorites')renderFavoritesScreen();};
 document.querySelectorAll('.navItem[data-screen="favorites"]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(renderFavoritesScreen,0)));
+
+
+// ===== V19.6 Stable Sidebar Initialization =====
+(function(){
+  const byId=id=>document.getElementById(id);
+  function refreshV196(){
+    try{
+      if(typeof rebuildCustomData==='function') rebuildCustomData();
+      if(typeof renderTopics==='function') renderTopics();
+      if(typeof renderPremiumTopics==='function') renderPremiumTopics();
+      if(typeof loadVoices==='function') loadVoices();
+      if(typeof updateRateValue==='function') updateRateValue();
+      const topics=byId('topics');
+      if(topics && !topics.children.length && Array.isArray(T) && T.length && typeof renderTopics==='function') renderTopics();
+    }catch(err){ console.error('V19.6 sidebar initialization error:',err); }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',refreshV196,{once:true});
+  else refreshV196();
+  setTimeout(refreshV196,250);
+  setTimeout(refreshV196,900);
+  byId('sidebarTopicSearch')?.addEventListener('input',()=>{ try{renderTopics();}catch(err){console.error(err);} });
+  window.addEventListener('pageshow',refreshV196);
+})();
