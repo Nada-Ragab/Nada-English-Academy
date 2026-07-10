@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V19.8 - Smart Learning Center</title>
+<title>Nada English Academy V19.9 - Progress Insights</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -171,6 +171,18 @@
   <div class="premiumMotivation">
     <div class="motivationIcon">🚀</div><div><b>خطوة صغيرة كل يوم تصنع فرقًا كبيرًا.</b><span id="premiumMotivationText">ابدئي الآن بجملة واحدة فقط.</span></div>
     <button class="btn green" data-go="learn">ابدئي التعلّم</button>
+  </div>
+
+  <div class="progressInsightsPanel panelCard">
+    <div class="panelHead"><div><small>PROGRESS INSIGHTS</small><h3>ملخص التعلّم</h3></div><span class="panelIcon">📈</span></div>
+    <div class="insightStatsRow">
+      <div class="insightMiniCard"><span>✅</span><div><small>تم إتقانها اليوم</small><b id="insightKnownToday">0</b></div></div>
+      <div class="insightMiniCard"><span>🔁</span><div><small>أضيفت للمراجعة</small><b id="insightReviewToday">0</b></div></div>
+      <div class="insightMiniCard"><span>⏱️</span><div><small>وقت المذاكرة اليوم</small><b id="insightMinutesToday">0 د</b></div></div>
+      <div class="insightMiniCard"><span>🔥</span><div><small>سلسلة النشاط</small><b id="insightStreak">1 يوم</b></div></div>
+    </div>
+    <div class="weeklyTimeline" id="weeklyTimeline"></div>
+    <div class="insightActions"><button class="btn blue" id="insightOpenStats">📊 عرض التقرير الكامل</button><button class="btn purple" id="insightStartReview">🔁 بدء مراجعة اليوم</button></div>
   </div>
 </section>
 <section class="screen" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>

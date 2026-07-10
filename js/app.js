@@ -41,7 +41,7 @@ rebuildCustomData();
 let state = consolidatedData?.state || safeParse(localStorage.getItem('nada_v12_state'), {i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]});
 let voices = [], currentQuiz = null, currentReview = null, daily = [];
 const $ = id => document.getElementById(id);
-function saveAllData(){ if(!storageAvailable()) return; const payload={version:'19.7',savedAt:new Date().toISOString(),state,customTopics,hiddenBuiltInTopicIds,pinnedBuiltInTopicIds,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
+function saveAllData(){ if(!storageAvailable()) return; const payload={version:'19.9',savedAt:new Date().toISOString(),state,customTopics,hiddenBuiltInTopicIds,pinnedBuiltInTopicIds,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); }
 function save(){ localStorage.setItem('nada_v12_state', JSON.stringify(state)); saveAllData(); }
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1400); }
 function clean(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
@@ -1135,3 +1135,30 @@ const oldRefreshDashboardV198=refreshDashboard;
 refreshDashboard=function(){oldRefreshDashboardV198();refreshSmartLearningCenter();};
 document.querySelectorAll('.learningModuleCard[data-go]').forEach(btn=>btn.addEventListener('click',()=>openScreen(btn.dataset.go)));
 setTimeout(refreshSmartLearningCenter,700);
+
+
+// ===== V19.9 Progress Insights =====
+const V199_ACTIVITY_KEY='nada_v199_daily_activity';
+function v199DateKey(date=new Date()){return date.toISOString().slice(0,10);}
+function v199ReadActivity(){try{return JSON.parse(localStorage.getItem(V199_ACTIVITY_KEY)||'{}')||{};}catch(_){return {};}}
+function v199WriteActivity(data){localStorage.setItem(V199_ACTIVITY_KEY,JSON.stringify(data));}
+function v199Track(type,amount=1){const data=v199ReadActivity();const key=v199DateKey();data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};data[key][type]=Number(data[key][type]||0)+Number(amount||0);data[key].visits=Math.max(1,Number(data[key].visits||0));v199WriteActivity(data);refreshProgressInsights();}
+function v199EnsureVisit(){const data=v199ReadActivity();const key=v199DateKey();data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};if(!data[key].visits)data[key].visits=1;v199WriteActivity(data);}
+function v199Streak(data){let count=0;const d=new Date();for(let i=0;i<365;i++){const k=v199DateKey(d);const x=data[k];if(x&&(Number(x.known||0)+Number(x.review||0)+Number(x.minutes||0)+Number(x.visits||0)>0)){count++;d.setDate(d.getDate()-1);}else if(i===0){d.setDate(d.getDate()-1);}else break;}return Math.max(1,count);}
+function refreshProgressInsights(){
+  const data=v199ReadActivity(),today=data[v199DateKey()]||{};
+  const focusStats=(typeof readFocusStats==='function'?readFocusStats():{})||{};
+  const todayMinutes=Math.round(Number(today.minutes||0)+Number(focusStats[v199DateKey()]||0));
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  set('insightKnownToday',Number(today.known||0));set('insightReviewToday',Number(today.review||0));set('insightMinutesToday',todayMinutes+' د');set('insightStreak',v199Streak(data)+' يوم');
+  const labels=['أحد','اثن','ثلا','أرب','خمي','جمع','سبت'];const wrap=document.getElementById('weeklyTimeline');
+  if(wrap){const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=v199DateKey(d),x=data[k]||{};const mins=Number(x.minutes||0)+Number(focusStats[k]||0);const score=Math.min(100,Number(x.known||0)*18+Number(x.review||0)*10+mins*3+Number(x.visits||0)*8);days.push(`<div class="weekDayCard ${i===0?'today':''}"><strong>${labels[d.getDay()]}</strong><small>${Number(x.known||0)} جملة · ${Math.round(mins)}د</small><div class="dayActivity"><span style="width:${score}%"></span></div></div>`);}wrap.innerHTML=days.join('');}
+}
+const v199OldMarkKnown=markKnown;markKnown=function(n){const before=Boolean(state.known?.[n]);v199OldMarkKnown(n);if(!before)v199Track('known',1);};
+const v199OldMarkReview=markReview;markReview=function(n){const before=Boolean(state.review?.[n]);v199OldMarkReview(n);if(!before)v199Track('review',1);};
+document.getElementById('insightOpenStats')?.addEventListener('click',()=>openScreen('stats'));
+document.getElementById('insightStartReview')?.addEventListener('click',()=>openScreen('review'));
+v199EnsureVisit();
+const v199OldRefreshDashboard=refreshDashboard;refreshDashboard=function(){v199OldRefreshDashboard();refreshProgressInsights();};
+window.addEventListener('focus',refreshProgressInsights);
+setTimeout(refreshProgressInsights,700);
