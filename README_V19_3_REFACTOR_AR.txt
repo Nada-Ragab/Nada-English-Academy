@@ -1,11 +1,397 @@
-Nada English Academy V19.3 - إعادة هيكلة
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nada English Academy V20.0 - Stable Foundation</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V20.0.2</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<div class="layout">
+<aside class="side" id="appSidebar">
+  <div class="sidebarHeader">
+    <div class="sidebarLogo">🦉</div>
+    <div><strong>Nada Academy</strong><small>Learn English smarter</small></div>
+    <button class="sidebarClose" id="sidebarClose" aria-label="إغلاق القائمة">×</button>
+  </div>
 
-تم فصل الواجهة والمنطق دون تغيير الوظائف:
-- index.html: هيكل الصفحات فقط
-- css/app.css: جميع التنسيقات
-- js/app.js: جميع وظائف JavaScript
-- assets/data/sentences.json: المحتوى الأساسي
-- sw.js: التخزين المؤقت وتشغيل PWA
+  <nav class="sidebarNav" aria-label="القائمة الرئيسية">
+    <div class="navSectionTitle">التعلّم</div>
+    <button class="tab navItem active" data-screen="dashboard"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
+    <button class="tab navItem" data-screen="learn"><span class="navIcon">📚</span><span>التعلّم</span></button>
+    <button class="tab navItem" data-screen="daily"><span class="navIcon">📅</span><span>درس اليوم</span></button>
+    <button class="tab navItem" data-screen="review"><span class="navIcon">🔁</span><span>المراجعة</span></button>
+    <button class="tab navItem" data-screen="flashcards"><span class="navIcon">🃏</span><span>Flashcards</span></button>
+    <button class="tab navItem" data-screen="quiz"><span class="navIcon">📝</span><span>الاختبارات</span></button>
 
-طريقة الرفع إلى GitHub:
-ارفع كل الملفات والمجلدات مع الحفاظ على نفس الهيكل، ثم Commit وSync Changes.
+    <div class="navSectionTitle">المهارات</div>
+    <button class="tab navItem" data-screen="dictation"><span class="navIcon">🎧</span><span>الاستماع والكتابة</span></button>
+    <button class="tab navItem" data-screen="speak"><span class="navIcon">🎤</span><span>تدريب النطق</span></button>
+    <button class="tab navItem" data-screen="words"><span class="navIcon">🧠</span><span>Word Coach</span></button>
+    <button class="tab navItem" data-screen="grammar"><span class="navIcon">📘</span><span>Grammar</span></button>
+
+    <div class="navSectionTitle">المحادثة والعمل</div>
+    <button class="tab navItem" data-screen="conversation"><span class="navIcon">💬</span><span>محادثة موجّهة</span></button>
+    <button class="tab navItem" data-screen="freechat"><span class="navIcon">🗨️</span><span>محادثة حرة</span></button>
+    <button class="tab navItem" data-screen="erp"><span class="navIcon">🏢</span><span>Odoo / ERP</span></button>
+
+    <div class="navSectionTitle">التقدّم والأدوات</div>
+    <button class="tab navItem" data-screen="stats"><span class="navIcon">📊</span><span>الإحصائيات</span></button>
+    <button class="tab navItem" data-screen="achievements"><span class="navIcon">🏆</span><span>الإنجازات</span></button>
+    <button class="tab navItem" data-screen="planner"><span class="navIcon">🗓️</span><span>خطة الدراسة</span></button>
+    <button class="tab navItem" data-screen="mistakes"><span class="navIcon">🧯</span><span>أخطائي</span></button>
+    <button class="tab navItem" data-screen="lab"><span class="navIcon">🧪</span><span>Practice Lab</span></button>
+    <button class="tab navItem" data-screen="playlist"><span class="navIcon">🎵</span><span>Audio Playlist</span></button>
+    <button class="tab navItem" data-screen="notes"><span class="navIcon">🗒️</span><span>ملاحظاتي</span></button>
+    <button class="tab navItem" data-screen="favorites"><span class="navIcon">⭐</span><span>المفضلة</span></button>
+    <button class="tab navItem" data-screen="backup"><span class="navIcon">⇅</span><span>استيراد / تصدير</span></button>
+    <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
+  </nav>
+
+  <section class="sidebarTools voiceOnlyTools" aria-label="الأدوات السريعة">
+    <div class="sidebarSectionHead"><span>⚡ الأدوات السريعة</span><small>إعدادات النطق</small></div>
+    <div class="voiceSettingsPanel voiceSettingsAlways" aria-label="إعدادات الصوت">
+      <div class="voiceSettingsTitle"><span>🔊 إعدادات الصوت</span><small id="rateValue">0.85x</small></div>
+      <label class="voiceField"><span>اختيار الصوت</span><select id="voice" aria-label="اختيار الصوت"></select></label>
+      <label class="voiceField rangeField"><span>سرعة النطق</span><input type="range" id="rate" min="0.55" max="1.25" value="0.85" step="0.05"></label>
+      <button type="button" class="voiceTestBtn" id="voiceTestBtn">▶ اختبار الصوت</button>
+      <input id="search" class="hiddenLegacySearch" placeholder="بحث سريع: رقم / English / عربي" aria-hidden="true" tabindex="-1">
+    </div>
+  </section>
+
+  <section class="sidebarTopics" aria-label="قائمة الموضوعات">
+    <div class="sidebarSectionHead topicSectionHead"><span>📚 Topics</span><span class="topicCountBadge" id="topicCountBadge">0</span></div>
+    <input class="topicSearch" id="sidebarTopicSearch" placeholder="🔍 Search topics...">
+    <div class="topicList" id="topics"></div>
+  </section>
+  <div class="sidebarFooter"><div class="miniGoal"><span>هدف اليوم</span><b id="sideGoal">0%</b></div><div class="miniGoalBar"><span id="sideGoalBar"></span></div></div>
+</aside>
+<main class="main">
+<section class="screen active" id="dashboard">
+  <div class="dashboardHero">
+    <div>
+      <span class="eyebrow">WELCOME BACK, NADA</span>
+      <h1>كمّلي رحلتك في الإنجليزية بثقة ✨</h1>
+      <p>اختاري درسًا، راجعي الكلمات الصعبة، أو ابدئي تدريبًا سريعًا من مكان واحد.</p>
+      <div class="heroActions"><button class="btn green" id="dashContinue">▶ متابعة التعلّم</button><button class="btn blue" id="dashDaily">📅 درس اليوم</button><button class="btn purple" id="dashReview">🔁 مراجعة ذكية</button></div>
+    </div>
+    <div class="heroBadge"><span>🎯</span><b id="dashGoalPct">0%</b><small>الهدف اليومي</small></div>
+  </div>
+  <div class="dashboardGrid">
+    <div class="dashCard"><div class="dashIcon green">⭐</div><div><small>XP المكتسب</small><b id="dashXP">0</b><span>استمري في التعلّم</span></div></div>
+    <div class="dashCard"><div class="dashIcon blue">✅</div><div><small>جمل متقنة</small><b id="dashKnown">0</b><span>من إجمالي المحتوى</span></div></div>
+    <div class="dashCard"><div class="dashIcon orange">🔁</div><div><small>تحتاج مراجعة</small><b id="dashReviewCount">0</b><span>جاهزة للتدريب</span></div></div>
+    <div class="dashCard"><div class="dashIcon purple">❤️</div><div><small>المفضلة</small><b id="dashFav">0</b><span>جملك المهمة</span></div></div>
+  </div>
+  <div class="dashboardColumns">
+    <div class="panelCard"><div class="panelHead"><div><small>CONTINUE LEARNING</small><h3>آخر درس</h3></div><span class="panelIcon">📖</span></div><div class="continueSentence" id="dashSentence">ابدئي رحلتك الآن</div><div class="mutedText" id="dashSentenceAr"></div><button class="btn green wide" id="dashResume">متابعة من آخر نقطة</button></div>
+    <div class="panelCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="freechat">💬<span>محادثة حرة</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
+  </div>
+  <div class="panelCard goalPanel"><div class="panelHead"><div><small>WEEKLY PROGRESS</small><h3>تقدمك الحالي</h3></div><b id="dashProgressText">0%</b></div><div class="modernProgress"><span id="dashProgressBar"></span></div><p class="mutedText">كل جملة تتقنيها تقرّبك خطوة من هدفك.</p></div>
+  <div class="activityCard"><div class="panelHead"><div><small>THIS WEEK</small><h3>نشاطك الأسبوعي</h3></div><span class="activityBadge">7 DAYS</span></div><div class="activityBars" id="activityBars"><div><span style="--h:38%"></span><small>س</small></div><div><span style="--h:55%"></span><small>ح</small></div><div><span style="--h:30%"></span><small>ن</small></div><div><span style="--h:74%"></span><small>ث</small></div><div><span style="--h:62%"></span><small>ر</small></div><div><span style="--h:86%"></span><small>خ</small></div><div class="today"><span style="--h:48%"></span><small>ج</small></div></div></div>
+  <div class="insightGrid">
+    <div class="panelCard focusCard">
+      <div class="panelHead"><div><small>SMART FOCUS</small><h3>تركيز اليوم</h3></div><span class="panelIcon">🎯</span></div>
+      <div class="focusSummary"><div class="focusRing"><b id="focusCount">0</b><small>جمل</small></div><div><strong id="focusTitle">ابدئي مراجعة ذكية</strong><p id="focusText" class="mutedText">سنختار لكِ أفضل خطوة بناءً على تقدمك.</p></div></div>
+      <button class="btn purple wide" id="focusAction">ابدئي الآن</button>
+    </div>
+    <div class="panelCard recentTopicsCard">
+      <div class="panelHead"><div><small>RECENT TOPICS</small><h3>موضوعاتك الأخيرة</h3></div><span class="panelIcon">🕘</span></div>
+      <div id="recentTopicsList" class="recentTopicsList"></div>
+    </div>
+  </div>
+  <div class="focusSessionPanel panelCard">
+    <div class="focusSessionInfo">
+      <span class="eyebrow darkEyebrow">FOCUS SESSION</span>
+      <h3>جلسة مذاكرة مركزة</h3>
+      <p>اختاري المدة، ابدئي المؤقت، وركّزي على هدف واحد فقط.</p>
+      <div class="focusPresetRow">
+        <button class="focusPreset active" data-focus-min="10">10 دقائق</button>
+        <button class="focusPreset" data-focus-min="15">15 دقيقة</button>
+        <button class="focusPreset" data-focus-min="25">25 دقيقة</button>
+      </div>
+      <div class="focusSessionActions">
+        <button class="btn green" id="focusTimerStart">▶ ابدئي</button>
+        <button class="btn orange" id="focusTimerPause">⏸ إيقاف مؤقت</button>
+        <button class="btn" id="focusTimerReset">↺ إعادة</button>
+      </div>
+    </div>
+    <div class="focusTimerCard">
+      <div class="focusTimerRing" id="focusTimerRing" style="--timer-pct:0%">
+        <div><b id="focusTimerText">10:00</b><small id="focusTimerState">جاهزة</small></div>
+      </div>
+      <div class="focusTodayStat"><span>وقت اليوم</span><b id="focusTodayMinutes">0 دقيقة</b></div>
+    </div>
+  </div>
+  <div class="premiumSection">
+    <div class="premiumSectionHead">
+      <div><span class="eyebrow darkEyebrow">PREMIUM LEARNING HUB</span><h2>مسارك الذكي اليوم</h2><p>اختاري مهارة أو موضوع وابدئي مباشرة.</p></div>
+      <div class="premiumHeadActions"><button class="softAction" data-go="daily">📅 خطة اليوم</button><button class="softAction" data-go="stats">📊 تقريري</button></div>
+    </div>
+    <div class="skillProgressGrid">
+      <button class="skillProgressCard" data-go="dictation"><span class="skillIcon blueGlow">🎧</span><span><b>Listening</b><small>الاستماع والفهم</small></span><em id="premiumListeningPct">0%</em></button>
+      <button class="skillProgressCard" data-go="speak"><span class="skillIcon purpleGlow">🎙️</span><span><b>Speaking</b><small>النطق والطلاقة</small></span><em id="premiumSpeakingPct">0%</em></button>
+      <button class="skillProgressCard" data-go="words"><span class="skillIcon orangeGlow">📖</span><span><b>Vocabulary</b><small>الكلمات المحفوظة</small></span><em id="premiumWordsPct">0%</em></button>
+      <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
+    </div>
+  </div>
+  <div class="topicExplorer panelCard">
+    <div class="topicExplorerHead">
+      <div><small>TOPIC LIBRARY</small><h3>استكشفي الموضوعات</h3></div>
+      <div class="topicExplorerTools"><input id="premiumTopicSearch" placeholder="ابحثي عن موضوع..."><button class="iconAction" id="premiumTopicClear" title="مسح البحث">×</button></div>
+    </div>
+    <div class="topicLibraryToolbar">
+      <button class="btn green" id="libraryAddTopic" type="button">＋ إضافة موضوع جديد</button>
+      <button class="btn blue" id="libraryImportTopics" type="button">⇧ استيراد</button>
+      <button class="btn purple" id="libraryExportTopics" type="button">⇩ تصدير</button>
+      <button class="btn" id="restoreHiddenTopics" type="button">↺ استعادة المحذوف</button>
+    </div>
+    <div class="topicExplorerHead topicExplorerHeadFilters">
+    </div>
+    <div class="topicChips"><button class="active" data-topic-filter="all">الكل</button><button data-topic-filter="recent">الأخيرة</button><button data-topic-filter="custom">المرفوعة</button><button data-topic-filter="progress">قيد الدراسة</button></div>
+    <div class="premiumTopicsGrid" id="premiumTopicsGrid"></div>
+    <button class="btn blue wide premiumMoreBtn" id="premiumTopicsMore">عرض المزيد من الموضوعات</button>
+  </div>
+  <div class="premiumMotivation">
+    <div class="motivationIcon">🚀</div><div><b>خطوة صغيرة كل يوم تصنع فرقًا كبيرًا.</b><span id="premiumMotivationText">ابدئي الآن بجملة واحدة فقط.</span></div>
+    <button class="btn green" data-go="learn">ابدئي التعلّم</button>
+  </div>
+
+  <div class="progressInsightsPanel panelCard">
+    <div class="panelHead"><div><small>PROGRESS INSIGHTS</small><h3>ملخص التعلّم</h3></div><span class="panelIcon">📈</span></div>
+    <div class="insightStatsRow">
+      <div class="insightMiniCard"><span>✅</span><div><small>تم إتقانها اليوم</small><b id="insightKnownToday">0</b></div></div>
+      <div class="insightMiniCard"><span>🔁</span><div><small>أضيفت للمراجعة</small><b id="insightReviewToday">0</b></div></div>
+      <div class="insightMiniCard"><span>⏱️</span><div><small>وقت المذاكرة اليوم</small><b id="insightMinutesToday">0 د</b></div></div>
+      <div class="insightMiniCard"><span>🔥</span><div><small>سلسلة النشاط</small><b id="insightStreak">1 يوم</b></div></div>
+    </div>
+    <div class="weeklyTimeline" id="weeklyTimeline"></div>
+    <div class="insightActions"><button class="btn blue" id="insightOpenStats">📊 عرض التقرير الكامل</button><button class="btn purple" id="insightStartReview">🔁 بدء مراجعة اليوم</button></div>
+  </div>
+</section>
+<section class="screen" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
+<section class="screen" id="daily"><h2>📅 درس اليوم</h2><div class="grid"><div class="stat"><b id="dNew">0</b>جمل جديدة</div><div class="stat"><b id="dRev">0</b>مراجعة</div><div class="stat"><b>15</b>دقيقة</div></div><div class="controls"><button class="btn green" id="buildDaily">تجهيز درس اليوم</button><button class="btn blue" id="startDaily">ابدئي الدرس</button><button class="btn orange" id="printDaily">طباعة</button></div><div class="resultBox" id="dailyList"></div></section>
+<section class="screen" id="review"><h2>🔁 مراجعة ذكية</h2><div class="box"><div class="en" id="revEn"></div><div class="ar" id="revAr"></div><div class="controls"><button class="btn blue" id="revSpeak">🔊</button><button class="btn green" id="revOk">عرفتها</button><button class="btn orange" id="revBad">لسه صعبة</button></div></div></section>
+<section class="screen" id="quiz"><h2>📝 اختبار الترجمة</h2><div class="box"><div class="en" id="qText"></div><div id="choices"></div><div id="qFeedback"></div><button class="btn purple" id="newQuiz">سؤال جديد</button></div></section>
+<section class="screen" id="dictation"><h2>🎧 استمعي واكتبي</h2><div class="box"><button class="btn blue" id="dictSpeak">🔊 اسمع الجملة</button><textarea id="dictInput" rows="4" placeholder="Write what you hear..."></textarea><div class="controls"><button class="btn green" id="dictCheck">تحقق</button><button class="btn" id="dictClear">مسح</button></div><div id="dictOut"></div></div></section>
+<section class="screen" id="speak">
+  <h2>🎙️ تدريب النطق الحر</h2>
+  <div class="box">
+    <p>اتكلمي بحرية بالإنجليزية. التدريب غير مرتبط بالجملة الحالية.</p>
+    <label for="pronTarget"><b>نص اختياري للمقارنة</b></label>
+    <textarea id="pronTarget" rows="3" placeholder="اكتبي كلمة أو جملة من اختيارك، أو اتركيه فارغًا للتحدث الحر..."></textarea>
+    <div class="controls">
+      <button class="btn red" id="micBtn">🎙️ ابدأ التحدث الحر</button>
+      <button class="btn" id="pronClear">🗑️ مسح</button>
+      <button class="btn blue" id="pronListen">🔊 اسمعي النص</button>
+      <button class="btn green" id="pronCopy">📋 نسخ كلامي</button>
+    </div>
+    <div class="box" id="heard">سيظهر كلامك هنا...</div>
+    <div id="speechScore"></div>
+  </div>
+</section>
+<section class="screen" id="words"><h2>🔤 Word Coach</h2><div class="box"><div class="en" id="wordSentence"></div><div id="wordList"></div><textarea id="wordNote" rows="3" placeholder="ملاحظتك على الكلمات..."></textarea><div class="controls"><button class="btn green" id="saveWords">حفظ الكلمات</button><button class="btn blue" id="wordQuiz">اختبار كلمة</button></div><h3>الكلمات المحفوظة</h3><div id="savedWords"></div></div></section>
+<section class="screen" id="stats"><h2>📊 إحصائيات</h2><div class="grid"><div class="stat"><b id="sKnown">0</b>محفوظة</div><div class="stat"><b id="sReview">0</b>مراجعة</div><div class="stat"><b id="sFav">0</b>مفضلة</div><div class="stat"><b id="sPct">0%</b>إنجاز</div></div><div id="topicStats"></div></section>
+
+<section class="screen" id="achievements">
+  <h2>🏆 الإنجازات</h2>
+  <div class="box">
+    <p>الإنجازات بتتفتح تلقائيًا حسب عدد الجمل المحفوظة، المراجعة، المفضلة، والنقاط.</p>
+  </div>
+  <div class="grid" id="achGrid"></div>
+</section>
+<section class="screen" id="flashcards">
+  <h2>🃏 Flashcards</h2>
+  <div class="box">
+    <div class="flash" id="flashFlip">
+      <div>
+        <div class="big" id="flashText">اضغطي كارت جديد</div>
+        <p class="note" id="flashHint">الكارت يختار من جمل المراجعة أو الجمل الجديدة.</p>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn blue" id="flashSpeak">🔊 اسمع</button>
+      <button class="btn green" id="flashKnown">✅ عرفتها</button>
+      <button class="btn orange" id="flashAgain">🔁 راجعيها</button>
+      <button class="btn purple" id="flashNext">كارت جديد</button>
+    </div>
+  </div>
+</section>
+<section class="screen" id="planner">
+  <h2>🗓️ خطة أسبوعية</h2>
+  <div class="box">
+    <div class="grid">
+      <div><label>عدد الجمل يوميًا</label><input id="dailyTarget" type="number" min="5" max="100" value="20"></div>
+      <div><label>وقت المذاكرة بالدقائق</label><input id="minutesTarget" type="number" min="5" max="120" value="25"></div>
+    </div>
+    <div class="controls">
+      <button class="btn green" id="makePlan">اعملي الخطة</button>
+      <button class="btn blue" onclick="window.print()">طباعة الخطة</button>
+    </div>
+    <div id="planOut" class="box">اضغطي "اعملي الخطة" لعرض جدول 7 أيام.</div>
+  </div>
+</section>
+<section class="screen" id="conversation">
+  <h2>💬 Conversation Mode</h2>
+  <div class="box">
+    <p>يبني محادثة قصيرة من نفس موضوع الجملة الحالية، ثم يمكنك تشغيلها صوتيًا.</p>
+    <div class="controls">
+      <button class="btn green" id="buildConv">بناء المحادثة</button>
+      <button class="btn blue" id="playConv">تشغيل المحادثة</button>
+      <button class="btn purple" id="focusMode">وضع التركيز</button>
+    </div>
+    <div class="resultBox" id="convOut"></div>
+  </div>
+</section>
+<section class="screen" id="freechat">
+  <h2>🗣️ محادثات حرة</h2>
+  <div class="freeChatWrap">
+    <div class="freeChatSide">
+      <h3>اختاري الموقف</h3>
+      <button class="btn scenarioBtn active" data-scenario="general">محادثة عامة</button>
+      <button class="btn scenarioBtn" data-scenario="work">العمل والاجتماعات</button>
+      <button class="btn scenarioBtn" data-scenario="odoo">Odoo / ERP</button>
+      <button class="btn scenarioBtn" data-scenario="travel">السفر والفندق</button>
+      <button class="btn scenarioBtn" data-scenario="shopping">التسوق</button>
+      <button class="btn scenarioBtn" data-scenario="interview">مقابلة عمل</button>
+      <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <button class="btn blue" id="freeChatSpeak" style="width:100%">🔊 اسمعي الرد</button>
+      <button class="btn green" id="freeChatSpeakCorrection" style="width:100%;margin-top:7px" disabled>✅ اسمعي التصحيح</button>
+      <button class="btn orange" id="freeChatHint" style="width:100%;margin-top:7px">💡 اقتراح رد</button>
+      <button class="btn red" id="freeChatClear" style="width:100%;margin-top:7px">مسح المحادثة</button>
+    </div>
+    <div class="freeChatMain">
+      <div class="freeChatMessages" id="freeChatMessages"></div>
+      <div class="freeChatInput">
+        <input id="freeChatText" placeholder="اكتبي ردك بالإنجليزية أو استخدمي الميكروفون...">
+        <button class="btn purple" id="freeChatMic" type="button">🎤 اتكلمي</button>
+        <button class="btn green" id="freeChatSend" type="button">إرسال</button>
+      </div>
+      <div class="note" id="freeChatMicStatus">اضغطي 🎤 اتكلمي، ثم قولي ردك بالإنجليزية.</div>
+      <div class="note" id="freeChatFeedback">اكتبي جملة بالإنجليزية، وسأرد عليكِ وأعطيكِ ملاحظة بسيطة.</div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="grammar">
+  <h2>📘 Grammar Trainer</h2>
+  <div class="box">
+    <p class="note">تدريب سريع على قواعد A1/A2 من الجملة الحالية.</p>
+    <div class="grid">
+      <button class="btn blue" id="grammarExplain">شرح الجملة الحالية</button>
+      <button class="btn green" id="grammarQuiz">سؤال Grammar</button>
+    </div>
+    <div id="grammarOut" class="resultBox">اضغطي على زر الشرح أو السؤال.</div>
+  </div>
+</section>
+<section class="screen" id="erp">
+  <h2>💼 ERP / Odoo English</h2>
+  <div class="box">
+    <p class="note">جمل شغل جاهزة للمقابلات، الاجتماعات، والدعم الفني.</p>
+    <div class="controls">
+      <button class="btn purple" id="erpRandom">جملة عشوائية</button>
+      <button class="btn blue" id="erpSpeak">🔊 اسمع</button>
+      <button class="btn green" id="erpSave">حفظ في الكلمات</button>
+    </div>
+    <div class="big" id="erpEn">اضغطي جملة عشوائية</div>
+    <div class="arabic" id="erpAr"></div>
+  </div>
+</section>
+<section class="screen" id="mistakes">
+  <h2>🧯 أخطائي ونقاط الضعف</h2>
+  <div class="box">
+    <div class="controls">
+      <button class="btn orange" id="buildMistakes">تحليل الأخطاء</button>
+      <button class="btn red" id="clearReview">مسح قائمة المراجعة</button>
+    </div>
+    <div id="mistakesOut" class="resultBox">اضغطي تحليل الأخطاء.</div>
+  </div>
+</section>
+
+
+<section class="screen" id="lab"><h2>🧪 Practice Lab</h2><div class="v15Card"><p>تدريب سريع من 10 جمل: اسمعي، اكتبي، ثم قارني.</p><div class="v15Progress"><span id="labBar"></span></div><div class="en" id="labEn"></div><div class="ar" id="labAr"></div><textarea id="labAnswer" rows="3" placeholder="اكتبي الجملة هنا بالإنجليزي..."></textarea><div id="labResult"></div><div class="controls"><button class="btn green" id="labStart">ابدئي تدريب جديد</button><button class="btn blue" id="labSpeak">🔊 اسمع</button><button class="btn purple" id="labCheck">تحقق</button><button class="btn orange" id="labNext">التالي</button></div></div></section>
+<section class="screen" id="playlist"><h2>🎧 Audio Playlist</h2><div class="v15Card"><p>شغّلي قائمة صوتية للجمل: الموضوع الحالي، المراجعة، أو المفضلة.</p><div class="controls"><button class="btn green" id="playTopic">تشغيل الموضوع الحالي</button><button class="btn orange" id="playReview">تشغيل المراجعة</button><button class="btn purple" id="playFav">تشغيل المفضلة</button><button class="btn red" id="stopPlay">إيقاف</button></div><label>تكرار كل جملة</label><input id="repeatCount" type="number" value="1" min="1" max="5"><label>وقت الانتظار بين الجمل بالثواني</label><input id="gapSeconds" type="number" value="2" min="1" max="10"><div id="playlistOut"></div></div></section>
+<section class="screen" id="notes"><h2>🗒️ ملاحظاتي</h2><div class="v15Card"><div class="en" id="noteSentence"></div><div class="ar" id="noteArabic"></div><textarea id="sentenceNote" rows="4" placeholder="اكتبي ملاحظتك على الجملة الحالية..."></textarea><div class="controls"><button class="btn green" id="saveNote">حفظ الملاحظة</button><button class="btn blue" id="exportNotes">تصدير الملاحظات</button><button class="btn orange" id="showNotes">عرض الملاحظات</button></div><div id="notesOut"></div></div><div class="v15Card"><h3>اختصارات الكيبورد</h3><p><span class="kbd">Space</span> تشغيل الصوت | <span class="kbd">←</span> السابق | <span class="kbd">→</span> التالي | <span class="kbd">K</span> عرفتها | <span class="kbd">R</span> مراجعة</p></div></section>
+<section class="screen" id="favorites"><h2>⭐ المفضلة</h2>
+<div class="v15Card"><p>كل الجمل التي أضفتِها إلى المفضلة تظهر هنا.</p><div id="favoritesList" class="favoritesList"></div></div></section>
+<section class="screen" id="backup"><h2>💾 حفظ البيانات والنسخ الاحتياطي</h2>
+<div class="box"><div class="stat"><b id="storageStatus">✅</b><span>الحفظ التلقائي مفعّل على هذا الجهاز</span><small id="storageDetails" style="display:block;margin-top:8px;color:var(--muted)"></small></div></div>
+<div class="box"><p><b>يتم حفظ التقدم والمواضيع المرفوعة تلقائيًا.</b><br>تحديث ملفات GitHub لا يحذف بياناتك على نفس المتصفح والجهاز.</p><div class="controls"><button class="btn green" id="exportProgress">📥 تنزيل نسخة احتياطية كاملة</button><label class="btn blue" style="width:auto">📤 استرجاع نسخة احتياطية<input id="importProgress" type="file" accept="application/json" hidden></label><button class="btn orange" id="exportCsv">تصدير الجمل CSV</button><button class="btn red" id="resetBtn">مسح التقدم فقط</button></div></div>
+<div class="box"><p class="note">مهم: عند تغيير الهاتف أو المتصفح، نزّلي نسخة احتياطية ثم استورديها على الجهاز الجديد.</p></div></section>
+</main>
+</div>
+<div class="modalOverlay" id="topicModal">
+  <div class="modalCard" dir="rtl">
+    <h2 id="topicModalTitle">➕ إضافة موضوع جديد</h2>
+    <label>اسم الموضوع بالإنجليزية</label>
+    <input id="newTopicEn" placeholder="Example: Customer Support">
+    <label>اسم الموضوع بالعربية</label>
+    <input id="newTopicAr" placeholder="مثال: خدمة العملاء">
+    <label>الجمل</label>
+    <p class="note">اكتبي كل جملة في سطر بالشكل: English | العربية</p>
+    <textarea id="newTopicLines" placeholder="How can I help you? | كيف يمكنني مساعدتك؟&#10;Please explain the problem. | من فضلك اشرح المشكلة."></textarea>
+    <div class="box" style="margin-top:12px">
+      <b>📂 إضافة موضوعات عن طريق رفع ملف</b>
+      <p class="note">يدعم CSV وJSON وTXT. أعمدة CSV: English, Arabic, Topic, Topic Arabic</p>
+      <div class="controls">
+        <label class="btn blue" style="width:auto">اختيار ملف<input id="topicFileInput" type="file" accept=".csv,.json,.txt,text/csv,application/json,text/plain" hidden></label>
+        <button class="btn orange" id="downloadTopicTemplate" type="button">تحميل نموذج CSV</button>
+      </div>
+      <div id="topicFileStatus" class="note"></div>
+    </div>
+    <div class="controls">
+      <button class="btn green" id="saveTopicBtn">💾 حفظ الموضوع</button>
+      <button class="btn" id="cancelTopicBtn">إلغاء</button>
+    </div>
+  </div>
+</div>
+<div class="modalOverlay" id="topicWorkspaceModal">
+  <div class="modalCard topicWorkspaceCard" dir="rtl">
+    <div class="workspaceHeader">
+      <div>
+        <small>TOPIC WORKSPACE</small>
+        <h2 id="workspaceTitle">إدارة الموضوع</h2>
+        <p id="workspaceSubtitle" class="note"></p>
+      </div>
+      <button class="iconAction" id="closeTopicWorkspace" type="button" aria-label="إغلاق">×</button>
+    </div>
+    <div class="workspaceMetaGrid">
+      <label>اسم الموضوع بالإنجليزية<input id="workspaceTitleEn" dir="ltr"></label>
+      <label>اسم الموضوع بالعربية<input id="workspaceTitleAr"></label>
+      <button class="btn green" id="workspaceSaveMeta" type="button">💾 حفظ الاسم</button>
+      <button class="btn blue" id="workspaceOpenLearn" type="button">▶ فتح للتعلّم</button>
+    </div>
+    <div class="workspaceAddSentence">
+      <h3>➕ إضافة جملة داخل الموضوع</h3>
+      <div class="workspaceSentenceInputs">
+        <input id="workspaceNewEnglish" dir="ltr" placeholder="English sentence">
+        <input id="workspaceNewArabic" placeholder="الترجمة العربية">
+        <button class="btn green" id="workspaceAddSentence" type="button">إضافة</button>
+      </div>
+    </div>
+    <div class="workspaceListHead">
+      <h3>الجمل <span id="workspaceSentenceCount">0</span></h3>
+      <input id="workspaceSentenceSearch" placeholder="🔍 بحث داخل الجمل...">
+    </div>
+    <div class="workspaceSentenceList" id="workspaceSentenceList"></div>
+    <div class="controls workspaceFooter">
+      <button class="btn purple" id="workspaceExportTopic" type="button">📤 تصدير الموضوع</button>
+      <button class="btn" id="workspaceCloseBottom" type="button">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+
+<nav class="mobileBottomNav" aria-label="التنقل السريع">
+  <button data-go="dashboard"><span>🏠</span><small>الرئيسية</small></button>
+  <button data-go="learn"><span>📚</span><small>التعلّم</small></button>
+  <button data-go="speak"><span>🎤</span><small>النطق</small></button>
+  <button data-go="freechat"><span>💬</span><small>محادثة</small></button>
+  <button id="mobileMoreBtn"><span>☰</span><small>المزيد</small></button>
+</nav>
+<div class="toast" id="toast"></div>
+<script src="js/storage.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
