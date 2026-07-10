@@ -693,3 +693,57 @@ refreshDashboard=function(){oldRefreshDashboardV1942();refreshDashboardInsights(
 document.getElementById('mobileMoreBtn')?.addEventListener('click',openSidebar);
 document.querySelectorAll('.mobileBottomNav [data-go]').forEach(btn=>btn.addEventListener('click',()=>openScreen(btn.dataset.go)));
 setTimeout(refreshDashboardInsights,650);
+
+
+// ===== V19.4.3 Premium UI =====
+let premiumTopicFilter='all';
+let premiumTopicLimit=9;
+const premiumTopicIcons=['👋','🙋','🪪','👨‍👩‍👧','⏰','🏠','🍽️','☕','🛍️','💰','🕒','📅','🌤️','🧭','🚗','✈️','🏨','🏫','📝','💼','🤝','🎯','✉️','📱','🌐','🆘','💡','🙏','🗣️','⚖️','😊','🩺','🚨','🛠️','🎯','🕰️','🚀','🔓','🎨','🏃','👗','🧹','🏙️','🏦','💊','🧳','🤗','📚','🔗','❓'];
+const premiumTopicAccents=['#dbeafe','#ede9fe','#dcfce7','#ffedd5','#fce7f3','#cffafe'];
+function topicKnownCount(t){
+  const start=Number(t.start_index||0), end=start+Number(t.count||0);
+  return S.slice(start,end).filter(x=>state.known?.[x.number]).length;
+}
+function getPremiumTopicRows(){
+  const q=(document.getElementById('premiumTopicSearch')?.value||'').trim().toLowerCase();
+  let rows=T.map((t,i)=>({...t,_i:i,_known:topicKnownCount(t)}));
+  if(premiumTopicFilter==='custom') rows=rows.filter(t=>t.custom);
+  if(premiumTopicFilter==='progress') rows=rows.filter(t=>t._known>0&&t._known<t.count);
+  if(premiumTopicFilter==='recent') rows=rows.sort((a,b)=>Math.abs((state.i||0)-a.start_index)-Math.abs((state.i||0)-b.start_index));
+  if(q) rows=rows.filter(t=>String(t.title_en||'').toLowerCase().includes(q)||String(t.title_ar||'').includes(q));
+  return rows;
+}
+function renderPremiumTopics(){
+  const grid=document.getElementById('premiumTopicsGrid'); if(!grid)return;
+  const rows=getPremiumTopicRows(); const visible=rows.slice(0,premiumTopicLimit);
+  grid.innerHTML=visible.length?visible.map((t,i)=>{
+    const pct=t.count?Math.round((t._known/t.count)*100):0;
+    const icon=t.custom?'⭐':premiumTopicIcons[(t.id||t._i||i)%premiumTopicIcons.length];
+    const accent=premiumTopicAccents[(t.id||t._i||i)%premiumTopicAccents.length];
+    return `<article class="premiumTopicCard" data-topic-start="${t.start_index}" style="--topic-accent:${accent}"><div class="premiumTopicTop"><span class="premiumTopicIcon">${icon}</span><span class="premiumTopicNumber">${t.custom?'CUSTOM':('TOPIC '+(t.number||t.id||i+1))}</span></div><h4>${escapeHtml(t.title_en||'Topic')}</h4><p>${escapeHtml(t.title_ar||'')}</p><div class="premiumTopicMeta"><span>${t._known}/${t.count||0} جملة</span><div class="premiumTopicProgress"><i style="width:${pct}%"></i></div><span>${pct}%</span></div></article>`;
+  }).join(''):'<div class="premiumEmpty">لا توجد موضوعات مطابقة للبحث.</div>';
+  grid.querySelectorAll('[data-topic-start]').forEach(card=>card.addEventListener('click',()=>{state.i=Number(card.dataset.topicStart)||0;render();openScreen('learn');}));
+  const more=document.getElementById('premiumTopicsMore'); if(more){more.style.display=rows.length>premiumTopicLimit?'block':'none';more.textContent=premiumTopicLimit>=rows.length?'تم عرض كل الموضوعات':'عرض المزيد من الموضوعات';}
+}
+function refreshPremiumDashboard(){
+  const known=Object.keys(state.known||{}).length;
+  const review=Object.keys(state.review||{}).length;
+  const words=(state.words||[]).length;
+  const base=Math.max(1,S.length);
+  const setPct=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=Math.min(100,Math.max(0,Math.round(v)))+'%';};
+  setPct('premiumListeningPct',(known/base)*100);
+  setPct('premiumSpeakingPct',Math.min(100,(state.xp||0)/12));
+  setPct('premiumWordsPct',Math.min(100,words*3));
+  setPct('premiumGrammarPct',Math.min(100,((state.xp||0)+review*4)/15));
+  const msg=document.getElementById('premiumMotivationText');
+  if(msg)msg.textContent=review?`لديكِ ${review} جملة جاهزة للمراجعة اليوم.`:`أتقنتِ ${known} جملة حتى الآن. استمري!`;
+  renderPremiumTopics();
+}
+const oldRefreshDashboardV1943=refreshDashboard;
+refreshDashboard=function(){oldRefreshDashboardV1943();refreshPremiumDashboard();};
+document.getElementById('premiumTopicSearch')?.addEventListener('input',()=>{premiumTopicLimit=9;renderPremiumTopics();});
+document.getElementById('premiumTopicClear')?.addEventListener('click',()=>{const el=document.getElementById('premiumTopicSearch');if(el)el.value='';premiumTopicLimit=9;renderPremiumTopics();});
+document.querySelectorAll('[data-topic-filter]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-topic-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');premiumTopicFilter=btn.dataset.topicFilter;premiumTopicLimit=9;renderPremiumTopics();}));
+document.getElementById('premiumTopicsMore')?.addEventListener('click',()=>{premiumTopicLimit+=9;renderPremiumTopics();});
+document.querySelectorAll('.premiumSection [data-go],.premiumMotivation [data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
+setTimeout(refreshPremiumDashboard,450);
