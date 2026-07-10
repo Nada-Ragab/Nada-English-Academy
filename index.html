@@ -293,11 +293,10 @@
       <label>المستوى
         <select id="aiLevel"><option>A1</option><option selected>A2</option><option>B1</option></select>
       </label>
-      <label>AI Endpoint<input id="aiEndpoint" dir="ltr" placeholder="https://your-secure-server.com/chat"></label>
-      <label>API Key (اختياري)<input id="aiApiKey" dir="ltr" type="password" placeholder="يُحفظ على هذا الجهاز فقط"></label>
-      <button class="btn blue wide" id="saveAiSettings">💾 حفظ الإعدادات</button>
+      <div class="cloudReadyBadge">✓ Gemini متصل عبر Firebase AI Logic</div>
+      <button class="btn blue wide" id="saveAiSettings">💾 حفظ وضع التدريب</button>
       <button class="btn orange wide" id="clearAiChat">مسح المحادثة</button>
-      <p class="note">استخدمي رابط خادم آمن. لا يُنصح بوضع مفتاح OpenAI مباشرة داخل تطبيق منشور.</p>
+      <p class="note">لا يحتاج إلى Endpoint أو API Key. المدرّس متصل مباشرةً بمشروع Firebase.</p>
     </aside>
     <div class="box aiChatCard">
       <div id="aiMessages" class="aiMessages"></div>
