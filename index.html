@@ -3,62 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V25.9 - Dashboard Cleanup</title>
+<title>Nada English Academy V26.0 - Smart Sidebar</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V25.9</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V26.0</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
-<aside class="side" id="appSidebar">
+<aside class="side sidebarV260" id="appSidebar">
   <div class="sidebarHeader">
     <div class="sidebarLogo">🦉</div>
-    <div><strong>Nada Academy</strong><small>Learn English smarter</small></div>
+    <div class="sidebarBrandText"><strong>Nada Academy</strong><small>Learn English smarter</small></div>
     <button class="sidebarClose" id="sidebarClose" aria-label="إغلاق القائمة">×</button>
   </div>
 
-  <nav class="sidebarNav" aria-label="القائمة الرئيسية">
-    <div class="navSectionTitle">التعلّم</div>
-    <button class="tab navItem active" data-screen="dashboard"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
-    <button class="tab navItem" data-screen="learn"><span class="navIcon">📚</span><span>التعلّم</span></button>
-    <button class="tab navItem" data-screen="daily"><span class="navIcon">📅</span><span>درس اليوم</span></button>
-    <button class="tab navItem" data-screen="myday"><span class="navIcon">🧭</span><span>خطة يومي</span></button>
-    <button class="tab navItem" data-screen="myweek"><span class="navIcon">📆</span><span>تقريري الأسبوعي</span></button>
-    <button class="tab navItem" data-screen="review"><span class="navIcon">🔁</span><span>المراجعة</span></button>
-    <button class="tab navItem" data-screen="flashcards"><span class="navIcon">🃏</span><span>Flashcards</span></button>
-    <button class="tab navItem" data-screen="quiz"><span class="navIcon">📝</span><span>الاختبارات</span></button>
+  <nav class="sidebarNav sidebarGroupedNav" aria-label="القائمة الرئيسية">
+    <section class="sideGroup open" data-group="home">
+      <button type="button" class="sideGroupToggle"><span>🏠 الرئيسية</span><i>⌃</i></button>
+      <div class="sideGroupBody">
+        <button class="tab navItem active" data-screen="dashboard"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
+        <button class="tab navItem" data-screen="learn"><span class="navIcon">📚</span><span>حقيبة التعلّم</span></button>
+        <button class="tab navItem" data-screen="daily"><span class="navIcon">📅</span><span>دروس اليوم</span></button>
+        <button class="tab navItem" data-screen="myday"><span class="navIcon">🎯</span><span>خطة يومي</span></button>
+        <button class="tab navItem" data-screen="myweek"><span class="navIcon">📆</span><span>تقريري الأسبوعي</span></button>
+      </div>
+    </section>
 
-    <div class="navSectionTitle">المهارات</div>
-    <button class="tab navItem" data-screen="dictation"><span class="navIcon">🎧</span><span>الاستماع والكتابة</span></button>
-    <button class="tab navItem" data-screen="speak"><span class="navIcon">🎤</span><span>تدريب النطق</span></button>
-    <button class="tab navItem" data-screen="words"><span class="navIcon">🧠</span><span>Word Coach</span></button>
-    <button class="tab navItem" data-screen="grammar"><span class="navIcon">📘</span><span>Grammar</span></button>
+    <section class="sideGroup open" data-group="learning">
+      <button type="button" class="sideGroupToggle"><span>🎓 التعلّم</span><i>⌃</i></button>
+      <div class="sideGroupBody">
+        <button class="tab navItem" data-screen="review"><span class="navIcon">🔁</span><span>المراجعة الذكية</span></button>
+        <button class="tab navItem" data-screen="flashcards"><span class="navIcon">🃏</span><span>Flashcards</span></button>
+        <button class="tab navItem" data-screen="quiz"><span class="navIcon">📝</span><span>الاختبارات</span></button>
+        <button class="tab navItem" data-screen="dictation"><span class="navIcon">🎧</span><span>الاستماع والكتابة</span></button>
+        <button class="tab navItem" data-screen="speak"><span class="navIcon">🎤</span><span>تدريب النطق</span></button>
+        <button class="tab navItem" data-screen="words"><span class="navIcon">🧠</span><span>المفردات</span></button>
+        <button class="tab navItem" data-screen="grammar"><span class="navIcon">📘</span><span>Grammar</span></button>
+      </div>
+    </section>
 
-    <div class="navSectionTitle">المحادثة والعمل</div>
-    <button class="tab navItem" data-screen="conversation"><span class="navIcon">💬</span><span>محادثة موجّهة</span></button>
-    <button class="tab navItem" data-screen="freechat"><span class="navIcon">🗨️</span><span>محادثة حرة</span></button>
-    <button class="tab navItem" data-screen="aiteacher"><span class="navIcon">🤖</span><span>AI Teacher</span></button>
-    <button class="tab navItem" data-screen="smartcoach"><span class="navIcon">🚀</span><span>Smart Coach</span></button>
-    <button class="tab navItem" data-screen="odooacademy"><span class="navIcon">🎓</span><span>Odoo Academy</span></button>
-    <button class="tab navItem" data-screen="erp"><span class="navIcon">🏢</span><span>Odoo / ERP</span></button>
+    <section class="sideGroup open aiGroup" data-group="ai">
+      <button type="button" class="sideGroupToggle"><span>🤖 AI Teacher</span><i>⌃</i></button>
+      <div class="sideGroupBody">
+        <button class="tab navItem" data-screen="aiteacher"><span class="navIcon">🤖</span><span>مدرّس الذكاء الاصطناعي</span></button>
+        <button class="tab navItem" data-screen="conversation"><span class="navIcon">💬</span><span>محادثة موجّهة</span></button>
+        <button class="tab navItem" data-screen="freechat"><span class="navIcon">🗨️</span><span>محادثة حرة</span></button>
+        <button class="tab navItem" data-screen="smartcoach"><span class="navIcon">🚀</span><span>Smart Coach</span></button>
+      </div>
+    </section>
 
-    <div class="navSectionTitle">التقدّم والأدوات</div>
-    <button class="tab navItem" data-screen="stats"><span class="navIcon">📊</span><span>الإحصائيات</span></button>
-    <button class="tab navItem" data-screen="achievements"><span class="navIcon">🏆</span><span>الإنجازات</span></button>
-    <button class="tab navItem" data-screen="planner"><span class="navIcon">🗓️</span><span>خطة الدراسة</span></button>
-    <button class="tab navItem" data-screen="mistakes"><span class="navIcon">🧯</span><span>أخطائي</span></button>
-    <button class="tab navItem" data-screen="lab"><span class="navIcon">🧪</span><span>Practice Lab</span></button>
-    <button class="tab navItem" data-screen="playlist"><span class="navIcon">🎵</span><span>Audio Playlist</span></button>
-    <button class="tab navItem" data-screen="notes"><span class="navIcon">🗒️</span><span>ملاحظاتي</span></button>
-    <button class="tab navItem" data-screen="favorites"><span class="navIcon">⭐</span><span>المفضلة</span></button>
-    <button class="tab navItem" data-screen="backup"><span class="navIcon">⇅</span><span>استيراد / تصدير</span></button>
-    <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
-    <button class="tab navItem" data-screen="account"><span class="navIcon">👤</span><span>الحساب والمزامنة</span></button>
+    <section class="sideGroup open odooGroup" data-group="odoo">
+      <button type="button" class="sideGroupToggle"><span>🎓 Odoo Academy</span><i>⌃</i></button>
+      <div class="sideGroupBody">
+        <button class="tab navItem" data-screen="odooacademy"><span class="navIcon">📖</span><span>دروس Odoo</span></button>
+        <button class="tab navItem" data-screen="erp"><span class="navIcon">🖥️</span><span>تدريبات Odoo / ERP</span></button>
+        <button class="tab navItem" data-screen="planner"><span class="navIcon">💼</span><span>خطة الدراسة المهنية</span></button>
+      </div>
+    </section>
+
+    <section class="sideGroup" data-group="review">
+      <button type="button" class="sideGroupToggle"><span>🔄 المراجعة والأدوات</span><i>⌄</i></button>
+      <div class="sideGroupBody">
+        <button class="tab navItem" data-screen="mistakes"><span class="navIcon">⚠️</span><span>Needs Review</span></button>
+        <button class="tab navItem" data-screen="stats"><span class="navIcon">📊</span><span>الإحصائيات</span></button>
+        <button class="tab navItem" data-screen="achievements"><span class="navIcon">🏆</span><span>الإنجازات</span></button>
+        <button class="tab navItem" data-screen="lab"><span class="navIcon">🧪</span><span>Practice Lab</span></button>
+        <button class="tab navItem" data-screen="playlist"><span class="navIcon">🎵</span><span>Audio Playlist</span></button>
+        <button class="tab navItem" data-screen="favorites"><span class="navIcon">❤️</span><span>المفضلة</span></button>
+        <button class="tab navItem" data-screen="notes"><span class="navIcon">🗒️</span><span>ملاحظاتي</span></button>
+      </div>
+    </section>
+
+    <section class="sideGroup" data-group="settings">
+      <button type="button" class="sideGroupToggle"><span>⚙️ الإعدادات</span><i>⌄</i></button>
+      <div class="sideGroupBody">
+        <button class="tab navItem" data-screen="backup"><span class="navIcon">💾</span><span>النسخ الاحتياطي</span></button>
+        <button class="tab navItem" data-screen="backup"><span class="navIcon">⇄</span><span>استيراد / تصدير</span></button>
+        <button class="tab navItem" data-screen="account"><span class="navIcon">👤</span><span>الحساب والمزامنة</span></button>
+      </div>
+    </section>
   </nav>
 
-  <section class="sidebarTools voiceOnlyTools" aria-label="الأدوات السريعة">
-    <div class="sidebarSectionHead"><span>⚡ الأدوات السريعة</span><small>إعدادات النطق</small></div>
-    <div class="voiceSettingsPanel voiceSettingsAlways" aria-label="إعدادات الصوت">
-      <div class="voiceSettingsTitle"><span>🔊 إعدادات الصوت</span><small id="rateValue">0.85x</small></div>
+  <section class="sidebarTools voiceOnlyTools sideUtilityCard" aria-label="إعدادات الصوت">
+    <button type="button" class="sidebarUtilityToggle"><span>🔊 إعدادات الصوت</span><i>⌄</i></button>
+    <div class="voiceSettingsPanel voiceSettingsAlways sidebarUtilityBody" aria-label="إعدادات الصوت">
+      <div class="voiceSettingsTitle"><span>اختيار الصوت والسرعة</span><small id="rateValue">0.85x</small></div>
       <label class="voiceField"><span>اختيار الصوت</span><select id="voice" aria-label="اختيار الصوت"></select></label>
       <label class="voiceField rangeField"><span>سرعة النطق</span><input type="range" id="rate" min="0.55" max="1.25" value="0.85" step="0.05"></label>
       <button type="button" class="voiceTestBtn" id="voiceTestBtn">▶ اختبار الصوت</button>
@@ -66,12 +94,35 @@
     </div>
   </section>
 
-  <section class="sidebarTopics" aria-label="قائمة الموضوعات">
-    <div class="sidebarSectionHead topicSectionHead"><span>📚 Topics</span><span class="topicCountBadge" id="topicCountBadge">0</span></div>
-    <input class="topicSearch" id="sidebarTopicSearch" placeholder="🔍 Search topics...">
-    <div class="topicList" id="topics"></div>
+  <section class="sidebarTopics sideUtilityCard" aria-label="قائمة الموضوعات">
+    <button type="button" class="sidebarUtilityToggle topicUtilityToggle"><span>📚 مكتبة الموضوعات</span><b class="topicCountBadge" id="topicCountBadge">0</b><i>⌄</i></button>
+    <div class="sidebarUtilityBody topicUtilityBody">
+      <input class="topicSearch" id="sidebarTopicSearch" placeholder="🔍 ابحثي في الموضوعات...">
+      <div class="topicList" id="topics"></div>
+    </div>
   </section>
-  <div class="sidebarFooter"><div class="miniGoal"><span>هدف اليوم</span><b id="sideGoal">0%</b></div><div class="miniGoalBar"><span id="sideGoalBar"></span></div></div>
+
+  <section class="sidebarInsightStack" aria-label="ملخص التقدم">
+    <article class="sideProgressCard">
+      <div class="sideProgressRing" id="sidebarProgressRing"><div><b id="sidebarOverallPct">0%</b><small>تقدمك العام</small></div></div>
+      <div><strong>أنتِ على الطريق الصحيح!</strong><p>استمري بخطوة صغيرة كل يوم.</p></div>
+    </article>
+    <div class="sideMiniStats">
+      <article><span>🔥</span><b id="sidebarStreakStat">1</b><small>يوم متتالي</small></article>
+      <article><span>⏱️</span><b id="sidebarStudyStat">0 د</b><small>وقت اليوم</small></article>
+      <article><span>📊</span><b id="sidebarKnownStat">0</b><small>جملة متقنة</small></article>
+      <article><span>⭐</span><b id="sidebarRatingStat">—</b><small>آخر تقييم</small></article>
+    </div>
+    <article class="sideChallengeCard">
+      <div class="sideChallengeHead"><span>🎯 تحدي اليوم</span><b id="sidebarChallengeCount">0/15</b></div>
+      <p id="sidebarChallengeText">أتقني 15 جملة جديدة واكسبي نقاطًا إضافية.</p>
+      <div class="sideChallengeBar"><span id="sidebarChallengeBar"></span></div>
+      <button type="button" class="tab sideChallengeBtn" data-screen="learn">🎁 ابدئي التحدي</button>
+    </article>
+    <blockquote class="sideQuote">❝ الطريق إلى إتقان اللغة يبدأ بخطوة واحدة. كل يوم فرصة جديدة للتحسن. ❞</blockquote>
+  </section>
+
+  <div class="sidebarFooter"><div class="miniGoal"><span>هدف اليوم</span><b id="sideGoal">0%</b></div><div class="miniGoalBar"><span id="sideGoalBar"></span></div><button type="button" class="sidebarFoldBtn" id="sidebarFoldBtn">‹ طي القائمة</button></div>
 </aside>
 <main class="main">
 <section class="screen active" id="dashboard">
@@ -750,5 +801,6 @@
 <script src="js/ui-v254.js?v=25.5"></script>
 <script src="js/my-day-v255.js?v=25.7"></script>
 <script src="js/my-week-v256.js?v=25.7"></script>
+<script src="js/sidebar-v260.js"></script>
 </body>
 </html>
