@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V25.8 - Dashboard Order</title>
+<title>Nada English Academy V25.9 - Dashboard Cleanup</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V25.8</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V25.9</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -129,7 +129,11 @@
       <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
     </div>
   </div>
-  <div class="activityCard"><div class="panelHead"><div><small>THIS WEEK</small><h3>نشاطك الأسبوعي</h3></div><span class="activityBadge">7 DAYS</span></div><div class="activityBars" id="activityBars"><div><span style="--h:38%"></span><small>س</small></div><div><span style="--h:55%"></span><small>ح</small></div><div><span style="--h:30%"></span><small>ن</small></div><div><span style="--h:74%"></span><small>ث</small></div><div><span style="--h:62%"></span><small>ر</small></div><div><span style="--h:86%"></span><small>خ</small></div><div class="today"><span style="--h:48%"></span><small>ج</small></div></div></div>
+  <div class="panelCard dashAiRecommendation dashAiRecommendationCompact">
+    <div class="panelHead"><div><small>AI RECOMMENDATION</small><h3>توصية المدرب الذكي لليوم</h3></div><span class="panelIcon">🤖</span></div>
+    <div id="dashAiRecList" class="dashAiRecList"></div>
+    <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
+  </div>
   <div class="panelCard smartCoachPreview"><div class="panelHead"><div><small>AI SMART COACH</small><h3>برنامجك الذكي هذا الأسبوع</h3></div><span class="panelIcon">🚀</span></div><div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div><button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button></div>
   <div class="dashExecutiveGrid">
     <div class="panelCard dashMasterCard">
@@ -158,16 +162,11 @@
     <div class="panelHead"><div><small>LAST 7 DAYS</small><h3>نشاط آخر 7 أيام</h3></div><span class="activityBadge">WEEK</span></div>
     <div id="dashWeekActivity" class="dashWeekActivity"></div>
   </div>
-  <div class="dashAiProGrid">
+  <div class="dashAiProGrid dashAiProGridSingle">
     <div class="panelCard dashTodayMission">
       <div class="panelHead"><div><small>TODAY'S MISSION</small><h3>هدف اليوم</h3></div><span class="panelIcon">🎯</span></div>
       <div class="dashMissionProgress"><div><b id="dashMissionPct">0%</b><span id="dashMissionSummary">0 من 4 مهام</span></div><i><span id="dashMissionBar"></span></i></div>
       <div id="dashMissionList" class="dashMissionList"></div>
-    </div>
-    <div class="panelCard dashAiRecommendation">
-      <div class="panelHead"><div><small>AI RECOMMENDATION</small><h3>توصية المدرب الذكي</h3></div><span class="panelIcon">🤖</span></div>
-      <div id="dashAiRecList" class="dashAiRecList"></div>
-      <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
     </div>
   </div>
   <div class="dashSkillsGrid">
@@ -746,8 +745,8 @@
 <script src="js/cloud-ai.js?v=24.0"></script>
 <script src="js/smart-coach.js?v=24.0"></script>
 <script src="js/odoo-academy.js?v=25.2"></script>
-<script src="js/dashboard-v253.js?v=25.8"></script>
-<script src="js/dashboard-v258.js?v=25.8"></script>
+<script src="js/dashboard-v253.js?v=25.9"></script>
+<script src="js/dashboard-v258.js?v=25.9"></script>
 <script src="js/ui-v254.js?v=25.5"></script>
 <script src="js/my-day-v255.js?v=25.7"></script>
 <script src="js/my-week-v256.js?v=25.7"></script>
