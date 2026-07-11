@@ -700,3 +700,7 @@ body.dark .aiMsg.user{background:#14532d}body.dark .aiMsg.teacher{background:#31
 /* V21.1 automatic Firebase connection */
 .cloudReadyCard{display:flex;flex-direction:column;gap:14px;justify-content:center}
 .cloudReadyBadge{display:inline-flex;align-items:center;justify-content:center;align-self:center;padding:12px 22px;border-radius:999px;background:#eafbea;color:#16833a;font-weight:800;border:1px solid #b8ebc2}
+
+
+/* V22.9 AI session coach */
+.aiSessionStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.aiSessionStats>div{background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:10px 6px;text-align:center}.aiSessionStats small{display:block;color:var(--muted);font-size:10px;margin-bottom:3px}.aiSessionStats b{font-size:17px}.aiSessionReport{margin-top:12px;border:1px solid #c4b5fd;background:#f5f3ff;border-radius:14px;padding:13px;white-space:pre-wrap;line-height:1.7}.aiSessionReport h4{margin:0 0 8px}.aiSessionReport .scoreGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}.aiSessionReport .scoreGrid span{background:#fff;border-radius:10px;padding:8px;text-align:center;font-weight:800}body.dark .aiSessionReport{background:#251f45;border-color:#5b4bb7}body.dark .aiSessionReport .scoreGrid span{background:#17132d}@media(max-width:460px){.aiSessionStats{grid-template-columns:1fr}.aiSessionReport .scoreGrid{grid-template-columns:1fr}}

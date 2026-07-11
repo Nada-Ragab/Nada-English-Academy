@@ -3,6 +3,8 @@
 const el=id=>document.getElementById(id);
 const AI_SETTINGS_KEY='nada_ai_settings_v2';
 const AI_HISTORY_KEY='nada_ai_history_v2';
+const AI_REPORT_KEY='nada_ai_last_report_v1';
+const AI_SESSION_START_KEY='nada_ai_session_start_v1';
 const FIREBASE_CONFIG_KEY='nada_firebase_config_v1';
 const BUILTIN_FIREBASE_CONFIG={
   apiKey:'AIzaSyBbljF4Vw1Zy5cA2VVG3zrK_UPZ0xxftYg',
@@ -24,6 +26,7 @@ let firebaseApp=null, auth=null, db=null, currentUser=null, firebaseModules=null
 let aiModel=null;
 let syncTimer=null;
 let aiBusy=false;
+let sessionClock=null;
 function readJson(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'')||fallback}catch{return fallback}}
 function setNote(id,text){const n=el(id);if(n)n.textContent=text}
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
@@ -33,8 +36,73 @@ function saveAiSettings(){
   aiModel=null;
   setNote('aiStatus','تم حفظ وضع التدريب. المدرّس جاهز.');
 }
-function renderAi(){const box=el('aiMessages');if(!box)return;box.innerHTML=aiHistory.map(m=>`<div class="aiMsg ${m.role}">${escapeHtml(m.text)}</div>`).join('');box.scrollTop=box.scrollHeight}
+function renderAi(){const box=el('aiMessages');if(!box)return;box.innerHTML=aiHistory.map(m=>`<div class="aiMsg ${m.role}">${escapeHtml(m.text)}</div>`).join('');box.scrollTop=box.scrollHeight;updateSessionStats()}
 function addAi(role,text){aiHistory.push({role,text,time:Date.now()});aiHistory=aiHistory.slice(-60);localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(aiHistory));renderAi()}
+function sessionStart(){
+  let value=Number(localStorage.getItem(AI_SESSION_START_KEY)||0);
+  if(!value){value=Date.now();localStorage.setItem(AI_SESSION_START_KEY,String(value))}
+  return value;
+}
+function updateSessionStats(){
+  const users=aiHistory.filter(m=>m.role==='user').length;
+  const teachers=aiHistory.filter(m=>m.role==='teacher').length;
+  if(el('aiUserCount'))el('aiUserCount').textContent=String(users);
+  if(el('aiTeacherCount'))el('aiTeacherCount').textContent=String(teachers);
+  const secs=Math.max(0,Math.floor((Date.now()-sessionStart())/1000));
+  const mm=String(Math.floor(secs/60)).padStart(2,'0');
+  const ss=String(secs%60).padStart(2,'0');
+  if(el('aiSessionTime'))el('aiSessionTime').textContent=`${mm}:${ss}`;
+}
+function showSessionReport(report){
+  const box=el('aiSessionReport');if(!box)return;
+  if(!report){box.hidden=true;box.innerHTML='';return}
+  box.hidden=false;
+  box.innerHTML=`<h4>📊 تقرير الجلسة</h4><div class="scoreGrid"><span>Grammar<br>${escapeHtml(report.grammarScore||0)}%</span><span>Vocabulary<br>${escapeHtml(report.vocabularyScore||0)}%</span><span>Fluency<br>${escapeHtml(report.fluencyScore||0)}%</span></div><b>نقاط القوة</b><br>${escapeHtml(report.strengthsArabic||'—')}<br><br><b>ما يحتاج تحسينًا</b><br>${escapeHtml(report.improvementArabic||'—')}<br><br><b>الواجب</b><br><span dir="ltr">${escapeHtml(report.homeworkEnglish||'—')}</span>`;
+}
+async function evaluateSession(){
+  const userLines=aiHistory.filter(m=>m.role==='user').map(m=>m.text).slice(-20);
+  if(userLines.length<2){setNote('aiStatus','اكتبي رسالتين على الأقل قبل تقييم الجلسة.');return}
+  if(aiBusy)return;
+  aiBusy=true;
+  if(el('evaluateAiSession'))el('evaluateAiSession').disabled=true;
+  setNote('aiStatus','يُعد المدرّس تقرير الجلسة...');
+  try{
+    if(!await ensureFirebase())throw new Error('تعذر تهيئة Firebase');
+    const m=firebaseModules;
+    const ai=m.getAI(firebaseApp,{backend:new m.GoogleAIBackend()});
+    const schema=m.Schema.object({properties:{
+      grammarScore:m.Schema.integer(),vocabularyScore:m.Schema.integer(),fluencyScore:m.Schema.integer(),
+      strengthsArabic:m.Schema.string(),improvementArabic:m.Schema.string(),homeworkEnglish:m.Schema.string()
+    }});
+    const model=m.getGenerativeModel(ai,{model:GEMINI_MODEL,generationConfig:{temperature:0.2,maxOutputTokens:350,responseMimeType:'application/json',responseSchema:schema}});
+    const prompt=`Evaluate this English learner session at ${getAiSettings().level} level. Scores must be integers from 0 to 100. Give concise Arabic feedback and one short English homework task. Student messages:\n${userLines.join('\n')}`;
+    const result=await model.generateContent(prompt);
+    const raw=result&&result.response&&typeof result.response.text==='function'?result.response.text():'';
+    const report=JSON.parse(cleanJsonText(raw));
+    localStorage.setItem(AI_REPORT_KEY,JSON.stringify(report));
+    showSessionReport(report);
+    setNote('aiStatus','تم إعداد تقرير الجلسة.');
+    scheduleAutoSync();
+  }catch(e){
+    console.error('Session evaluation error:',e);
+    const lower=String(e&&e.message||e).toLowerCase();
+    setNote('aiStatus',lower.includes('quota')||lower.includes('429')?'تم الوصول إلى الحد المجاني المؤقت لـ Gemini. حاولي لاحقًا.':'تعذر إعداد تقرير الجلسة الآن.');
+  }finally{
+    aiBusy=false;
+    if(el('evaluateAiSession'))el('evaluateAiSession').disabled=false;
+  }
+}
+function startNewSession(){
+  stopAiVoice();
+  aiHistory=[];
+  localStorage.removeItem(AI_HISTORY_KEY);
+  localStorage.removeItem(AI_REPORT_KEY);
+  localStorage.setItem(AI_SESSION_START_KEY,String(Date.now()));
+  showSessionReport(null);
+  addAi('teacher','Hello Nada! Let us start a new conversation.');
+  updateSessionStats();
+}
+
 function teacherPrompt(s){
   const labels={
     general:'daily English conversation',
@@ -224,10 +292,10 @@ async function initFirebase(){
   }catch(e){setNote('syncStatus','تعذر ربط Firebase: '+e.message);setNote('aiStatus','تعذر تهيئة Firebase AI Logic.');return false}
 }
 function updateAuthUI(){const box=el('authState');if(!box)return;box.textContent=currentUser?'مسجلة الدخول: '+currentUser.email:'غير مسجلة الدخول';if(el('signOutBtn'))el('signOutBtn').disabled=!currentUser}
-function localPayload(){if(typeof saveAllData==='function')saveAllData();return readJson('nada_english_academy_v18_data',{savedAt:new Date().toISOString()})}
+function localPayload(){if(typeof saveAllData==='function')saveAllData();const payload=readJson('nada_english_academy_v18_data',{savedAt:new Date().toISOString()});payload.aiHistory=readJson(AI_HISTORY_KEY,[]);payload.aiSettings=getAiSettings();payload.aiLastReport=readJson(AI_REPORT_KEY,null);return payload}
 async function ensureFirebase(){return auth&&db?true:initFirebase()}
 async function uploadCloud(silent){if(!await ensureFirebase()||!currentUser){if(!silent)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;await m.setDoc(m.doc(db,'users',currentUser.uid),{academyData:localPayload(),updatedAt:m.serverTimestamp(),email:currentUser.email},{merge:true});setNote('syncStatus','آخر رفع: '+new Date().toLocaleString('ar-EG'))}catch(e){setNote('syncStatus','فشل الرفع: '+e.message)}}
-async function downloadCloud(show){if(!await ensureFirebase()||!currentUser){if(show)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;const snap=await m.getDoc(m.doc(db,'users',currentUser.uid));if(!snap.exists()||!snap.data().academyData){setNote('syncStatus','لا توجد بيانات محفوظة لهذا الحساب.');return}const data=snap.data().academyData;localStorage.setItem('nada_english_academy_v18_data',JSON.stringify(data));if(data.state)localStorage.setItem('nada_v12_state',JSON.stringify(data.state));if(data.customTopics)localStorage.setItem('nada_custom_topics_v1',JSON.stringify(data.customTopics));if(show)setNote('syncStatus','تم تحميل البيانات. أعيدي فتح الصفحة لتطبيقها.')}catch(e){setNote('syncStatus','فشل التحميل: '+e.message)}}
+async function downloadCloud(show){if(!await ensureFirebase()||!currentUser){if(show)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;const snap=await m.getDoc(m.doc(db,'users',currentUser.uid));if(!snap.exists()||!snap.data().academyData){setNote('syncStatus','لا توجد بيانات محفوظة لهذا الحساب.');return}const data=snap.data().academyData;localStorage.setItem('nada_english_academy_v18_data',JSON.stringify(data));if(data.state)localStorage.setItem('nada_v12_state',JSON.stringify(data.state));if(data.customTopics)localStorage.setItem('nada_custom_topics_v1',JSON.stringify(data.customTopics));if(data.aiHistory)localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(data.aiHistory));if(data.aiSettings)localStorage.setItem(AI_SETTINGS_KEY,JSON.stringify(data.aiSettings));if(data.aiLastReport)localStorage.setItem(AI_REPORT_KEY,JSON.stringify(data.aiLastReport));if(show)setNote('syncStatus','تم تحميل البيانات. أعيدي فتح الصفحة لتطبيقها.')}catch(e){setNote('syncStatus','فشل التحميل: '+e.message)}}
 function scheduleAutoSync(){if(localStorage.getItem(AUTO_SYNC_KEY)==='0'||!currentUser)return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>uploadCloud(true),1200)}
 function bind(){
   if(!el('aiMessages'))return;
@@ -238,7 +306,10 @@ function bind(){
   el('aiSendBtn').onclick=()=>{const t=el('aiInput').value.trim();if(t){el('aiInput').value='';askAi(t)}};
   el('aiInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el('aiSendBtn').click()}};
   el('aiVoiceBtn').onclick=()=>{if(voiceMode)stopAiVoice();else startAiVoice()};
-  el('clearAiChat').onclick=()=>{stopAiVoice();aiHistory=[];localStorage.removeItem(AI_HISTORY_KEY);addAi('teacher','Hello Nada! Let us start a new conversation.')};
+  el('clearAiChat').onclick=startNewSession;
+  if(el('evaluateAiSession'))el('evaluateAiSession').onclick=evaluateSession;
+  showSessionReport(readJson(AI_REPORT_KEY,null));
+  sessionStart();clearInterval(sessionClock);sessionClock=setInterval(updateSessionStats,1000);updateSessionStats();
   localStorage.setItem(FIREBASE_CONFIG_KEY,JSON.stringify(BUILTIN_FIREBASE_CONFIG));
   if(localStorage.getItem(AUTO_SYNC_KEY)===null)localStorage.setItem(AUTO_SYNC_KEY,'1');
   if(el('autoSyncToggle')){el('autoSyncToggle').checked=localStorage.getItem(AUTO_SYNC_KEY)!=='0';el('autoSyncToggle').onchange=e=>localStorage.setItem(AUTO_SYNC_KEY,e.target.checked?'1':'0')}

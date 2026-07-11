@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V22.8 - AI Teacher</title>
+<title>Nada English Academy V22.9 - AI Session Coach</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -298,8 +298,15 @@
         <select id="aiLevel"><option>A1</option><option selected>A2</option><option>B1</option><option>B2</option></select>
       </label>
       <div class="cloudReadyBadge">✓ Gemini متصل عبر Firebase AI Logic</div>
+      <div class="aiSessionStats">
+        <div><small>رسائلك</small><b id="aiUserCount">0</b></div>
+        <div><small>ردود المدرّس</small><b id="aiTeacherCount">0</b></div>
+        <div><small>مدة الجلسة</small><b id="aiSessionTime">00:00</b></div>
+      </div>
       <button class="btn blue wide" id="saveAiSettings">💾 حفظ وضع التدريب</button>
-      <button class="btn orange wide" id="clearAiChat">مسح المحادثة</button>
+      <button class="btn purple wide" id="evaluateAiSession">📊 إنهاء وتقييم الجلسة</button>
+      <button class="btn orange wide" id="clearAiChat">🆕 بدء جلسة جديدة</button>
+      <div id="aiSessionReport" class="aiSessionReport" hidden></div>
       <p class="note">لا يحتاج إلى Endpoint أو API Key. المدرّس متصل مباشرةً بمشروع Firebase.</p>
     </aside>
     <div class="box aiChatCard">
