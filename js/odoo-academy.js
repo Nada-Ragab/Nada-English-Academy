@@ -2,7 +2,8 @@
 'use strict';
 const $=id=>document.getElementById(id);
 const STATE_KEY='nada_odoo_academy_v1';
-const CONTENT_KEY='nada_odoo_academy_content_v273';
+const CONTENT_KEY='nada_odoo_academy_content_v274';
+const LEGACY_CONTENT_KEY='nada_odoo_academy_content_v273';
 let modules={
  payroll:{title:'Payroll',icon:'💰',tag:'HR & PAYROLL',description:'اشرحي دورة الرواتب، Salary Rules، Work Entries، المدخلات والتقارير باحتراف.',lessons:[
   ['Payroll Workflow','فهم دورة الراتب من العقد حتى اعتماد Payslip.','Explain the complete payroll workflow from employee contract to payslip validation.'],
@@ -24,22 +25,30 @@ let modules={
 };
 const defaultModules=JSON.parse(JSON.stringify(modules));
 function normalizeModule(m={}){
+ const normalizeCase=x=>({title:String(x?.title||'Implementation Case'),context:String(x?.context||''),requirements:Array.isArray(x?.requirements)?x.requirements.map(String):[],model:String(x?.model||'')});
+ const normalizeQuiz=x=>({type:String(x?.type||'Custom'),q:String(x?.q||''),options:Array.isArray(x?.options)?x.options.map(String):[],answer:String(x?.answer||''),explain:String(x?.explain||'')});
  return {
-  title:String(m.title||'New Module'),icon:String(m.icon||'🧩'),tag:String(m.tag||'ODOO MODULE'),description:String(m.description||''),
+  title:String(m.title||'New Module'),icon:String(m.icon||'🧩'),color:String(m.color||'#6d5dfc'),tag:String(m.tag||'ODOO MODULE'),description:String(m.description||''),
   lessons:Array.isArray(m.lessons)?m.lessons.map(x=>[String(x?.[0]||''),String(x?.[1]||''),String(x?.[2]||'')]):[],
+  sentences:Array.isArray(m.sentences)?m.sentences.map(x=>[String(x?.[0]||''),String(x?.[1]||'')]):[],
   words:Array.isArray(m.words)?m.words.map(x=>[String(x?.[0]||''),String(x?.[1]||'')]):[],
   dialogue:Array.isArray(m.dialogue)?m.dialogue.map(x=>[String(x?.[0]||'Client'),String(x?.[1]||'')]):[],
-  interview:Array.isArray(m.interview)?m.interview.map(String):[]
+  interview:Array.isArray(m.interview)?m.interview.map(String):[],
+  cases:Array.isArray(m.cases)?m.cases.map(normalizeCase):[],
+  quiz:Array.isArray(m.quiz)?m.quiz.map(normalizeQuiz):[]
  };
 }
 function loadContent(){
  try{
-  const saved=JSON.parse(localStorage.getItem(CONTENT_KEY)||'null');
+  const raw=localStorage.getItem(CONTENT_KEY)||localStorage.getItem(LEGACY_CONTENT_KEY)||'null';
+  const saved=JSON.parse(raw);
   if(saved&&typeof saved==='object'&&Object.keys(saved).length){
-   return Object.fromEntries(Object.entries(saved).map(([k,v])=>[k,normalizeModule(v)]));
+   const normalized=Object.fromEntries(Object.entries(saved).map(([k,v])=>[k,normalizeModule(v)]));
+   localStorage.setItem(CONTENT_KEY,JSON.stringify(normalized));
+   return normalized;
   }
  }catch(e){console.warn('Odoo Academy content load failed',e)}
- return JSON.parse(JSON.stringify(defaultModules));
+ return Object.fromEntries(Object.entries(defaultModules).map(([k,v])=>[k,normalizeModule(v)]));
 }
 function saveContent(){localStorage.setItem(CONTENT_KEY,JSON.stringify(modules));window.dispatchEvent(new CustomEvent('nada:data-changed'));}
 modules=loadContent();
@@ -64,6 +73,12 @@ function moduleDone(key){return Object.keys(state.done).filter(x=>x.startsWith(k
 function renderModules(){const box=$('oaModuleList');if(!box)return;box.innerHTML=Object.entries(modules).map(([k,m])=>{const done=moduleDone(k);return `<button class="${k===active?'active':''}" data-module="${k}"><span>${m.icon}</span><div><b>${m.title}</b><small>${done}/${m.lessons.length} دروس</small></div><i>${m.lessons.length?Math.round(done/m.lessons.length*100):0}%</i></button>`}).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>{active=b.dataset.module;renderAll()})}
 function renderHeader(){const m=mod(),done=moduleDone(active),pct=m.lessons.length?Math.round(done/m.lessons.length*100):0;$('oaModuleIcon').textContent=m.icon;$('oaModuleTag').textContent=m.tag;$('oaModuleTitle').textContent=m.title;$('oaModuleDescription').textContent=m.description;$('oaModulePct').textContent=pct+'%';$('oaModuleBar').style.width=pct+'%';$('oaModuleProgressText').textContent=`${done} من ${m.lessons.length} دروس`}
 function renderLessons(){const box=$('oaLessons');box.innerHTML=mod().lessons.map((l,i)=>{const key=`${active}:${i}`,done=!!state.done[key];return `<article class="oaLesson ${done?'done':''}"><button class="oaLessonCheck" data-check="${i}">${done?'✓':''}</button><div><small>LESSON ${i+1}</small><h3>${l[0]}</h3><p>${l[1]}</p><div class="oaEnglishTask">${l[2]}</div></div><div class="oaLessonActions"><button data-speak="${i}">🔊 اسمع</button><button data-practice="${i}">🤖 تدربي</button></div></article>`}).join('');box.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>{const key=`${active}:${b.dataset.check}`;state.done[key]=!state.done[key];save();renderAll()});box.querySelectorAll('[data-speak]').forEach(b=>b.onclick=()=>speak(mod().lessons[+b.dataset.speak][2]));box.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>{const l=mod().lessons[+b.dataset.practice];startPractice();goAI(`You are an Odoo client. Ask me to complete this task about ${mod().title}: ${l[2]} Ask one question at a time, correct my English in Arabic, then continue.`)})}
+function renderSentences(){
+ const host=$('oaSentences');if(!host)return;const rows=mod().sentences||[];
+ host.innerHTML=rows.length?rows.map((x,i)=>`<article class="oaSentenceCard"><div><small>SENTENCE ${i+1}</small><b>${x[0]}</b><span>${x[1]}</span></div><div><button data-sentence-speak="${i}">🔊</button><button data-sentence-practice="${i}">🤖 تدربي</button></div></article>`).join(''):'<div class="smartEmpty">لا توجد جمل إضافية في هذا الموديول بعد.</div>';
+ host.querySelectorAll('[data-sentence-speak]').forEach(b=>b.onclick=()=>speak(rows[+b.dataset.sentenceSpeak][0]));
+ host.querySelectorAll('[data-sentence-practice]').forEach(b=>b.onclick=()=>{const row=rows[+b.dataset.sentencePractice];startPractice();goAI(`Practice this Odoo ${mod().title} sentence with me: ${row[0]} Correct my grammar and pronunciation, then ask me to use it in a client conversation.`)});
+}
 function renderWords(filter=''){const box=$('oaVocabulary'),q=filter.toLowerCase();box.innerHTML=mod().words.filter(w=>w[0].toLowerCase().includes(q)||w[1].includes(filter)).map((w,i)=>{const key=`${active}:${w[0]}`,known=!!state.words[key];return `<div class="oaWord ${known?'known':''}"><button class="oaWordSound" data-word="${w[0]}">🔊</button><div><b>${w[0]}</b><span>${w[1]}</span></div><button class="oaWordKnow" data-known="${w[0]}">${known?'✓ متقنة':'عرفتها'}</button></div>`}).join('')||'<div class="smartEmpty">لا توجد نتائج.</div>';box.querySelectorAll('[data-word]').forEach(b=>b.onclick=()=>speak(b.dataset.word,.72));box.querySelectorAll('[data-known]').forEach(b=>b.onclick=()=>{const key=`${active}:${b.dataset.known}`;state.words[key]=!state.words[key];save();renderWords($('oaWordSearch').value)})}
 function renderDialogue(){const box=$('oaDialogue');box.innerHTML=mod().dialogue.map((d,i)=>`<div class="oaDialogueLine ${i%2?'consultant':'client'}"><span>${d[0]}</span><p>${d[1]}</p><button data-line="${i}">🔊</button></div>`).join('');box.querySelectorAll('[data-line]').forEach(b=>b.onclick=()=>speak(mod().dialogue[+b.dataset.line][1]))}
 function renderInterview(){const box=$('oaInterviewQuestions');box.innerHTML=mod().interview.map((q,i)=>`<div><span>${i+1}</span><p>${q}</p><button data-q="${i}">تدربي مع AI</button></div>`).join('');box.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{startPractice();goAI(`Act as an interviewer hiring an Odoo Functional Consultant. Ask me this question about ${mod().title}: ${mod().interview[+b.dataset.q]} Wait for my answer, then give correction, a stronger model answer, and one follow-up question.`)})}
@@ -74,12 +89,13 @@ function startWordQuiz(){const words=mod().words;quizWord=words[Math.floor(Math.
 function renderStats(){const totalLessons=Object.values(modules).reduce((n,m)=>n+m.lessons.length,0),done=Object.values(state.done||{}).filter(Boolean).length,words=Object.values(state.words||{}).filter(Boolean).length,pct=Math.round((done/totalLessons)*100);$('oaOverall').textContent=pct+'%';$('oaDoneLessons').textContent=done;$('oaMasteredWords').textContent=words;$('oaPracticeCount').textContent=state.practices||0;$('oaTrackStreak').textContent=(state.days||[]).length;$('oaLevel').textContent=(JSON.parse(localStorage.getItem('nada_ai_settings_v2')||'{}').level||'A2')+' • Functional Track'}
 
 function renderCase(){
- const c=caseStudies[active]||{title:mod().title+' Implementation Case',context:'Create a realistic client scenario for this module and practice gathering requirements.',requirements:['Explain the current process.','Identify the required configuration.','Present the recommended Odoo workflow.'],model:'Start by gathering the client requirements, map the current process, configure the suitable Odoo workflow, test it with realistic data, and obtain user approval.'},box=$('oaCaseStudy');if(!box)return;
+ const c=(mod().cases&&mod().cases[0])||caseStudies[active]||{title:mod().title+' Implementation Case',context:'Create a realistic client scenario for this module and practice gathering requirements.',requirements:['Explain the current process.','Identify the required configuration.','Present the recommended Odoo workflow.'],model:'Start by gathering the client requirements, map the current process, configure the suitable Odoo workflow, test it with realistic data, and obtain user approval.'},box=$('oaCaseStudy');if(!box)return;
  box.innerHTML=`<div class="oaCaseBlock"><small>CLIENT CASE</small><h4>${c.title}</h4><p>${c.context}</p></div><div class="oaCaseBlock"><small>YOUR TASK</small><ul>${c.requirements.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
  const ans=$('oaCaseAnswer');if(ans){ans.hidden=true;ans.textContent=c.model}
 }
 function buildAssessment(){
  const m=mod(),qs=[];
+ if(Array.isArray(m.quiz)&&m.quiz.length){m.quiz.forEach(q=>qs.push({type:q.type||'Custom',q:q.q,options:[...(q.options||[])],answer:q.answer,explain:q.explain||''}));}
  const shuffled=[...m.words].sort(()=>Math.random()-.5).slice(0,5);
  shuffled.forEach(w=>{
   const distract=[...m.words].filter(x=>x[0]!==w[0]).sort(()=>Math.random()-.5).slice(0,3).map(x=>x[1]);
@@ -113,7 +129,7 @@ function finishAssessment(){
  $('oaRetryAssessment').onclick=buildAssessment;renderBestScore();
 }
 function renderBestScore(){const el=$('oaBestScore');if(el)el.textContent=(state.scores?.[active]??'—')+(state.scores?.[active]!=null?'%':'')}
-function renderAll(){renderModules();renderHeader();renderLessons();renderWords($('oaWordSearch')?.value||'');renderDialogue();renderInterview();updateScenario();renderStats();renderCase();renderBestScore();if($('oaAssessment'))$('oaAssessment').innerHTML=''}
+function renderAll(){renderModules();renderHeader();renderLessons();renderSentences();renderWords($('oaWordSearch')?.value||'');renderDialogue();renderInterview();updateScenario();renderStats();renderCase();renderBestScore();if($('oaAssessment'))$('oaAssessment').innerHTML=''}
 
 window.OdooAcademyEditorAPI={
  getModules:()=>JSON.parse(JSON.stringify(modules)),
@@ -127,6 +143,7 @@ window.OdooAcademyEditorAPI={
  },
  reset:()=>{modules=JSON.parse(JSON.stringify(defaultModules));active=modules.payroll?'payroll':Object.keys(modules)[0];saveContent();renderAll()},
  refresh:renderAll,
+ getCases:()=>JSON.parse(JSON.stringify(caseStudies)),
  speak
 };
 

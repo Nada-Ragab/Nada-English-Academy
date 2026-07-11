@@ -1,0 +1,60 @@
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+let draft=null,selected=null,section='lessons',search='';
+const clone=x=>JSON.parse(JSON.stringify(x));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const api=()=>window.OdooAcademyEditorAPI;
+function ensure(){if(!api()||!$('oaAdminRoot'))return false;if(!draft){draft=api().getModules();selected=api().getActive()||Object.keys(draft)[0]}return true}
+function slug(title){let base=String(title||'module').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'module',k=base,n=2;while(draft[k])k=base+'-'+n++;return k}
+function save(){api().saveModules(clone(draft));window.NadaCloud?.scheduleAutoSync?.();render()}
+function getRows(m){return ({lessons:m.lessons,sentences:m.sentences,words:m.words,dialogue:m.dialogue,interview:m.interview,cases:m.cases,quiz:m.quiz}[section]||[])}
+function moduleForm(m){return `<div class="oaAdminModuleForm"><label>الأيقونة<input id="oaAdminIcon" value="${esc(m.icon)}" maxlength="4"></label><label>لون الموديول<input id="oaAdminColor" type="color" value="${esc(m.color||'#6d5dfc')}"></label><label>اسم الموديول<input id="oaAdminTitle" value="${esc(m.title)}"></label><label>التصنيف<input id="oaAdminTag" value="${esc(m.tag)}"></label><label class="wide">الوصف<textarea id="oaAdminDescription">${esc(m.description)}</textarea></label></div>`}
+function itemBody(item){
+ if(section==='lessons')return `<b>${esc(item[0])}</b><span>${esc(item[1])}</span><small>${esc(item[2])}</small>`;
+ if(section==='sentences')return `<b>${esc(item[0])}</b><span>${esc(item[1])}</span>`;
+ if(section==='words')return `<b>${esc(item[0])}</b><span>${esc(item[1])}</span>`;
+ if(section==='dialogue')return `<b>${esc(item[0])}</b><span>${esc(item[1])}</span>`;
+ if(section==='interview')return `<b>${esc(item)}</b>`;
+ if(section==='cases')return `<b>${esc(item.title)}</b><span>${esc(item.context)}</span><small>${esc((item.requirements||[]).join(' • '))}</small>`;
+ if(section==='quiz')return `<b>${esc(item.q)}</b><span>${esc(item.answer)}</span><small>${esc((item.options||[]).join(' | '))}</small>`;
+ return '';
+}
+function speakText(item){if(section==='lessons')return item[2];if(section==='sentences'||section==='words')return item[0];if(section==='dialogue')return item[1];if(section==='interview')return item;if(section==='cases')return `${item.title}. ${item.context}`;if(section==='quiz')return item.q;return ''}
+function rowsHtml(m){const q=search.trim().toLowerCase();return getRows(m).map((item,i)=>({item,i})).filter(x=>JSON.stringify(x.item).toLowerCase().includes(q)).map(({item,i})=>`<article class="oaAdminRow" data-index="${i}"><div class="oaAdminRowText">${itemBody(item)}</div><div class="oaAdminRowActions"><button data-act="speak" title="تشغيل النطق">🔊</button><button data-act="up" title="لأعلى">↑</button><button data-act="down" title="لأسفل">↓</button><button data-act="edit" title="تعديل">✏️</button><button data-act="delete" class="danger" title="حذف">🗑️</button></div></article>`).join('')||'<div class="smartEmpty">لا توجد عناصر مطابقة.</div>'}
+function sectionTabs(){return [['lessons','الدروس'],['sentences','الجمل'],['words','المصطلحات'],['dialogue','الحوار'],['interview','المقابلة'],['cases','Case Studies'],['quiz','الاختبارات']].map(([k,t])=>`<button data-section="${k}" class="${section===k?'active':''}">${t}</button>`).join('')}
+function render(){if(!ensure())return;const root=$('oaAdminRoot'),m=draft[selected];if(!m){selected=Object.keys(draft)[0];return render()}
+ root.innerHTML=`<div class="oaAdminLayout"><aside class="oaAdminModules"><div class="oaAdminModuleTools"><input id="oaAdminModuleSearch" placeholder="بحث في الموديولات..."><button id="oaAdminDuplicateModule">نسخ</button></div><div class="oaAdminModuleList">${Object.entries(draft).map(([k,x],i)=>`<button data-module="${esc(k)}" class="${k===selected?'active':''}" style="--module-color:${esc(x.color||'#6d5dfc')}"><span>${esc(x.icon)}</span><b>${esc(x.title)}</b><small>${x.lessons.length} درس • ${(x.sentences||[]).length} جملة</small><i><em data-module-up="${esc(k)}">↑</em><em data-module-down="${esc(k)}">↓</em></i></button>`).join('')}</div><div class="oaAdminSidebarActions"><button id="oaAdminExportModule" class="btn blue wide">📤 تصدير الموديول</button><label class="btn purple wide">📥 استيراد موديول<input id="oaAdminImportModule" type="file" accept="application/json" hidden></label><button id="oaAdminDeleteModule" class="btn danger wide">حذف الموديول الحالي</button><button id="oaAdminReset" class="btn wide">استعادة المحتوى الأصلي</button></div></aside><section class="oaAdminWorkspace">${moduleForm(m)}<div class="oaAdminSaveBar"><button id="oaAdminSaveModule" class="btn blue">💾 حفظ بيانات الموديول</button><button id="oaAdminOpenModule" class="btn green">▶ فتح للتعلّم</button></div><div class="oaAdminSectionTabs">${sectionTabs()}</div><div class="oaAdminListHead"><input id="oaAdminSearch" value="${esc(search)}" placeholder="بحث داخل المحتوى..."><button id="oaAdminAddItem" class="btn green">＋ إضافة</button></div><div id="oaAdminItems">${rowsHtml(m)}</div></section></div>`;
+ bindRendered();
+}
+function promptItem(existing){
+ if(section==='lessons'){const a=prompt('اسم الدرس',existing?.[0]||'');if(a===null)return null;const b=prompt('الشرح بالعربي',existing?.[1]||'');if(b===null)return null;const c=prompt('المهمة أو الجملة بالإنجليزية',existing?.[2]||'');if(c===null)return null;return[a.trim(),b.trim(),c.trim()]}
+ if(section==='sentences'){const a=prompt('الجملة بالإنجليزية',existing?.[0]||'');if(a===null)return null;const b=prompt('الترجمة العربية',existing?.[1]||'');if(b===null)return null;return[a.trim(),b.trim()]}
+ if(section==='words'){const a=prompt('المصطلح بالإنجليزية',existing?.[0]||'');if(a===null)return null;const b=prompt('المعنى بالعربية',existing?.[1]||'');if(b===null)return null;return[a.trim(),b.trim()]}
+ if(section==='dialogue'){const a=prompt('المتحدث: Client أو Consultant',existing?.[0]||'Client');if(a===null)return null;const b=prompt('الجملة بالإنجليزية',existing?.[1]||'');if(b===null)return null;return[a.trim(),b.trim()]}
+ if(section==='interview'){const a=prompt('سؤال المقابلة بالإنجليزية',existing||'');return a===null?null:a.trim()}
+ if(section==='cases'){const title=prompt('عنوان الحالة',existing?.title||'');if(title===null)return null;const context=prompt('وصف الحالة',existing?.context||'');if(context===null)return null;const req=prompt('المهام المطلوبة - افصلي بينها بعلامة |',(existing?.requirements||[]).join(' | '));if(req===null)return null;const model=prompt('نموذج الإجابة',existing?.model||'');if(model===null)return null;return{title:title.trim(),context:context.trim(),requirements:req.split('|').map(x=>x.trim()).filter(Boolean),model:model.trim()}}
+ if(section==='quiz'){const q=prompt('السؤال',existing?.q||'');if(q===null)return null;const opts=prompt('الاختيارات - افصلي بينها بعلامة |',(existing?.options||[]).join(' | '));if(opts===null)return null;const answer=prompt('الإجابة الصحيحة',existing?.answer||'');if(answer===null)return null;const explain=prompt('الشرح',existing?.explain||'');if(explain===null)return null;return{type:existing?.type||'Custom',q:q.trim(),options:opts.split('|').map(x=>x.trim()).filter(Boolean),answer:answer.trim(),explain:explain.trim()}}
+ return null;
+}
+function reorderModule(key,dir){const entries=Object.entries(draft),i=entries.findIndex(([k])=>k===key),j=i+dir;if(i<0||j<0||j>=entries.length)return;[entries[i],entries[j]]=[entries[j],entries[i]];draft=Object.fromEntries(entries);save()}
+function exportModule(){const m={version:'27.4',key:selected,module:draft[selected]};const blob=new Blob([JSON.stringify(m,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`odoo-${selected}.json`;a.click();URL.revokeObjectURL(a.href)}
+async function importModule(file){try{const data=JSON.parse(await file.text()),raw=data.module||data;if(!raw||typeof raw!=='object')throw new Error('صيغة غير صحيحة');const title=raw.title||'Imported Module',key=slug(data.key||title);draft[key]={title:String(title),icon:String(raw.icon||'🧩'),color:String(raw.color||'#6d5dfc'),tag:String(raw.tag||'ODOO MODULE'),description:String(raw.description||''),lessons:Array.isArray(raw.lessons)?raw.lessons:[],sentences:Array.isArray(raw.sentences)?raw.sentences:[],words:Array.isArray(raw.words)?raw.words:[],dialogue:Array.isArray(raw.dialogue)?raw.dialogue:[],interview:Array.isArray(raw.interview)?raw.interview:[],cases:Array.isArray(raw.cases)?raw.cases:[],quiz:Array.isArray(raw.quiz)?raw.quiz:[]};selected=key;save();alert('تم استيراد الموديول بنجاح.')}catch(e){alert('تعذر الاستيراد: '+e.message)}}
+function bindRendered(){
+ document.querySelectorAll('.oaAdminModuleList [data-module]').forEach(b=>b.onclick=e=>{if(e.target.closest('em'))return;selected=b.dataset.module;search='';render()});
+ document.querySelectorAll('[data-module-up]').forEach(b=>b.onclick=e=>{e.stopPropagation();reorderModule(b.dataset.moduleUp,-1)});document.querySelectorAll('[data-module-down]').forEach(b=>b.onclick=e=>{e.stopPropagation();reorderModule(b.dataset.moduleDown,1)});
+ $('oaAdminModuleSearch').oninput=e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.oaAdminModuleList [data-module]').forEach(b=>b.hidden=!b.textContent.toLowerCase().includes(q))};
+ $('oaAdminSaveModule').onclick=()=>{const m=draft[selected];m.icon=$('oaAdminIcon').value.trim()||'🧩';m.color=$('oaAdminColor').value||'#6d5dfc';m.title=$('oaAdminTitle').value.trim()||'Untitled Module';m.tag=$('oaAdminTag').value.trim()||'ODOO MODULE';m.description=$('oaAdminDescription').value.trim();save()};
+ $('oaAdminOpenModule').onclick=()=>{save();api().setActive(selected);document.querySelector('[data-oa-tab="lessons"]')?.click()};
+ $('oaAdminAddItem').onclick=()=>{const v=promptItem(null);if(v===null||v==='')return;getRows(draft[selected]).push(v);save()};
+ $('oaAdminSearch').oninput=e=>{search=e.target.value;const box=$('oaAdminItems');box.innerHTML=rowsHtml(draft[selected]);bindRows()};
+ $('oaAdminDuplicateModule').onclick=()=>{const key=slug(draft[selected].title+' Copy');draft[key]=clone(draft[selected]);draft[key].title+=' Copy';selected=key;save()};
+ $('oaAdminExportModule').onclick=exportModule;$('oaAdminImportModule').onchange=e=>e.target.files[0]&&importModule(e.target.files[0]);
+ $('oaAdminDeleteModule').onclick=()=>{if(Object.keys(draft).length===1)return alert('لا يمكن حذف آخر موديول.');if(!confirm('حذف الموديول وكل محتواه؟'))return;delete draft[selected];selected=Object.keys(draft)[0];save()};
+ $('oaAdminReset').onclick=()=>{if(confirm('استعادة محتوى Odoo Academy الأصلي؟ ستُحذف تعديلاتك الحالية.')){api().reset();draft=api().getModules();selected=api().getActive();render()}};
+ document.querySelectorAll('[data-section]').forEach(b=>b.onclick=()=>{section=b.dataset.section;search='';render()});bindRows();
+}
+function bindRows(){$('oaAdminItems')?.querySelectorAll('.oaAdminRow').forEach(row=>{const i=+row.dataset.index;row.querySelectorAll('[data-act]').forEach(btn=>btn.onclick=()=>{const arr=getRows(draft[selected]),act=btn.dataset.act;if(act==='speak')return api().speak(speakText(arr[i]));if(act==='edit'){const v=promptItem(arr[i]);if(v===null||v==='')return;arr[i]=v}if(act==='delete'){if(!confirm('حذف هذا العنصر؟'))return;arr.splice(i,1)}if(act==='up'&&i>0)[arr[i-1],arr[i]]=[arr[i],arr[i-1]];if(act==='down'&&i<arr.length-1)[arr[i+1],arr[i]]=[arr[i],arr[i+1]];save()})})}
+function addModule(){if(!ensure())return;const title=prompt('اسم الموديول الجديد');if(!title)return;const key=slug(title);draft[key]={title:title.trim(),icon:'🧩',color:'#6d5dfc',tag:'ODOO MODULE',description:'',lessons:[],sentences:[],words:[],dialogue:[],interview:[],cases:[],quiz:[]};selected=key;save()}
+window.addEventListener('load',()=>{if(!ensure())return;$('oaAdminAddModule').onclick=addModule;document.querySelector('[data-oa-tab="manage"]')?.addEventListener('click',render);render()});
+})();

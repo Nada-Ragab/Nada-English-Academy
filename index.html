@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V27.3 - Topics Screen</title>
+<title>Nada English Academy V27.4 - Odoo Academy Manager</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V27.3</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V27.4</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side sidebarV260" id="appSidebar">
   <div class="sidebarHeader">
@@ -641,7 +641,7 @@
         <button data-oa-tab="assessment">📝 اختبار الموديول</button>
         <button data-oa-tab="manage">⚙️ إدارة المحتوى</button>
       </div>
-      <div class="oaPane active" data-oa-pane="lessons"><div id="oaLessons" class="oaLessons"></div></div>
+      <div class="oaPane active" data-oa-pane="lessons"><div id="oaLessons" class="oaLessons"></div><div class="panelCard oaExtraSentences"><div class="panelHead"><div><small>MODULE SENTENCES</small><h3>جمل الموديول</h3></div></div><div id="oaSentences" class="oaSentences"></div></div></div>
       <div class="oaPane" data-oa-pane="vocabulary">
         <div class="panelCard"><div class="panelHead"><div><small>MODULE VOCABULARY</small><h3>مصطلحات الموديول</h3></div><button class="btn blue" id="oaQuizWords">اختبار سريع</button></div><input id="oaWordSearch" class="oaSearch" placeholder="ابحثي داخل المصطلحات..."><div id="oaVocabulary" class="oaVocabulary"></div><div id="oaWordQuiz" class="oaQuizBox"></div></div>
       </div>
@@ -682,7 +682,7 @@
       <div class="oaPane" data-oa-pane="manage">
         <div class="panelCard oaManageCard">
           <div class="panelHead"><div><small>CONTENT MANAGER</small><h3>إدارة موديولات ودروس Odoo</h3></div><button class="btn green" id="oaAdminAddModule">＋ إضافة موديول</button></div>
-          <p class="note">عدّلي اسم الموديول ووصفه، وأضيفي أو رتّبي الدروس والمصطلحات والحوارات وأسئلة المقابلات. التعديلات تُحفظ على الجهاز وتدخل ضمن المزامنة.</p>
+          <p class="note">إدارة كاملة للموديولات والدروس والجمل والمصطلحات والحوارات وأسئلة المقابلات ودراسات الحالة والاختبارات، مع الترتيب والتصدير والاستيراد والمزامنة.</p>
           <div id="oaAdminRoot"></div>
         </div>
       </div>
@@ -800,8 +800,8 @@
 <script src="js/app.js"></script>
 <script src="js/cloud-ai.js?v=27.0"></script>
 <script src="js/smart-coach.js?v=27.0"></script>
-<script src="js/odoo-academy.js?v=27.3"></script>
-<script src="js/odoo-editor-v273.js?v=27.3"></script>
+<script src="js/odoo-academy.js?v=27.4"></script>
+<script src="js/odoo-editor-v274.js?v=27.4"></script>
 <script src="js/dashboard-v253.js?v=27.0"></script>
 <script src="js/dashboard-v258.js?v=27.0"></script>
 <script src="js/ui-v254.js?v=27.0"></script>
