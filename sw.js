@@ -1,18 +1,5 @@
-const CACHE_NAME = 'nada-english-academy-v22-ai';
-const ASSETS = ['./','./index.html','./css/app.css','./js/storage.js','./js/app.js','./js/cloud-ai.js','./manifest.webmanifest','./assets/data/sentences.json','./icons/icon-192.png','./icons/icon-512.png'];
-self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
-  self.skipWaiting();
-});
-self.addEventListener('activate', event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));
-  self.clients.claim();
-});
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
-    const copy = response.clone();
-    caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-    return response;
-  }).catch(() => caches.match('./index.html'))));
-});
+const CACHE_NAME = 'nada-english-academy-v25-6-weekly-ai-coach';
+const ASSETS = ['./','./index.html','./css/app.css','./js/storage.js','./js/app.js','./js/cloud-ai.js','./js/smart-coach.js','./js/odoo-academy.js','./js/dashboard-v253.js','./js/ui-v254.js','./js/my-day-v255.js','./js/my-week-v256.js','./manifest.webmanifest','./assets/data/sentences.json','./icons/icon-192.png','./icons/icon-512.png'];
+self.addEventListener('install', event => {event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));self.skipWaiting();});
+self.addEventListener('activate', event => {event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch', event => {if (event.request.method !== 'GET') return;event.respondWith(fetch(event.request).then(response => {const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy));return response;}).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('./index.html'))));});

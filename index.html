@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V23.0 - AI Session Coach</title>
+<title>Nada English Academy V25.6 - Weekly AI Coach</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V22.8</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V25.6</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -21,6 +21,8 @@
     <button class="tab navItem active" data-screen="dashboard"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
     <button class="tab navItem" data-screen="learn"><span class="navIcon">📚</span><span>التعلّم</span></button>
     <button class="tab navItem" data-screen="daily"><span class="navIcon">📅</span><span>درس اليوم</span></button>
+    <button class="tab navItem" data-screen="myday"><span class="navIcon">🧭</span><span>خطة يومي</span></button>
+    <button class="tab navItem" data-screen="myweek"><span class="navIcon">📆</span><span>تقريري الأسبوعي</span></button>
     <button class="tab navItem" data-screen="review"><span class="navIcon">🔁</span><span>المراجعة</span></button>
     <button class="tab navItem" data-screen="flashcards"><span class="navIcon">🃏</span><span>Flashcards</span></button>
     <button class="tab navItem" data-screen="quiz"><span class="navIcon">📝</span><span>الاختبارات</span></button>
@@ -35,6 +37,8 @@
     <button class="tab navItem" data-screen="conversation"><span class="navIcon">💬</span><span>محادثة موجّهة</span></button>
     <button class="tab navItem" data-screen="freechat"><span class="navIcon">🗨️</span><span>محادثة حرة</span></button>
     <button class="tab navItem" data-screen="aiteacher"><span class="navIcon">🤖</span><span>AI Teacher</span></button>
+    <button class="tab navItem" data-screen="smartcoach"><span class="navIcon">🚀</span><span>Smart Coach</span></button>
+    <button class="tab navItem" data-screen="odooacademy"><span class="navIcon">🎓</span><span>Odoo Academy</span></button>
     <button class="tab navItem" data-screen="erp"><span class="navIcon">🏢</span><span>Odoo / ERP</span></button>
 
     <div class="navSectionTitle">التقدّم والأدوات</div>
@@ -76,7 +80,7 @@
       <span class="eyebrow">WELCOME BACK, NADA</span>
       <h1>كمّلي رحلتك في الإنجليزية بثقة ✨</h1>
       <p>اختاري درسًا، راجعي الكلمات الصعبة، أو ابدئي تدريبًا سريعًا من مكان واحد.</p>
-      <div class="heroActions"><button class="btn green" id="dashContinue">▶ متابعة التعلّم</button><button class="btn blue" id="dashDaily">📅 درس اليوم</button><button class="btn purple" id="dashReview">🔁 مراجعة ذكية</button></div>
+      <div class="heroActions"><button class="btn green" id="dashContinue">▶ متابعة التعلّم</button><button class="btn blue" id="dashDaily">📅 درس اليوم</button><button class="btn teal" data-go="myday">🧭 خطة يومي</button><button class="btn orange" data-go="myweek">📆 تقريري الأسبوعي</button><button class="btn purple" id="dashReview">🔁 مراجعة ذكية</button></div>
     </div>
     <div class="heroBadge"><span>🎯</span><b id="dashGoalPct">0%</b><small>الهدف اليومي</small></div>
   </div>
@@ -92,6 +96,76 @@
   </div>
   <div class="panelCard goalPanel"><div class="panelHead"><div><small>WEEKLY PROGRESS</small><h3>تقدمك الحالي</h3></div><b id="dashProgressText">0%</b></div><div class="modernProgress"><span id="dashProgressBar"></span></div><p class="mutedText">كل جملة تتقنيها تقرّبك خطوة من هدفك.</p></div>
   <div class="activityCard"><div class="panelHead"><div><small>THIS WEEK</small><h3>نشاطك الأسبوعي</h3></div><span class="activityBadge">7 DAYS</span></div><div class="activityBars" id="activityBars"><div><span style="--h:38%"></span><small>س</small></div><div><span style="--h:55%"></span><small>ح</small></div><div><span style="--h:30%"></span><small>ن</small></div><div><span style="--h:74%"></span><small>ث</small></div><div><span style="--h:62%"></span><small>ر</small></div><div><span style="--h:86%"></span><small>خ</small></div><div class="today"><span style="--h:48%"></span><small>ج</small></div></div></div>
+  <div class="panelCard smartCoachPreview"><div class="panelHead"><div><small>AI SMART COACH</small><h3>برنامجك الذكي هذا الأسبوع</h3></div><span class="panelIcon">🚀</span></div><div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div><button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button></div>
+  <div class="dashExecutiveGrid">
+    <div class="panelCard dashMasterCard">
+      <div class="panelHead"><div><small>LEARNING OVERVIEW</small><h3>ملخص تقدمك</h3></div><span id="dashTodayDate" class="dashDate"></span></div>
+      <div class="dashMasterBody">
+        <div class="dashMasterRing" id="dashMasterRing"><div><b id="dashMasterPct">0%</b><small>التقدم العام</small></div></div>
+        <div id="dashMilestones" class="dashMilestones"></div>
+      </div>
+    </div>
+    <div class="panelCard dashNextCard">
+      <div class="panelHead"><div><small>BEST NEXT STEP</small><h3>خطوتك التالية</h3></div><span class="panelIcon" id="dashNextIcon">🧭</span></div>
+      <div class="dashNextContent"><h2 id="dashNextTitle">كمّلي خطة الأسبوع</h2><p id="dashNextText">سنحدد لكِ أفضل نشاط حسب تقدمك.</p></div>
+      <button class="btn green wide" id="dashNextAction">ابدئي الآن</button>
+      <div class="dashMiniRow"><span>🔥 <b id="dashMainStreak">1 يوم</b></span><span>⭐ تقييمك <b id="dashStudyScore">0%</b></span></div>
+    </div>
+  </div>
+  <div class="panelCard dashOdooSnapshot">
+    <div class="panelHead"><div><small>ODOO ACADEMY</small><h3>تقدمك المهني</h3></div><button class="dashTextBtn" data-go="odooacademy">فتح الأكاديمية ←</button></div>
+    <div class="dashOdooLayout">
+      <div class="dashOdooProgress"><div><b id="dashOdooPct">0%</b><span>إجمالي المسار</span></div><i><span id="dashOdooBar"></span></i></div>
+      <div class="dashOdooStats"><div><b id="dashOdooLessons">0/35</b><small>دروس مكتملة</small></div><div><b id="dashOdooWords">0</b><small>مصطلحات متقنة</small></div><div><b id="dashOdooPractice">0</b><small>جلسات تدريب</small></div><div><b id="dashOdooBest">—</b><small>أفضل اختبار</small></div></div>
+    </div>
+  </div>
+  <div class="panelCard dashActivityPro">
+    <div class="panelHead"><div><small>LAST 7 DAYS</small><h3>نشاط آخر 7 أيام</h3></div><span class="activityBadge">WEEK</span></div>
+    <div id="dashWeekActivity" class="dashWeekActivity"></div>
+  </div>
+  <div class="dashAiProGrid">
+    <div class="panelCard dashTodayMission">
+      <div class="panelHead"><div><small>TODAY'S MISSION</small><h3>هدف اليوم</h3></div><span class="panelIcon">🎯</span></div>
+      <div class="dashMissionProgress"><div><b id="dashMissionPct">0%</b><span id="dashMissionSummary">0 من 4 مهام</span></div><i><span id="dashMissionBar"></span></i></div>
+      <div id="dashMissionList" class="dashMissionList"></div>
+    </div>
+    <div class="panelCard dashAiRecommendation">
+      <div class="panelHead"><div><small>AI RECOMMENDATION</small><h3>توصية المدرب الذكي</h3></div><span class="panelIcon">🤖</span></div>
+      <div id="dashAiRecList" class="dashAiRecList"></div>
+      <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
+    </div>
+  </div>
+  <div class="dashSkillsGrid">
+    <div class="panelCard">
+      <div class="panelHead"><div><small>SKILLS TREND</small><h3>تطور مهاراتك</h3></div><span class="activityBadge">30 DAYS</span></div>
+      <div id="dashSkillTrend" class="dashSkillTrend"></div>
+    </div>
+    <div class="panelCard dashLastSession">
+      <div class="panelHead"><div><small>LAST AI SESSION</small><h3>آخر جلسة مع المدرّس</h3></div><span class="panelIcon">🎙️</span></div>
+      <div id="dashLastSessionBody" class="dashLastSessionBody"></div>
+      <button class="btn blue wide" data-go="aiteacher">متابعة المحادثة</button>
+    </div>
+  </div>
+  <div class="dashReviewAchievements">
+    <div class="panelCard">
+      <div class="panelHead"><div><small>NEEDS REVIEW</small><h3>تحتاج مراجعة</h3></div><span class="panelIcon">🧠</span></div>
+      <div id="dashNeedsReview" class="dashNeedsReview"></div>
+    </div>
+    <div class="panelCard">
+      <div class="panelHead"><div><small>ACHIEVEMENTS</small><h3>أحدث الإنجازات</h3></div><span class="panelIcon">🏆</span></div>
+      <div id="dashAchievements" class="dashAchievements"></div>
+    </div>
+  </div>
+  <div class="panelCard dashQuickLaunch">
+    <div class="panelHead"><div><small>QUICK ACTIONS</small><h3>ابدئي بسرعة</h3></div><span class="panelIcon">⚡</span></div>
+    <div class="dashQuickLaunchGrid">
+      <button data-go="learn"><span>▶️</span><b>متابعة التعلّم</b><small>آخر موضوع</small></button>
+      <button data-go="smartcoach"><span>🎙️</span><b>Speaking Lab</b><small>نطق وShadowing</small></button>
+      <button data-go="odooacademy"><span>💼</span><b>Odoo Academy</b><small>تدريب وظيفي</small></button>
+      <button data-go="aiteacher"><span>🤖</span><b>AI Teacher</b><small>محادثة وتصحيح</small></button>
+      <button data-go="flashcards"><span>🃏</span><b>Flashcards</b><small>مراجعة سريعة</small></button>
+    </div>
+  </div>
   <div class="insightGrid">
     <div class="panelCard focusCard">
       <div class="panelHead"><div><small>SMART FOCUS</small><h3>تركيز اليوم</h3></div><span class="panelIcon">🎯</span></div>
@@ -220,6 +294,60 @@
     </div>
   </div>
 </section>
+<section class="screen" id="myday">
+  <div class="myDayHero">
+    <div><span class="eyebrow">SMART DAILY PLAN</span><h1>خطة يومي 🧭</h1><p>مهام يومية ذكية تجمع التعلّم، المراجعة، النطق، وOdoo في مسار واحد.</p></div>
+    <div class="myDayDate"><small>اليوم</small><b id="myDayDateText">—</b><span id="myDayStreak">🔥 1 يوم</span></div>
+  </div>
+  <div class="myDayOverview">
+    <div class="panelCard myDayProgressCard"><div class="myDayRing" id="myDayRing"><div><b id="myDayPct">0%</b><small>مكتمل</small></div></div><div><h3 id="myDaySummary">0 من 0 مهام</h3><p class="mutedText" id="myDayMotivation">ابدئي بأول مهمة صغيرة.</p><button class="btn green" id="myDayNextBtn">▶ ابدئي المهمة التالية</button></div></div>
+    <div class="panelCard myDayStats"><div><span>⏱️</span><b id="myDayMinutes">0</b><small>دقيقة مخططة</small></div><div><span>✅</span><b id="myDayDone">0</b><small>مهام مكتملة</small></div><div><span>⭐</span><b id="myDayEarnedXp">0</b><small>XP اليوم</small></div></div>
+  </div>
+  <div class="myDayGrid">
+    <div class="panelCard"><div class="panelHead"><div><small>TODAY'S QUEUE</small><h3>مهام اليوم</h3></div><button class="dashTextBtn" id="myDayRefresh">تجديد الخطة ↻</button></div><div id="myDayTaskList" class="myDayTaskList"></div></div>
+    <div class="panelCard myDayAddCard"><div class="panelHead"><div><small>CUSTOM TASK</small><h3>أضيفي مهمة</h3></div><span class="panelIcon">＋</span></div><label>اسم المهمة<input id="myDayTaskTitle" placeholder="مثال: مراجعة Payroll Vocabulary"></label><div class="myDayFormRow"><label>المدة<select id="myDayTaskMinutes"><option value="5">5 دقائق</option><option value="10" selected>10 دقائق</option><option value="15">15 دقيقة</option><option value="25">25 دقيقة</option></select></label><label>القسم<select id="myDayTaskScreen"><option value="learn">التعلّم</option><option value="review">المراجعة</option><option value="speak">النطق</option><option value="aiteacher">AI Teacher</option><option value="odooacademy">Odoo Academy</option><option value="smartcoach">Smart Coach</option></select></label></div><button class="btn blue wide" id="myDayAddTask">إضافة المهمة</button><p class="mutedText myDayTip">💡 المهام المخصصة تُحفظ لهذا اليوم ويمكن حذفها.</p></div>
+  </div>
+  <div class="panelCard myDayWeekCard"><div class="panelHead"><div><small>WEEKLY CONSISTENCY</small><h3>انتظامك هذا الأسبوع</h3></div><span class="activityBadge">7 DAYS</span></div><div id="myDayWeek" class="myDayWeek"></div></div>
+</section>
+<section class="screen" id="myweek">
+  <div class="weekCoachHero">
+    <div><span class="eyebrow">WEEKLY AI COACH</span><h1>تقريري الأسبوعي 📆</h1><p>راجعي إنجازك، حددي أهداف الأسبوع القادم، وخذي توصيات واضحة قابلة للتنفيذ.</p></div>
+    <div class="weekCoachScore"><small>نتيجة الأسبوع</small><b id="weekOverallScore">0%</b><span id="weekCoachLevel">Getting Started</span></div>
+  </div>
+  <div class="weekMetricGrid">
+    <div class="weekMetric"><span>✅</span><b id="weekTasksDone">0</b><small>مهام مكتملة</small></div>
+    <div class="weekMetric"><span>⏱️</span><b id="weekMinutes">0</b><small>دقيقة دراسة</small></div>
+    <div class="weekMetric"><span>🎙️</span><b id="weekPronScore">—</b><small>أفضل نطق</small></div>
+    <div class="weekMetric"><span>💼</span><b id="weekOdooProgress">0%</b><small>تقدم Odoo</small></div>
+    <div class="weekMetric"><span>🧠</span><b id="weekMistakes">0</b><small>أخطاء تحتاج مراجعة</small></div>
+  </div>
+  <div class="weekCoachGrid">
+    <div class="panelCard">
+      <div class="panelHead"><div><small>LAST 7 DAYS</small><h3>نشاط الأسبوع</h3></div><span class="activityBadge">WEEK</span></div>
+      <div id="weekActivityChart" class="weekActivityChart"></div>
+    </div>
+    <div class="panelCard weekRecommendationsCard">
+      <div class="panelHead"><div><small>SMART RECOMMENDATIONS</small><h3>توصيات المدرب</h3></div><span class="panelIcon">🤖</span></div>
+      <div id="weekRecommendations" class="weekRecommendations"></div>
+      <button class="btn purple wide" id="weekStartRecommendation">ابدئي أهم توصية</button>
+    </div>
+  </div>
+  <div class="weekCoachGrid">
+    <div class="panelCard">
+      <div class="panelHead"><div><small>SKILL BALANCE</small><h3>توازن المهارات</h3></div><span class="panelIcon">📊</span></div>
+      <div id="weekSkillBars" class="weekSkillBars"></div>
+    </div>
+    <div class="panelCard">
+      <div class="panelHead"><div><small>NEXT WEEK GOALS</small><h3>أهداف الأسبوع القادم</h3></div><button class="dashTextBtn" id="weekResetGoals">إعادة الضبط ↻</button></div>
+      <div id="weekGoalList" class="weekGoalList"></div>
+      <div class="weekGoalForm"><input id="weekGoalTitle" placeholder="أضيفي هدفًا مخصصًا..."><select id="weekGoalTarget"><option value="3">3 مرات</option><option value="5" selected>5 مرات</option><option value="7">7 مرات</option><option value="10">10 مرات</option></select><button class="btn blue" id="weekAddGoal">إضافة</button></div>
+    </div>
+  </div>
+  <div class="panelCard weekSummaryCard">
+    <div class="panelHead"><div><small>WEEKLY SUMMARY</small><h3>ملخص جاهز للمراجعة</h3></div><button class="btn blue" id="weekExportReport">⬇ تصدير التقرير</button></div>
+    <div id="weekSummaryText" class="weekSummaryText"></div>
+  </div>
+</section>
 <section class="screen" id="planner">
   <h2>🗓️ خطة أسبوعية</h2>
   <div class="box">
@@ -328,6 +456,73 @@
     </div>
   </div>
 </section>
+
+<section class="screen" id="smartcoach">
+  <div class="smartCoachHero">
+    <div><span class="eyebrow">V24 SMART COACH</span><h2>🚀 مدرّبك الشخصي الذكي</h2><p>خطة تعلم، تدريب نطق، مواقف عملية، Odoo English، وتقييم أسبوعي في مكان واحد.</p></div>
+    <div class="smartCoachScore"><small>نتيجتك الأسبوعية</small><b id="scOverallScore">—</b><span id="scLevelLabel">A2</span></div>
+  </div>
+  <div class="smartCoachTabs" role="tablist">
+    <button class="active" data-smart-tab="path">🤖 خطة التعلم</button>
+    <button data-smart-tab="shadow">🎙️ النطق وShadowing</button>
+    <button data-smart-tab="roleplay">🎭 Role Play</button>
+    <button data-smart-tab="odoo">💼 Odoo Trainer</button>
+    <button data-smart-tab="dashboard">📊 Dashboard</button>
+  </div>
+
+  <div class="smartPane active" data-smart-pane="path">
+    <div class="smartTwoCol">
+      <div class="panelCard">
+        <div class="panelHead"><div><small>PERSONAL LEARNING PATH</small><h3>خطتك الشخصية</h3></div><span class="panelIcon">🧭</span></div>
+        <div class="pathSetup">
+          <label>هدفي الأساسي<select id="pathGoal"><option value="general">محادثة يومية</option><option value="work">العمل والاجتماعات</option><option value="odoo">Odoo وERP</option><option value="interview">مقابلات العمل</option></select></label>
+          <label>الوقت اليومي<select id="pathMinutes"><option value="10">10 دقائق</option><option value="20" selected>20 دقيقة</option><option value="30">30 دقيقة</option><option value="45">45 دقيقة</option></select></label>
+          <button class="btn purple" id="buildLearningPath">إنشاء خطة أسبوعية</button>
+        </div>
+        <div id="learningPathList" class="learningPathList"></div>
+      </div>
+      <div class="panelCard recommendationCard"><div class="panelHead"><div><small>NEXT BEST STEP</small><h3>توصية اليوم</h3></div><span class="panelIcon">✨</span></div><div id="dailyRecommendation" class="recommendationBody">أنشئي خطتك أولًا.</div><button class="btn green wide" id="startRecommendedTask">ابدئي المهمة المقترحة</button></div>
+    </div>
+  </div>
+
+  <div class="smartPane" data-smart-pane="shadow">
+    <div class="smartTwoCol">
+      <div class="panelCard shadowCard"><div class="panelHead"><div><small>LISTEN • REPEAT • SCORE</small><h3>Shadowing Lab</h3></div><span class="panelIcon">🎧</span></div>
+        <label>نوع الجمل<select id="shadowCategory"><option value="daily">Daily English</option><option value="business">Business English</option><option value="odoo">Odoo English</option></select></label>
+        <div class="shadowTarget" id="shadowTarget">Could you please repeat that more slowly?</div>
+        <div class="shadowActions"><button class="btn blue" id="shadowListen">🔊 اسمعي</button><button class="btn purple" id="shadowRecord">🎙️ سجّلي</button><button class="btn orange" id="shadowNext">التالي</button></div>
+        <div class="shadowLive" id="shadowLive">اضغطي سجّلي ثم كرري الجملة.</div>
+      </div>
+      <div class="panelCard scoreCard"><div class="panelHead"><div><small>PRONUNCIATION RESULT</small><h3>نتيجة المحاولة</h3></div><span class="panelIcon">🎯</span></div><div class="pronScoreRing"><b id="pronScore">—</b><small>Text Match</small></div><div id="pronFeedback" class="pronFeedback">لم تسجلي محاولة بعد.</div><p class="note">التقييم الحالي يقارن الكلمات التي تعرّف عليها المتصفح بالجملة الأصلية، وليس تحليلًا صوتيًا احترافيًا للفونيمات.</p></div>
+    </div>
+  </div>
+
+  <div class="smartPane" data-smart-pane="roleplay">
+    <div class="panelCard"><div class="panelHead"><div><small>REAL-LIFE SIMULATIONS</small><h3>اختاري الموقف</h3></div><span class="panelIcon">🎭</span></div><div class="roleplayGrid" id="roleplayGrid">
+      <button data-mode="interview" data-title="Job Interview" data-prompt="Start a realistic job interview for an Odoo Functional Consultant. Ask me one question at a time.">👩‍💼<b>مقابلة عمل</b><small>Odoo Functional Consultant</small></button>
+      <button data-mode="travel" data-title="Hotel Check-in" data-prompt="Role-play a hotel receptionist. I am checking in. Start with one short question.">🏨<b>الفندق</b><small>Check-in & requests</small></button>
+      <button data-mode="travel" data-title="Restaurant" data-prompt="Role-play a waiter in a restaurant. Help me order food and correct my English.">🍽️<b>المطعم</b><small>Ordering food</small></button>
+      <button data-mode="work" data-title="Client Meeting" data-prompt="Role-play a client in a project meeting. Ask me to explain the current implementation status.">🤝<b>اجتماع عميل</b><small>Status & requirements</small></button>
+      <button data-mode="business" data-title="Support Call" data-prompt="Role-play a customer support call. You have an urgent system issue. Ask me for help.">📞<b>مكالمة دعم</b><small>Problem solving</small></button>
+      <button data-mode="travel" data-title="Airport" data-prompt="Role-play an airport check-in agent. Ask for my passport and travel details.">✈️<b>المطار</b><small>Check-in & boarding</small></button>
+    </div><div id="roleplayStatus" class="note">اختاري موقفًا لبدء جلسة مباشرة داخل AI Teacher.</div></div>
+  </div>
+
+  <div class="smartPane" data-smart-pane="odoo">
+    <div class="smartTwoCol">
+      <div class="panelCard"><div class="panelHead"><div><small>ODOO FUNCTIONAL ENGLISH</small><h3>اختاري الموديول</h3></div><span class="panelIcon">💼</span></div><div class="odooModuleGrid" id="odooModuleGrid">
+        <button data-module="Payroll">Payroll</button><button data-module="Time Off">Time Off</button><button data-module="Accounting">Accounting</button><button data-module="Inventory">Inventory</button><button data-module="Sales">Sales</button><button data-module="Purchase">Purchase</button><button data-module="Real Estate">Real Estate</button><button data-module="End of Service">End of Service</button>
+      </div><label>نوع التدريب<select id="odooTrainingType"><option value="explain">شرح للعميل</option><option value="meeting">اجتماع جمع متطلبات</option><option value="support">مشكلة دعم فني</option><option value="interview">سؤال مقابلة</option></select></label><button class="btn green wide" id="startOdooTraining">ابدئي التدريب</button></div>
+      <div class="panelCard"><div class="panelHead"><div><small>FUNCTIONAL CONSULTANT KIT</small><h3>قوالب مفيدة</h3></div><span class="panelIcon">🧰</span></div><div class="consultantTemplates"><button data-template="Could you walk me through your current process?">جمع المتطلبات</button><button data-template="Based on your requirements, we can configure the workflow as follows.">اقتراح الحل</button><button data-template="The issue has been reproduced on the test environment and is under review.">تحديث حالة المشكلة</button><button data-template="Before moving to production, we need your confirmation on the UAT results.">طلب اعتماد UAT</button></div><div id="templatePreview" class="templatePreview">اختاري قالبًا لسماعه واستخدامه.</div><button class="btn blue wide" id="speakTemplate">🔊 اسمعي القالب</button></div>
+    </div>
+  </div>
+
+  <div class="smartPane" data-smart-pane="dashboard">
+    <div class="weeklyDashGrid"><div class="weeklyMetric"><span>📚</span><small>الخطة</small><b id="wdPlan">0%</b></div><div class="weeklyMetric"><span>🎙️</span><small>أفضل نطق</small><b id="wdPron">—</b></div><div class="weeklyMetric"><span>🎭</span><small>Role Plays</small><b id="wdRole">0</b></div><div class="weeklyMetric"><span>✍️</span><small>أخطاء محفوظة</small><b id="wdMistakes">0</b></div><div class="weeklyMetric"><span>⭐</span><small>التقييم العام</small><b id="wdOverall">—</b></div></div>
+    <div class="smartTwoCol"><div class="panelCard"><div class="panelHead"><div><small>WEEKLY BREAKDOWN</small><h3>تقييم المهارات</h3></div><span class="panelIcon">📈</span></div><div id="skillBars" class="skillBars"></div></div><div class="panelCard"><div class="panelHead"><div><small>AI RECOMMENDATIONS</small><h3>توصيات الأسبوع</h3></div><span class="panelIcon">💡</span></div><div id="weeklyRecommendations" class="weeklyRecommendations"></div><button class="btn purple wide" id="refreshWeeklyDashboard">تحديث التقييم</button></div></div>
+  </div>
+</section>
+
 <section class="screen" id="account">
   <h2>👤 الحساب والمزامنة</h2>
   <div class="accountGrid">
@@ -360,6 +555,80 @@
     <div id="grammarOut" class="resultBox">اضغطي على زر الشرح أو السؤال.</div>
   </div>
 </section>
+<section class="screen" id="odooacademy">
+  <div class="odooAcademyHero">
+    <div><span class="eyebrow">V25 ODOO ACADEMY</span><h2>🎓 Odoo English Academy</h2><p>اتعلمي شرح الموديولات، جمع المتطلبات، حل مشاكل العميل، وإجابات المقابلات بالإنجليزية.</p></div>
+    <div class="odooAcademyScore"><small>التقدم الكلي</small><b id="oaOverall">0%</b><span id="oaLevel">A2 • Functional Track</span></div>
+  </div>
+
+  <div class="oaStats">
+    <div><span>✅</span><b id="oaDoneLessons">0</b><small>دروس مكتملة</small></div>
+    <div><span>🧠</span><b id="oaMasteredWords">0</b><small>مصطلحات متقنة</small></div>
+    <div><span>🎭</span><b id="oaPracticeCount">0</b><small>تدريبات عملية</small></div>
+    <div><span>🔥</span><b id="oaTrackStreak">0</b><small>أيام تدريب</small></div>
+  </div>
+
+  <div class="oaLayout">
+    <aside class="oaModulesPanel panelCard">
+      <div class="panelHead"><div><small>LEARNING TRACKS</small><h3>اختاري الموديول</h3></div><span class="panelIcon">🧩</span></div>
+      <div id="oaModuleList" class="oaModuleList"></div>
+    </aside>
+    <div class="oaWorkspace">
+      <div class="oaModuleHeader panelCard">
+        <div><span id="oaModuleIcon" class="oaBigIcon">💰</span><small id="oaModuleTag">HR & PAYROLL</small><h2 id="oaModuleTitle">Payroll</h2><p id="oaModuleDescription"></p></div>
+        <div class="oaModuleProgress"><b id="oaModulePct">0%</b><div><span id="oaModuleBar"></span></div><small id="oaModuleProgressText">0 من 0 دروس</small></div>
+      </div>
+      <div class="oaTabs">
+        <button class="active" data-oa-tab="lessons">📚 الدروس</button>
+        <button data-oa-tab="vocabulary">🧠 المصطلحات</button>
+        <button data-oa-tab="dialogue">💬 محادثة العميل</button>
+        <button data-oa-tab="practice">🎭 تدريب عملي</button>
+        <button data-oa-tab="interview">👩‍💼 مقابلة</button>
+        <button data-oa-tab="case">🧩 Case Study</button>
+        <button data-oa-tab="assessment">📝 اختبار الموديول</button>
+      </div>
+      <div class="oaPane active" data-oa-pane="lessons"><div id="oaLessons" class="oaLessons"></div></div>
+      <div class="oaPane" data-oa-pane="vocabulary">
+        <div class="panelCard"><div class="panelHead"><div><small>MODULE VOCABULARY</small><h3>مصطلحات الموديول</h3></div><button class="btn blue" id="oaQuizWords">اختبار سريع</button></div><input id="oaWordSearch" class="oaSearch" placeholder="ابحثي داخل المصطلحات..."><div id="oaVocabulary" class="oaVocabulary"></div><div id="oaWordQuiz" class="oaQuizBox"></div></div>
+      </div>
+      <div class="oaPane" data-oa-pane="dialogue">
+        <div class="panelCard"><div class="panelHead"><div><small>CLIENT CONVERSATION</small><h3>حوار عملي</h3></div><button class="btn blue" id="oaPlayDialogue">🔊 تشغيل الحوار</button></div><div id="oaDialogue" class="oaDialogue"></div></div>
+      </div>
+      <div class="oaPane" data-oa-pane="practice">
+        <div class="panelCard"><div class="panelHead"><div><small>AI ROLE PLAY</small><h3>تدريب مع عميل افتراضي</h3></div><span class="panelIcon">🤖</span></div><label>السيناريو<select id="oaScenario"><option value="requirements">جمع متطلبات</option><option value="demo">شرح Demo للعميل</option><option value="support">حل مشكلة دعم</option><option value="uat">جلسة UAT</option></select></label><div id="oaScenarioPreview" class="oaScenarioPreview"></div><button class="btn green wide" id="oaStartPractice">ابدئي Role Play مع AI</button></div>
+      </div>
+      <div class="oaPane" data-oa-pane="interview">
+        <div class="panelCard"><div class="panelHead"><div><small>INTERVIEW COACH</small><h3>أسئلة Functional Consultant</h3></div><button class="btn purple" id="oaStartInterview">ابدئي مقابلة AI</button></div><div id="oaInterviewQuestions" class="oaInterviewQuestions"></div></div>
+      </div>
+      <div class="oaPane" data-oa-pane="case">
+        <div class="panelCard oaCaseCard">
+          <div class="panelHead"><div><small>REAL IMPLEMENTATION CASE</small><h3>دراسة حالة عملية</h3></div><span class="panelIcon">🧩</span></div>
+          <div id="oaCaseStudy" class="oaCaseStudy"></div>
+          <div class="oaCaseActions">
+            <button class="btn blue" id="oaSpeakCase">🔊 اسمع المطلوب</button>
+            <button class="btn green" id="oaStartCase">🤖 حلّي الحالة مع AI</button>
+            <button class="btn purple" id="oaRevealCase">💡 اعرضي نموذج الإجابة</button>
+          </div>
+          <div id="oaCaseAnswer" class="oaCaseAnswer" hidden></div>
+        </div>
+      </div>
+      <div class="oaPane" data-oa-pane="assessment">
+        <div class="panelCard oaAssessmentCard">
+          <div class="panelHead"><div><small>MODULE ASSESSMENT</small><h3>اختبار الموديول</h3></div><div class="oaBestScore">أفضل نتيجة <b id="oaBestScore">—</b></div></div>
+          <p class="note">10 أسئلة على المصطلحات، الدورة الوظيفية، والتعامل مع العميل. يلزم 70% لاجتياز الموديول.</p>
+          <div id="oaAssessmentIntro" class="oaAssessmentIntro">
+            <div><span>🧠</span><b>Vocabulary</b><small>مصطلحات الموديول</small></div>
+            <div><span>⚙️</span><b>Workflow</b><small>فهم دورة العمل</small></div>
+            <div><span>💬</span><b>Consulting</b><small>اختيار الرد المهني</small></div>
+          </div>
+          <button class="btn green wide" id="oaStartAssessment">ابدئي الاختبار</button>
+          <div id="oaAssessment" class="oaAssessment"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="screen" id="erp">
   <h2>💼 ERP / Odoo English</h2>
   <div class="box">
@@ -468,6 +737,12 @@
 <div class="toast" id="toast"></div>
 <script src="js/storage.js"></script>
 <script src="js/app.js"></script>
-<script src="js/cloud-ai.js?v=22.8"></script>
+<script src="js/cloud-ai.js?v=24.0"></script>
+<script src="js/smart-coach.js?v=24.0"></script>
+<script src="js/odoo-academy.js?v=25.2"></script>
+<script src="js/dashboard-v253.js?v=25.4"></script>
+<script src="js/ui-v254.js?v=25.5"></script>
+<script src="js/my-day-v255.js?v=25.6"></script>
+<script src="js/my-week-v256.js?v=25.6"></script>
 </body>
 </html>
