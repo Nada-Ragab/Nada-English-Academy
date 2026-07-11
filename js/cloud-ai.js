@@ -16,6 +16,7 @@ const BUILTIN_FIREBASE_CONFIG={
 const AUTO_SYNC_KEY='nada_auto_sync_v1';
 const FIREBASE_SDK_VERSION='12.16.0';
 const GEMINI_MODEL='gemini-3.5-flash';
+const APP_VERSION='22.6';
 const AI_REPLY_FIELDS=['englishReply','arabicTranslation','correction','explanationArabic','nextQuestion'];
 let aiHistory=[];
 let voiceRecognition=null;
@@ -65,57 +66,48 @@ function conversationPrompt(text){
   return `${teacherPrompt(s)}\n\nConversation so far:\n${recent||'(new conversation)'}\nStudent: ${text}`;
 }
 function cleanJsonText(raw){
-  let text=String(raw??'').replace(/^\uFEFF/,'').trim();
+  let text=String(raw||'').trim();
   text=text.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+  text=text.replace(/[“”]/g,'"').replace(/[‘’]/g,"'");
   const start=text.indexOf('{');
   const end=text.lastIndexOf('}');
   if(start!==-1&&end>start)text=text.slice(start,end+1);
   return text.trim();
 }
-function normalizeTeacherObject(value){
-  if(!value||typeof value!=='object'||Array.isArray(value))return null;
-  const out={};
-  for(const key of AI_REPLY_FIELDS){
-    const field=value[key];
-    out[key]=field==null?'':String(field).trim();
-  }
-  return AI_REPLY_FIELDS.some(key=>out[key])?out:null;
-}
 function parseTeacherReply(raw){
   const cleaned=cleanJsonText(raw);
   let obj=null;
   try{
-    obj=normalizeTeacherObject(JSON.parse(cleaned));
-  }catch(firstError){
-    try{
-      const repaired=cleaned
-        .replace(/,\s*([}\]])/g,'$1')
-        .replace(/[\u201c\u201d]/g,'"')
-        .replace(/[\u2018\u2019]/g,"'");
-      obj=normalizeTeacherObject(JSON.parse(repaired));
-    }catch(secondError){
-      console.error('Unable to parse Gemini teacher JSON.',{raw,cleaned,firstError,secondError});
-    }
-  }
-  if(!obj){
+    obj=JSON.parse(cleaned);
+  }catch(error){
+    const plain=String(raw||'')
+      .replace(/^```(?:json)?\s*/i,'')
+      .replace(/\s*```$/,'')
+      .replace(/[*#`]/g,'')
+      .trim();
     return {
-      display:'تعذر قراءة رد المدرّس بشكل صحيح. حاولي إرسال الرسالة مرة أخرى.',
-      spoken:''
+      display: plain || 'لم يصل رد واضح من المدرّس. حاولي مرة أخرى.',
+      spoken: plain
     };
   }
-  const english=obj.englishReply;
-  const arabic=obj.arabicTranslation;
-  const correction=obj.correction;
-  const explanation=obj.explanationArabic;
-  const next=obj.nextQuestion;
+  if(!obj||typeof obj!=='object'){
+    return {display:'لم يصل رد واضح من المدرّس. حاولي مرة أخرى.',spoken:''};
+  }
+  const v=k=>String(obj[k]||'').trim();
+  const english=v('englishReply');
+  const arabic=v('arabicTranslation');
+  const correction=v('correction');
+  const explanation=v('explanationArabic');
+  const next=v('nextQuestion');
   const parts=[];
   if(english)parts.push(`🗣 English\n${english}`);
   if(arabic)parts.push(`🇪🇬 العربية\n${arabic}`);
   if(correction)parts.push(`✍️ التصحيح\n${correction}`);
   if(explanation)parts.push(`💡 الشرح\n${explanation}`);
   if(next)parts.push(`❓ السؤال التالي\n${next}`);
+  const display=parts.join('\n\n');
   return {
-    display:parts.join('\n\n'),
+    display:display||'لم يصل رد واضح من المدرّس. حاولي مرة أخرى.',
     spoken:[english,next].filter(Boolean).join(' ')
   };
 }
@@ -133,10 +125,26 @@ async function ensureAiModel(){
   if(aiModel)return aiModel;
   if(!await ensureFirebase())throw new Error('تعذر تهيئة Firebase');
   const m=firebaseModules;
+  if(!m.Schema)throw new Error('إصدار Firebase الحالي لا يدعم Structured Output');
+  const responseSchema=m.Schema.object({
+    properties:{
+      englishReply:m.Schema.string(),
+      arabicTranslation:m.Schema.string(),
+      correction:m.Schema.string(),
+      explanationArabic:m.Schema.string(),
+      nextQuestion:m.Schema.string()
+    }
+  });
   const ai=m.getAI(firebaseApp,{backend:new m.GoogleAIBackend()});
   aiModel=m.getGenerativeModel(ai,{
     model:GEMINI_MODEL,
-    generationConfig:{temperature:0.55,maxOutputTokens:450,topP:0.9,responseMimeType:'application/json'}
+    generationConfig:{
+      temperature:0.45,
+      maxOutputTokens:500,
+      topP:0.9,
+      responseMimeType:'application/json',
+      responseSchema
+    }
   });
   return aiModel;
 }
