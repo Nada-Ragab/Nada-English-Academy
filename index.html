@@ -189,12 +189,24 @@
       <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
     </div>
   </div>
-  <div class="panelCard dashAiRecommendation dashAiRecommendationCompact">
-    <div class="panelHead"><div><small>AI RECOMMENDATION</small><h3>توصية المدرب الذكي لليوم</h3></div><span class="panelIcon">🤖</span></div>
-    <div id="dashAiRecList" class="dashAiRecList"></div>
-    <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
+  <div class="panelCard dashCoachUnified" id="dashCoachUnified">
+    <div class="panelHead">
+      <div><small>AI COACH</small><h3>مدربك الذكي</h3></div>
+      <span class="panelIcon">🤖</span>
+    </div>
+    <div class="dashCoachTabs" role="tablist" aria-label="مدربك الذكي">
+      <button class="active" type="button" data-coach-tab="today" role="tab" aria-selected="true">توصية اليوم</button>
+      <button type="button" data-coach-tab="week" role="tab" aria-selected="false">برنامج الأسبوع</button>
+    </div>
+    <div class="dashCoachPane active" data-coach-pane="today">
+      <div id="dashAiRecList" class="dashAiRecList"></div>
+      <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
+    </div>
+    <div class="dashCoachPane" data-coach-pane="week" hidden>
+      <div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div>
+      <button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button>
+    </div>
   </div>
-  <div class="panelCard smartCoachPreview"><div class="panelHead"><div><small>AI SMART COACH</small><h3>برنامجك الذكي هذا الأسبوع</h3></div><span class="panelIcon">🚀</span></div><div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div><button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button></div>
   <div class="panelCard dashMasterCard">
     <div class="panelHead"><div><small>LEARNING OVERVIEW</small><h3>ملخص تقدمك</h3></div><span id="dashTodayDate" class="dashDate"></span></div>
     <div class="dashMasterBody">
@@ -752,15 +764,16 @@
 <div class="toast" id="toast"></div>
 <script src="js/storage.js"></script>
 <script src="js/app.js"></script>
-<script src="js/cloud-ai.js?v=26.4"></script>
-<script src="js/smart-coach.js?v=26.4"></script>
-<script src="js/odoo-academy.js?v=26.4"></script>
-<script src="js/dashboard-v253.js?v=26.4"></script>
-<script src="js/dashboard-v258.js?v=26.4"></script>
-<script src="js/ui-v254.js?v=26.4"></script>
-<script src="js/my-day-v255.js?v=26.4"></script>
-<script src="js/my-week-v256.js?v=26.4"></script>
-<script src="js/sidebar-v260.js?v=26.4"></script>
-<script src="js/dashboard-v262.js?v=26.4"></script>
+<script src="js/cloud-ai.js?v=26.5"></script>
+<script src="js/smart-coach.js?v=26.5"></script>
+<script src="js/odoo-academy.js?v=26.5"></script>
+<script src="js/dashboard-v253.js?v=26.5"></script>
+<script src="js/dashboard-v258.js?v=26.5"></script>
+<script src="js/ui-v254.js?v=26.5"></script>
+<script src="js/my-day-v255.js?v=26.5"></script>
+<script src="js/my-week-v256.js?v=26.5"></script>
+<script src="js/sidebar-v260.js?v=26.5"></script>
+<script src="js/dashboard-v262.js?v=26.5"></script>
+<script src="js/dashboard-v265.js?v=26.5"></script>
 </body>
 </html>
