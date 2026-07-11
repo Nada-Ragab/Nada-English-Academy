@@ -131,22 +131,29 @@
 </aside>
 <main class="main">
 <section class="screen active" id="dashboard">
-  <div class="dashboardHero">
+  <div class="dashboardTabs" role="tablist" aria-label="أقسام لوحة التحكم">
+    <button class="active" type="button" data-dashboard-tab="overview">🏠 <span>نظرة عامة</span></button>
+    <button type="button" data-dashboard-tab="learn">📚 <span>التعلّم</span></button>
+    <button type="button" data-dashboard-tab="odoo">💼 <span>Odoo</span></button>
+    <button type="button" data-dashboard-tab="ai">🤖 <span>AI</span></button>
+    <button type="button" data-dashboard-tab="progress">📊 <span>التقدم</span></button>
+  </div>
+  <div class="dashboardHero dashboardTabSection" data-dashboard-section="overview">
     <div>
       <span class="eyebrow">WELCOME BACK, NADA</span>
       <h1>كمّلي رحلتك في الإنجليزية بثقة ✨</h1>
       <p>اختاري درسًا، راجعي الكلمات الصعبة، أو ابدئي تدريبًا سريعًا من مكان واحد.</p>
-      <div class="heroActions"><button class="btn green" id="dashContinue">▶ متابعة التعلّم</button><button class="btn blue" id="dashDaily">📅 درس اليوم</button><button class="btn teal" data-go="myday">🧭 خطة يومي</button><button class="btn orange" data-go="myweek">📆 تقريري الأسبوعي</button><button class="btn purple" id="dashReview">🔁 مراجعة ذكية</button></div>
+      <div class="heroActions"><button class="btn green" id="dashContinue">▶ متابعة رحلتي</button><button class="btn blue" id="dashDaily">📅 درس اليوم</button><button class="btn teal" data-go="myday">🧭 خطة يومي</button><button class="btn orange" data-go="myweek">📆 تقريري الأسبوعي</button><button class="btn purple" id="dashReview">🔁 مراجعة ذكية</button></div>
     </div>
     <div class="heroBadge"><span>🎯</span><b id="dashGoalPct">0%</b><small>الهدف اليومي</small></div>
   </div>
-  <div class="dashboardGrid">
+  <div class="dashboardGrid dashboardTabSection" data-dashboard-section="overview">
     <div class="dashCard"><div class="dashIcon green">⭐</div><div><small>XP المكتسب</small><b id="dashXP">0</b><span>استمري في التعلّم</span></div></div>
     <div class="dashCard"><div class="dashIcon blue">✅</div><div><small>جمل متقنة</small><b id="dashKnown">0</b><span>من إجمالي المحتوى</span></div></div>
     <div class="dashCard"><div class="dashIcon orange">🔁</div><div><small>تحتاج مراجعة</small><b id="dashReviewCount">0</b><span>جاهزة للتدريب</span></div></div>
     <div class="dashCard"><div class="dashIcon purple">❤️</div><div><small>المفضلة</small><b id="dashFav">0</b><span>جملك المهمة</span></div></div>
   </div>
-  <div class="homeDayGrid">
+  <div class="homeDayGrid dashboardTabSection" data-dashboard-section="overview">
     <div class="panelCard homeContinueCard">
       <div class="panelHead"><div><small>MY DAY</small><h3>ابدئي من أفضل خطوة</h3></div><span class="panelIcon">🎯</span></div>
       <div class="homeContinueMain"><div><span class="homeContinueIcon" id="homeNextIcon">▶️</span></div><div><b id="homeNextTitle">متابعة آخر درس</b><p id="homeNextText">سنختار لكِ النشاط الأنسب حسب تقدمك.</p></div></div>
@@ -155,12 +162,12 @@
     </div>
     <div class="panelCard homeQuickCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="aiteacher">🤖<span>AI Teacher</span></button><button data-go="odooacademy">💼<span>Odoo Academy</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
   </div>
-  <div class="dashFocusStrip" aria-label="اختصارات التقدم">
+  <div class="dashFocusStrip dashboardTabSection" data-dashboard-section="overview" aria-label="اختصارات التقدم">
     <button type="button" data-go="myweek"><span>📆</span><div><small>هذا الأسبوع</small><b id="focusWeekText">راجعي تقريرك</b></div><em>←</em></button>
     <button type="button" data-go="odooacademy"><span>💼</span><div><small>Odoo Academy</small><b id="focusOdooText">كمّلي المسار المهني</b></div><em>←</em></button>
     <button type="button" data-go="review"><span>🧠</span><div><small>Needs Review</small><b id="focusReviewText">لا توجد مراجعات</b></div><em>←</em></button>
   </div>
-  <div class="topicExplorer panelCard">
+  <div class="topicExplorer panelCard dashboardTabSection" data-dashboard-section="learn">
     <div class="topicExplorerHead">
       <div><small>TOPIC LIBRARY</small><h3>استكشفي الموضوعات</h3></div>
       <div class="topicExplorerTools"><input id="premiumTopicSearch" placeholder="ابحثي عن موضوع..."><button class="iconAction" id="premiumTopicClear" title="مسح البحث">×</button></div>
@@ -177,7 +184,7 @@
     <div class="premiumTopicsGrid" id="premiumTopicsGrid"></div>
     <button class="btn blue wide premiumMoreBtn" id="premiumTopicsMore">عرض المزيد من الموضوعات</button>
   </div>
-  <div class="premiumSection">
+  <div class="premiumSection dashboardTabSection" data-dashboard-section="learn">
     <div class="premiumSectionHead">
       <div><span class="eyebrow darkEyebrow">PREMIUM LEARNING HUB</span><h2>مسارك الذكي اليوم</h2><p>اختاري مهارة أو موضوع وابدئي مباشرة.</p></div>
       <div class="premiumHeadActions"><button class="softAction" data-go="daily">📅 خطة اليوم</button><button class="softAction" data-go="stats">📊 تقريري</button></div>
@@ -189,32 +196,20 @@
       <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
     </div>
   </div>
-  <div class="panelCard dashCoachUnified" id="dashCoachUnified">
-    <div class="panelHead">
-      <div><small>AI COACH</small><h3>مدربك الذكي</h3></div>
-      <span class="panelIcon">🤖</span>
-    </div>
-    <div class="dashCoachTabs" role="tablist" aria-label="مدربك الذكي">
-      <button class="active" type="button" data-coach-tab="today" role="tab" aria-selected="true">توصية اليوم</button>
-      <button type="button" data-coach-tab="week" role="tab" aria-selected="false">برنامج الأسبوع</button>
-    </div>
-    <div class="dashCoachPane active" data-coach-pane="today">
-      <div id="dashAiRecList" class="dashAiRecList"></div>
-      <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
-    </div>
-    <div class="dashCoachPane" data-coach-pane="week" hidden>
-      <div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div>
-      <button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button>
-    </div>
+  <div class="panelCard dashAiRecommendation dashAiRecommendationCompact dashboardTabSection" data-dashboard-section="ai">
+    <div class="panelHead"><div><small>AI RECOMMENDATION</small><h3>توصية المدرب الذكي لليوم</h3></div><span class="panelIcon">🤖</span></div>
+    <div id="dashAiRecList" class="dashAiRecList"></div>
+    <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
   </div>
-  <div class="panelCard dashMasterCard">
+  <div class="panelCard smartCoachPreview dashboardTabSection" data-dashboard-section="ai"><div class="panelHead"><div><small>AI SMART COACH</small><h3>برنامجك الذكي هذا الأسبوع</h3></div><span class="panelIcon">🚀</span></div><div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div><button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button></div>
+  <div class="panelCard dashMasterCard dashboardTabSection" data-dashboard-section="progress">
     <div class="panelHead"><div><small>LEARNING OVERVIEW</small><h3>ملخص تقدمك</h3></div><span id="dashTodayDate" class="dashDate"></span></div>
     <div class="dashMasterBody">
       <div class="dashMasterRing" id="dashMasterRing"><div><b id="dashMasterPct">0%</b><small>التقدم العام</small></div></div>
       <div id="dashMilestones" class="dashMilestones"></div>
     </div>
   </div>
-  <div class="panelCard dashOdooSnapshot">
+  <div class="panelCard dashOdooSnapshot dashboardTabSection" data-dashboard-section="odoo">
     <div class="panelHead"><div><small>ODOO ACADEMY</small><h3>تقدمك المهني</h3></div><button class="dashTextBtn" data-go="odooacademy">فتح الأكاديمية ←</button></div>
     <div class="dashOdooLayout">
       <div class="dashOdooProgress"><div><b id="dashOdooPct">0%</b><span>إجمالي المسار</span></div><i><span id="dashOdooBar"></span></i></div>
@@ -222,19 +217,19 @@
     </div>
     <div id="homeOdooModules" class="homeOdooModules"></div>
   </div>
-  <div class="dashAiProGrid dashAiProGridSingle">
+  <div class="dashAiProGrid dashAiProGridSingle dashboardTabSection" data-dashboard-section="overview">
     <div class="panelCard dashTodayMission">
       <div class="panelHead"><div><small>TODAY'S MISSION</small><h3>هدف اليوم</h3></div><span class="panelIcon">🎯</span></div>
       <div class="dashMissionProgress"><div><b id="dashMissionPct">0%</b><span id="dashMissionSummary">0 من 4 مهام</span></div><i><span id="dashMissionBar"></span></i></div>
       <div id="dashMissionList" class="dashMissionList"></div>
     </div>
   </div>
-  <div class="panelCard dashLastSession">
+  <div class="panelCard dashLastSession dashboardTabSection" data-dashboard-section="ai">
     <div class="panelHead"><div><small>LAST AI SESSION</small><h3>آخر جلسة مع المدرّس</h3></div><span class="panelIcon">🎙️</span></div>
     <div id="dashLastSessionBody" class="dashLastSessionBody"></div>
     <button class="btn blue wide" data-go="aiteacher">متابعة المحادثة</button>
   </div>
-  <div class="dashReviewAchievements">
+  <div class="dashReviewAchievements dashboardTabSection" data-dashboard-section="progress">
     <div class="panelCard">
       <div class="panelHead"><div><small>NEEDS REVIEW</small><h3>تحتاج مراجعة</h3></div><span class="panelIcon">🧠</span></div>
       <div id="dashNeedsReview" class="dashNeedsReview"></div>
@@ -244,11 +239,11 @@
       <div id="dashAchievements" class="dashAchievements"></div>
     </div>
   </div>
-  <div class="panelCard recentTopicsCard">
+  <div class="panelCard recentTopicsCard dashboardTabSection" data-dashboard-section="learn">
     <div class="panelHead"><div><small>RECENT TOPICS</small><h3>موضوعاتك الأخيرة</h3></div><span class="panelIcon">🕘</span></div>
     <div id="recentTopicsList" class="recentTopicsList"></div>
   </div>
-  <div class="focusSessionPanel panelCard">
+  <div class="focusSessionPanel panelCard dashboardTabSection" data-dashboard-section="learn">
     <div class="focusSessionInfo">
       <span class="eyebrow darkEyebrow">FOCUS SESSION</span>
       <h3>جلسة مذاكرة مركزة</h3>
@@ -764,16 +759,17 @@
 <div class="toast" id="toast"></div>
 <script src="js/storage.js"></script>
 <script src="js/app.js"></script>
-<script src="js/cloud-ai.js?v=26.5"></script>
-<script src="js/smart-coach.js?v=26.5"></script>
-<script src="js/odoo-academy.js?v=26.5"></script>
-<script src="js/dashboard-v253.js?v=26.5"></script>
-<script src="js/dashboard-v258.js?v=26.5"></script>
-<script src="js/ui-v254.js?v=26.5"></script>
-<script src="js/my-day-v255.js?v=26.5"></script>
-<script src="js/my-week-v256.js?v=26.5"></script>
-<script src="js/sidebar-v260.js?v=26.5"></script>
-<script src="js/dashboard-v262.js?v=26.5"></script>
-<script src="js/dashboard-v265.js?v=26.5"></script>
+<script src="js/cloud-ai.js?v=27.0"></script>
+<script src="js/smart-coach.js?v=27.0"></script>
+<script src="js/odoo-academy.js?v=27.0"></script>
+<script src="js/dashboard-v253.js?v=27.0"></script>
+<script src="js/dashboard-v258.js?v=27.0"></script>
+<script src="js/ui-v254.js?v=27.0"></script>
+<script src="js/my-day-v255.js?v=27.0"></script>
+<script src="js/my-week-v256.js?v=27.0"></script>
+<script src="js/sidebar-v260.js?v=27.0"></script>
+<script src="js/dashboard-v262.js?v=27.0"></script>
+<script src="js/dashboard-v265.js?v=27.0"></script>
+<script src="js/dashboard-v270.js?v=27.0"></script>
 </body>
 </html>

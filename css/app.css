@@ -850,3 +850,22 @@ body.sidebar-collapsed .sidebarSyncPill{display:none!important}
 @keyframes dashCoachFade{from{opacity:.35;transform:translateY(3px)}to{opacity:1;transform:none}}
 body.dark .dashCoachTabs button.active{color:#c4b5fd;background:#151c2e}
 @media(max-width:560px){.dashCoachTabs button{font-size:13px;padding:9px 7px}}
+
+
+/* V27.0 Dashboard 3.0 */
+.dashboardTabs{position:sticky;top:0;z-index:25;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:10px;margin:0 0 16px;background:color-mix(in srgb,var(--bg,#f6fbff) 90%,transparent);backdrop-filter:blur(14px);border:1px solid rgba(89,102,130,.12);border-radius:18px;box-shadow:0 8px 22px rgba(40,55,90,.08)}
+.dashboardTabs button{border:0;background:transparent;border-radius:13px;padding:11px 8px;font-weight:800;color:var(--muted,#64748b);cursor:pointer;transition:.2s ease;display:flex;align-items:center;justify-content:center;gap:7px}
+.dashboardTabs button:hover{background:rgba(88,204,2,.08);transform:translateY(-1px)}
+.dashboardTabs button.active{background:linear-gradient(135deg,#58cc02,#45b901);color:#fff;box-shadow:0 8px 18px rgba(88,204,2,.25)}
+.dashboardTabSection[hidden]{display:none!important}
+.dashboardTabSection.dashboardTabEnter{animation:dashTabEnter .22s ease both}
+@keyframes dashTabEnter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#dashboard[data-active-tab="odoo"] .dashOdooSnapshot,#dashboard[data-active-tab="ai"] .dashLastSession,#dashboard[data-active-tab="progress"] .dashMasterCard{margin-top:0}
+#dashboard[data-active-tab="odoo"] .homeOdooModules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media(max-width:760px){
+ .dashboardTabs{grid-template-columns:repeat(5,max-content);overflow-x:auto;justify-content:start;scrollbar-width:none;padding:8px;top:0}
+ .dashboardTabs::-webkit-scrollbar{display:none}
+ .dashboardTabs button{min-width:96px;padding:10px 12px}
+ .dashboardTabs button span{white-space:nowrap}
+ #dashboard[data-active-tab="odoo"] .homeOdooModules{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
