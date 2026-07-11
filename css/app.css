@@ -951,3 +951,16 @@ body.dark .odooModuleCard .topicsScreenStart{background:color-mix(in srgb,var(--
 .navItem:hover .navIcon,.navItem.active .navIcon{transform:none!important;}
 .oaExcelTools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 @media(max-width:720px){.oaExcelTools{width:100%}.oaExcelTools .btn{flex:1;min-width:120px}}
+
+
+/* V27.9 stability: prevent topic-card hover jitter and show playlist progress */
+.topicsScreenCard,.premiumTopicCard{transform:none!important;animation:none!important;will-change:auto!important}
+.topicsScreenCard:hover,.premiumTopicCard:hover{transform:none!important}
+#playlistOut .playItem{transition:background .15s,border-color .15s; border:1px solid transparent}
+#playlistOut .playItem.playing{background:rgba(37,99,235,.10);border-color:rgba(37,99,235,.35)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* V28 stability: no shaking or accidental movement on topic/module cards */
+.topicsScreenCard,.premiumTopicCard,.odooModuleCard,.topicsScreenCard *,.premiumTopicCard *,.odooModuleCard *{animation:none!important}
+.topicsScreenCard:hover,.premiumTopicCard:hover,.odooModuleCard:hover{transform:none!important}
+.topicsScreenCard:active,.premiumTopicCard:active,.odooModuleCard:active{transform:none!important}
+#playlistOut .playItem.playing{outline:3px solid rgba(28,176,246,.35);background:rgba(28,176,246,.10)}
