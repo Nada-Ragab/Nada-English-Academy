@@ -773,7 +773,45 @@ function checkLab(){ const x=labItems[labPos]; if(!x) return; const score=simila
 function nextLab(){ if(!labItems.length) makeLabPool(); else {labPos++; renderLab();} }
 function currentPlaylist(mode){ const cur=S[state.i]; if(mode==='topic') return S.filter(x=>x.topic_id===cur.topic_id); if(mode==='review') return Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean); if(mode==='fav') return Object.keys(state.fav||{}).map(n=>S[Number(n)-1]).filter(Boolean); return []; }
 function showPlaylist(list){ $('playlistOut').innerHTML=list.slice(0,60).map(x=>`<div class="playItem"><b>${x.number}. ${x.english}</b><small>${x.arabic}</small></div>`).join('') || '<p>لا توجد جمل في هذه القائمة.</p>'; }
-function playList(mode){ const list=currentPlaylist(mode); showPlaylist(list); playStop=false; const reps=Math.max(1,Number($('repeatCount').value)||1), gap=(Math.max(1,Number($('gapSeconds').value)||2))*1000; let i=0,r=0; function go(){ if(playStop||i>=list.length) return; speak(list[i].english); r++; if(r>=reps){ r=0; i++; } setTimeout(go,gap+1400); } go(); }
+function playList(mode){
+  const list=currentPlaylist(mode);
+  showPlaylist(list);
+  playStop=true;
+  speechSynthesis.cancel();
+  if(!list.length){ toast('لا توجد جمل في هذه القائمة'); return; }
+  playStop=false;
+  const reps=Math.max(1,Number($('repeatCount').value)||1);
+  const gap=Math.max(1,Number($('gapSeconds').value)||2)*1000;
+  let i=0, r=0;
+  const playNext=()=>{
+    if(playStop) return;
+    if(i>=list.length){
+      playStop=true;
+      toast('تم تشغيل القائمة كاملة ✅');
+      return;
+    }
+    const item=list[i];
+    const u=new SpeechSynthesisUtterance(item.english);
+    u.lang='en-US';
+    u.rate=Number($('rate')?.value)||0.85;
+    const v=voices[Number($('voice')?.value)];
+    if(v) u.voice=v;
+    document.querySelectorAll('#playlistOut .playItem').forEach((el,index)=>el.classList.toggle('playing',index===i));
+    u.onend=()=>{
+      if(playStop) return;
+      r++;
+      if(r>=reps){r=0;i++;}
+      setTimeout(playNext,gap);
+    };
+    u.onerror=()=>{
+      if(playStop) return;
+      r=0;i++;
+      setTimeout(playNext,300);
+    };
+    speechSynthesis.speak(u);
+  };
+  playNext();
+}
 function refreshNotes(){ const x=S[state.i]; if($('noteSentence')){ $('noteSentence').textContent=x.english; $('noteArabic').textContent=x.arabic; $('sentenceNote').value=state.notes[x.number]||''; } }
 function saveCurrentNote(){ const x=S[state.i]; const val=$('sentenceNote').value.trim(); if(val) state.notes[x.number]=val; else delete state.notes[x.number]; save(); showAllNotes(); }
 function showAllNotes(){ const entries=Object.entries(state.notes||{}); $('notesOut').innerHTML=entries.length?entries.slice(-100).reverse().map(([n,t])=>{const x=S[Number(n)-1]; return `<div class="noteBox"><b>${n}. ${x?x.english:''}</b><br><small>${x?x.arabic:''}</small><p>${t}</p></div>`}).join(''):'<p>لا توجد ملاحظات محفوظة بعد.</p>'; }
