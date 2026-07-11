@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V22.9 - AI Session Coach</title>
+<title>Nada English Academy V23.0 - AI Session Coach</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -307,6 +307,14 @@
       <button class="btn purple wide" id="evaluateAiSession">📊 إنهاء وتقييم الجلسة</button>
       <button class="btn orange wide" id="clearAiChat">🆕 بدء جلسة جديدة</button>
       <div id="aiSessionReport" class="aiSessionReport" hidden></div>
+      <div class="aiMistakesCard">
+        <div class="aiMistakesHead"><h4>🧠 دفتر أخطائي</h4><span id="aiMistakeCount">0</span></div>
+        <div id="aiMistakeList" class="aiMistakeList"></div>
+        <div class="aiMistakeActions">
+          <button class="btn blue" id="practiceAiMistakes">ابدئي مراجعة</button>
+          <button class="btn red" id="clearAiMistakes">مسح الأخطاء</button>
+        </div>
+      </div>
       <p class="note">لا يحتاج إلى Endpoint أو API Key. المدرّس متصل مباشرةً بمشروع Firebase.</p>
     </aside>
     <div class="box aiChatCard">

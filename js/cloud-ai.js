@@ -5,6 +5,7 @@ const AI_SETTINGS_KEY='nada_ai_settings_v2';
 const AI_HISTORY_KEY='nada_ai_history_v2';
 const AI_REPORT_KEY='nada_ai_last_report_v1';
 const AI_SESSION_START_KEY='nada_ai_session_start_v1';
+const AI_MISTAKES_KEY='nada_ai_mistakes_v1';
 const FIREBASE_CONFIG_KEY='nada_firebase_config_v1';
 const BUILTIN_FIREBASE_CONFIG={
   apiKey:'AIzaSyBbljF4Vw1Zy5cA2VVG3zrK_UPZ0xxftYg',
@@ -27,6 +28,7 @@ let aiModel=null;
 let syncTimer=null;
 let aiBusy=false;
 let sessionClock=null;
+let aiMistakes=[];
 function readJson(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'')||fallback}catch{return fallback}}
 function setNote(id,text){const n=el(id);if(n)n.textContent=text}
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
@@ -38,6 +40,37 @@ function saveAiSettings(){
 }
 function renderAi(){const box=el('aiMessages');if(!box)return;box.innerHTML=aiHistory.map(m=>`<div class="aiMsg ${m.role}">${escapeHtml(m.text)}</div>`).join('');box.scrollTop=box.scrollHeight;updateSessionStats()}
 function addAi(role,text){aiHistory.push({role,text,time:Date.now()});aiHistory=aiHistory.slice(-60);localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(aiHistory));renderAi()}
+function isCorrectCorrection(value){
+  const v=String(value||'').trim().toLowerCase();
+  return !v||v==='الجملة صحيحة'||v==='الجملة صحيحة.'||v.includes('sentence is correct')||v==='correct';
+}
+function saveMistake(original,correction,explanation){
+  if(isCorrectCorrection(correction))return;
+  const item={original:String(original||'').trim(),correction:String(correction||'').trim(),explanation:String(explanation||'').trim(),time:Date.now()};
+  if(!item.original||!item.correction)return;
+  const duplicate=aiMistakes.find(x=>x.original.toLowerCase()===item.original.toLowerCase()&&x.correction.toLowerCase()===item.correction.toLowerCase());
+  if(duplicate){duplicate.time=item.time;duplicate.explanation=item.explanation||duplicate.explanation}
+  else aiMistakes.unshift(item);
+  aiMistakes=aiMistakes.slice(0,50);
+  localStorage.setItem(AI_MISTAKES_KEY,JSON.stringify(aiMistakes));
+  renderMistakes();
+  scheduleAutoSync();
+}
+function renderMistakes(){
+  const count=el('aiMistakeCount');if(count)count.textContent=String(aiMistakes.length);
+  const box=el('aiMistakeList');if(!box)return;
+  if(!aiMistakes.length){box.innerHTML='<div class="aiMistakeEmpty">لا توجد أخطاء محفوظة حتى الآن.</div>';return}
+  box.innerHTML=aiMistakes.slice(0,6).map((m,i)=>`<div class="aiMistakeItem"><button class="aiMistakeDelete" data-i="${i}" title="حذف">×</button><small>كتبتِ</small><div class="wrongText" dir="ltr">${escapeHtml(m.original)}</div><small>الأصح</small><div class="correctText" dir="ltr">${escapeHtml(m.correction)}</div>${m.explanation?`<p>${escapeHtml(m.explanation)}</p>`:''}</div>`).join('');
+  box.querySelectorAll('.aiMistakeDelete').forEach(btn=>btn.onclick=()=>{aiMistakes.splice(Number(btn.dataset.i),1);localStorage.setItem(AI_MISTAKES_KEY,JSON.stringify(aiMistakes));renderMistakes();scheduleAutoSync()});
+}
+function practiceMistakes(){
+  if(!aiMistakes.length){setNote('aiStatus','لا توجد أخطاء محفوظة للتدريب عليها.');return}
+  const sample=aiMistakes.slice(0,8).map((m,i)=>`${i+1}. Wrong: ${m.original} | Correct: ${m.correction}`).join('\n');
+  const prompt=`Start a short review quiz using these learner mistakes. Ask only ONE simple question now and do not reveal the answer. Keep it suitable for ${getAiSettings().level}.\n${sample}`;
+  addAi('system','🧠 بدأت مراجعة أخطائك المحفوظة.');
+  askAi(prompt,true);
+}
+
 function sessionStart(){
   let value=Number(localStorage.getItem(AI_SESSION_START_KEY)||0);
   if(!value){value=Date.now();localStorage.setItem(AI_SESSION_START_KEY,String(value))}
@@ -141,7 +174,7 @@ function cleanJsonText(raw){
   if(start!==-1&&end>start)text=text.slice(start,end+1);
   return text.trim();
 }
-function parseTeacherReply(raw){
+function parseTeacherReply(raw,originalText){
   const cleaned=cleanJsonText(raw);
   let obj;
   try{
@@ -169,6 +202,7 @@ function parseTeacherReply(raw){
   if(correction)parts.push(`✍️ التصحيح\n${correction}`);
   if(explanation)parts.push(`💡 الشرح\n${explanation}`);
   if(next)parts.push(`❓ السؤال التالي\n${next}`);
+  saveMistake(originalText,correction,explanation);
   return {
     display: parts.join('\n\n') || 'تعذر قراءة رد المدرّس. حاولي مرة أخرى.',
     spoken: [english,next].filter(Boolean).join(' ')
@@ -210,10 +244,10 @@ async function ensureAiModel(){
   });
   return aiModel;
 }
-async function askAi(text){
+async function askAi(text,isReviewPrompt=false){
   if(aiBusy||!text)return;
-  const prompt=conversationPrompt(text);
-  addAi('user',text);
+  const prompt=isReviewPrompt?`${teacherPrompt(getAiSettings())}\n\n${text}`:conversationPrompt(text);
+  if(!isReviewPrompt)addAi('user',text);
   setNote('aiStatus','يفكر المدرّس...');
   aiBusy=true;
   if(el('aiSendBtn'))el('aiSendBtn').disabled=true;
@@ -222,7 +256,7 @@ async function askAi(text){
     const result=await model.generateContent(prompt);
     const raw=result&&result.response&&typeof result.response.text==='function'?result.response.text().trim():'';
     if(!raw)throw new Error('لم يصل رد من Gemini');
-    const reply=parseTeacherReply(raw);
+    const reply=parseTeacherReply(raw,isReviewPrompt?'':text);
     addAi('teacher',reply.display);
     setNote('aiStatus','تم التصحيح والرد عبر Firebase AI Logic.');
     if(voiceMode)await speakAi(reply.spoken||reply.display);
@@ -292,22 +326,22 @@ async function initFirebase(){
   }catch(e){setNote('syncStatus','تعذر ربط Firebase: '+e.message);setNote('aiStatus','تعذر تهيئة Firebase AI Logic.');return false}
 }
 function updateAuthUI(){const box=el('authState');if(!box)return;box.textContent=currentUser?'مسجلة الدخول: '+currentUser.email:'غير مسجلة الدخول';if(el('signOutBtn'))el('signOutBtn').disabled=!currentUser}
-function localPayload(){if(typeof saveAllData==='function')saveAllData();const payload=readJson('nada_english_academy_v18_data',{savedAt:new Date().toISOString()});payload.aiHistory=readJson(AI_HISTORY_KEY,[]);payload.aiSettings=getAiSettings();payload.aiLastReport=readJson(AI_REPORT_KEY,null);return payload}
+function localPayload(){if(typeof saveAllData==='function')saveAllData();const payload=readJson('nada_english_academy_v18_data',{savedAt:new Date().toISOString()});payload.aiHistory=readJson(AI_HISTORY_KEY,[]);payload.aiSettings=getAiSettings();payload.aiLastReport=readJson(AI_REPORT_KEY,null);payload.aiMistakes=readJson(AI_MISTAKES_KEY,[]);return payload}
 async function ensureFirebase(){return auth&&db?true:initFirebase()}
 async function uploadCloud(silent){if(!await ensureFirebase()||!currentUser){if(!silent)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;await m.setDoc(m.doc(db,'users',currentUser.uid),{academyData:localPayload(),updatedAt:m.serverTimestamp(),email:currentUser.email},{merge:true});setNote('syncStatus','آخر رفع: '+new Date().toLocaleString('ar-EG'))}catch(e){setNote('syncStatus','فشل الرفع: '+e.message)}}
-async function downloadCloud(show){if(!await ensureFirebase()||!currentUser){if(show)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;const snap=await m.getDoc(m.doc(db,'users',currentUser.uid));if(!snap.exists()||!snap.data().academyData){setNote('syncStatus','لا توجد بيانات محفوظة لهذا الحساب.');return}const data=snap.data().academyData;localStorage.setItem('nada_english_academy_v18_data',JSON.stringify(data));if(data.state)localStorage.setItem('nada_v12_state',JSON.stringify(data.state));if(data.customTopics)localStorage.setItem('nada_custom_topics_v1',JSON.stringify(data.customTopics));if(data.aiHistory)localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(data.aiHistory));if(data.aiSettings)localStorage.setItem(AI_SETTINGS_KEY,JSON.stringify(data.aiSettings));if(data.aiLastReport)localStorage.setItem(AI_REPORT_KEY,JSON.stringify(data.aiLastReport));if(show)setNote('syncStatus','تم تحميل البيانات. أعيدي فتح الصفحة لتطبيقها.')}catch(e){setNote('syncStatus','فشل التحميل: '+e.message)}}
+async function downloadCloud(show){if(!await ensureFirebase()||!currentUser){if(show)setNote('syncStatus','سجلي الدخول أولًا.');return}try{const m=firebaseModules;const snap=await m.getDoc(m.doc(db,'users',currentUser.uid));if(!snap.exists()||!snap.data().academyData){setNote('syncStatus','لا توجد بيانات محفوظة لهذا الحساب.');return}const data=snap.data().academyData;localStorage.setItem('nada_english_academy_v18_data',JSON.stringify(data));if(data.state)localStorage.setItem('nada_v12_state',JSON.stringify(data.state));if(data.customTopics)localStorage.setItem('nada_custom_topics_v1',JSON.stringify(data.customTopics));if(data.aiHistory)localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(data.aiHistory));if(data.aiSettings)localStorage.setItem(AI_SETTINGS_KEY,JSON.stringify(data.aiSettings));if(data.aiLastReport)localStorage.setItem(AI_REPORT_KEY,JSON.stringify(data.aiLastReport));if(data.aiMistakes)localStorage.setItem(AI_MISTAKES_KEY,JSON.stringify(data.aiMistakes));if(show)setNote('syncStatus','تم تحميل البيانات. أعيدي فتح الصفحة لتطبيقها.')}catch(e){setNote('syncStatus','فشل التحميل: '+e.message)}}
 function scheduleAutoSync(){if(localStorage.getItem(AUTO_SYNC_KEY)==='0'||!currentUser)return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>uploadCloud(true),1200)}
 function bind(){
   if(!el('aiMessages'))return;
   const s=getAiSettings();el('aiMode').value=s.mode||'general';el('aiLevel').value=s.level||'A2';
-  aiHistory=readJson(AI_HISTORY_KEY,[]);if(!aiHistory.length)addAi('teacher','Hello Nada! I am your AI English teacher. What would you like to practice today?');else renderAi();
+  aiHistory=readJson(AI_HISTORY_KEY,[]);aiMistakes=readJson(AI_MISTAKES_KEY,[]);renderMistakes();if(!aiHistory.length)addAi('teacher','Hello Nada! I am your AI English teacher. What would you like to practice today?');else renderAi();
   el('saveAiSettings').onclick=saveAiSettings;
   el('aiMode').onchange=saveAiSettings;el('aiLevel').onchange=saveAiSettings;
   el('aiSendBtn').onclick=()=>{const t=el('aiInput').value.trim();if(t){el('aiInput').value='';askAi(t)}};
   el('aiInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el('aiSendBtn').click()}};
   el('aiVoiceBtn').onclick=()=>{if(voiceMode)stopAiVoice();else startAiVoice()};
   el('clearAiChat').onclick=startNewSession;
-  if(el('evaluateAiSession'))el('evaluateAiSession').onclick=evaluateSession;
+  if(el('evaluateAiSession'))el('evaluateAiSession').onclick=evaluateSession;if(el('practiceAiMistakes'))el('practiceAiMistakes').onclick=practiceMistakes;if(el('clearAiMistakes'))el('clearAiMistakes').onclick=()=>{if(confirm('حذف كل الأخطاء المحفوظة؟')){aiMistakes=[];localStorage.removeItem(AI_MISTAKES_KEY);renderMistakes();scheduleAutoSync()}};
   showSessionReport(readJson(AI_REPORT_KEY,null));
   sessionStart();clearInterval(sessionClock);sessionClock=setInterval(updateSessionStats,1000);updateSessionStats();
   localStorage.setItem(FIREBASE_CONFIG_KEY,JSON.stringify(BUILTIN_FIREBASE_CONFIG));
