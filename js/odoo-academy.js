@@ -70,9 +70,62 @@ function mod(){return modules[active]}
 function speak(text,rate=.85){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=rate;speechSynthesis.speak(u)}
 function goAI(prompt){const nav=document.querySelector('[data-screen="aiteacher"]');nav?.click();setTimeout(()=>{const mode=$('aiMode');if(mode){mode.value='odoo';mode.dispatchEvent(new Event('change'))}const inp=$('aiInput');if(inp){inp.value=prompt;$('aiSendBtn')?.click()}},350)}
 function moduleDone(key){return Object.keys(state.done).filter(x=>x.startsWith(key+':')&&state.done[x]).length}
-function renderModules(){const box=$('oaModuleList');if(!box)return;box.innerHTML=Object.entries(modules).map(([k,m])=>{const done=moduleDone(k);return `<button class="${k===active?'active':''}" data-module="${k}"><span>${m.icon}</span><div><b>${m.title}</b><small>${done}/${m.lessons.length} دروس</small></div><i>${m.lessons.length?Math.round(done/m.lessons.length*100):0}%</i></button>`}).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>{active=b.dataset.module;renderAll()})}
+function renderModules(){
+ const box=$('oaModuleList');if(!box)return;
+ box.innerHTML=Object.entries(modules).map(([k,m])=>{const done=moduleDone(k);return `<button class="${k===active?'active':''}" data-module="${k}"><span>${m.icon}</span><div><b>${m.title}</b><small>${done}/${m.lessons.length} دروس</small></div><i>${m.lessons.length?Math.round(done/m.lessons.length*100):0}%</i></button>`}).join('')+
+ `<div class="oaDirectModuleTools"><button id="oaDirectAddModule">＋ إضافة موديول</button><button id="oaDirectEditModule">✏️ تعديل الموديول</button><button id="oaDirectDeleteModule" class="danger">🗑️ حذف</button></div>`;
+ box.querySelectorAll('[data-module]').forEach(b=>b.onclick=()=>{active=b.dataset.module;renderAll()});
+ $('oaDirectAddModule').onclick=addModuleDirect;
+ $('oaDirectEditModule').onclick=editModuleDirect;
+ $('oaDirectDeleteModule').onclick=deleteModuleDirect;
+}
+
+function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function uniqueModuleKey(title){let base=String(title||'module').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'module',key=base,n=2;while(modules[key])key=`${base}-${n++}`;return key}
+function addModuleDirect(){
+ const title=prompt('اسم الموديول بالإنجليزية');if(title===null||!title.trim())return;
+ const key=uniqueModuleKey(title),icon=prompt('الأيقونة', '🧩')||'🧩',description=prompt('وصف الموديول بالعربية','')||'';
+ modules[key]=normalizeModule({title:title.trim(),icon,tag:'ODOO MODULE',description,color:'#6d5dfc',lessons:[],sentences:[],words:[],dialogue:[],interview:[],cases:[],quiz:[]});active=key;saveContent();renderAll();
+}
+function editModuleDirect(){
+ const m=mod(),title=prompt('اسم الموديول',m.title);if(title===null)return;
+ const icon=prompt('الأيقونة',m.icon);if(icon===null)return;
+ const tag=prompt('التصنيف',m.tag);if(tag===null)return;
+ const description=prompt('الوصف',m.description);if(description===null)return;
+ m.title=title.trim()||m.title;m.icon=icon.trim()||m.icon;m.tag=tag.trim()||m.tag;m.description=description.trim();saveContent();renderAll();
+}
+function deleteModuleDirect(){
+ if(Object.keys(modules).length<=1){alert('لا يمكن حذف آخر موديول.');return}
+ if(!confirm(`حذف موديول ${mod().title} بكل محتواه؟`))return;
+ delete modules[active];active=Object.keys(modules)[0];saveContent();renderAll();
+}
+function editLessonDirect(index=null){
+ const current=index===null?['','','']:mod().lessons[index];
+ const title=prompt('اسم الدرس',current[0]);if(title===null)return;
+ const arabic=prompt('الشرح بالعربي',current[1]);if(arabic===null)return;
+ const english=prompt('المهمة أو الجملة بالإنجليزية',current[2]);if(english===null)return;
+ const row=[title.trim(),arabic.trim(),english.trim()];
+ if(!row[0]&&!row[1]&&!row[2])return;
+ if(index===null)mod().lessons.push(row);else mod().lessons[index]=row;
+ saveContent();renderAll();
+}
+function deleteLessonDirect(index){if(!confirm('حذف هذا الدرس؟'))return;mod().lessons.splice(index,1);saveContent();renderAll()}
+function moveLessonDirect(index,dir){const target=index+dir;if(target<0||target>=mod().lessons.length)return;[mod().lessons[index],mod().lessons[target]]=[mod().lessons[target],mod().lessons[index]];saveContent();renderAll()}
+
 function renderHeader(){const m=mod(),done=moduleDone(active),pct=m.lessons.length?Math.round(done/m.lessons.length*100):0;$('oaModuleIcon').textContent=m.icon;$('oaModuleTag').textContent=m.tag;$('oaModuleTitle').textContent=m.title;$('oaModuleDescription').textContent=m.description;$('oaModulePct').textContent=pct+'%';$('oaModuleBar').style.width=pct+'%';$('oaModuleProgressText').textContent=`${done} من ${m.lessons.length} دروس`}
-function renderLessons(){const box=$('oaLessons');box.innerHTML=mod().lessons.map((l,i)=>{const key=`${active}:${i}`,done=!!state.done[key];return `<article class="oaLesson ${done?'done':''}"><button class="oaLessonCheck" data-check="${i}">${done?'✓':''}</button><div><small>LESSON ${i+1}</small><h3>${l[0]}</h3><p>${l[1]}</p><div class="oaEnglishTask">${l[2]}</div></div><div class="oaLessonActions"><button data-speak="${i}">🔊 اسمع</button><button data-practice="${i}">🤖 تدربي</button></div></article>`}).join('');box.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>{const key=`${active}:${b.dataset.check}`;state.done[key]=!state.done[key];save();renderAll()});box.querySelectorAll('[data-speak]').forEach(b=>b.onclick=()=>speak(mod().lessons[+b.dataset.speak][2]));box.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>{const l=mod().lessons[+b.dataset.practice];startPractice();goAI(`You are an Odoo client. Ask me to complete this task about ${mod().title}: ${l[2]} Ask one question at a time, correct my English in Arabic, then continue.`)})}
+function renderLessons(){
+ const box=$('oaLessons');if(!box)return;
+ box.innerHTML=`<div class="oaDirectLessonsHead"><div><small>LESSON MANAGER</small><h3>دروس ${mod().title}</h3></div><button id="oaDirectAddLesson" class="btn green">＋ إضافة درس</button></div>`+
+ mod().lessons.map((l,i)=>{const key=`${active}:${i}`,done=!!state.done[key];return `<article class="oaLesson ${done?'done':''}"><button class="oaLessonCheck" data-check="${i}">${done?'✓':''}</button><div><small>LESSON ${i+1}</small><h3>${escapeHtml(l[0])}</h3><p>${escapeHtml(l[1])}</p><div class="oaEnglishTask">${escapeHtml(l[2])}</div></div><div class="oaLessonActions"><button data-speak="${i}">🔊 اسمع</button><button data-practice="${i}">🤖 تدربي</button><button data-lesson-up="${i}" title="لأعلى">↑</button><button data-lesson-down="${i}" title="لأسفل">↓</button><button data-lesson-edit="${i}">✏️ تعديل</button><button data-lesson-delete="${i}" class="danger">🗑️ حذف</button></div></article>`}).join('');
+ $('oaDirectAddLesson').onclick=()=>editLessonDirect();
+ box.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>{const key=`${active}:${b.dataset.check}`;state.done[key]=!state.done[key];save();renderAll()});
+ box.querySelectorAll('[data-speak]').forEach(b=>b.onclick=()=>speak(mod().lessons[+b.dataset.speak][2]));
+ box.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>{const l=mod().lessons[+b.dataset.practice];startPractice();goAI(`You are an Odoo client. Ask me to complete this task about ${mod().title}: ${l[2]} Ask one question at a time, correct my English in Arabic, then continue.`)});
+ box.querySelectorAll('[data-lesson-edit]').forEach(b=>b.onclick=()=>editLessonDirect(+b.dataset.lessonEdit));
+ box.querySelectorAll('[data-lesson-delete]').forEach(b=>b.onclick=()=>deleteLessonDirect(+b.dataset.lessonDelete));
+ box.querySelectorAll('[data-lesson-up]').forEach(b=>b.onclick=()=>moveLessonDirect(+b.dataset.lessonUp,-1));
+ box.querySelectorAll('[data-lesson-down]').forEach(b=>b.onclick=()=>moveLessonDirect(+b.dataset.lessonDown,1));
+}
 function renderSentences(){
  const host=$('oaSentences');if(!host)return;const rows=mod().sentences||[];
  host.innerHTML=rows.length?rows.map((x,i)=>`<article class="oaSentenceCard"><div><small>SENTENCE ${i+1}</small><b>${x[0]}</b><span>${x[1]}</span></div><div><button data-sentence-speak="${i}">🔊</button><button data-sentence-practice="${i}">🤖 تدربي</button></div></article>`).join(''):'<div class="smartEmpty">لا توجد جمل إضافية في هذا الموديول بعد.</div>';

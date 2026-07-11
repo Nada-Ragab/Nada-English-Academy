@@ -1,6 +1,6 @@
 {
-  "name": "Nada English Academy V27.4",
-  "short_name": "Nada Academy 27.4",
+  "name": "Nada English Academy V27.8",
+  "short_name": "Nada Academy",
   "description": "English learning academy with AI Teacher, Odoo Academy, speaking, review, and smart dashboards.",
   "start_url": "./index.html",
   "scope": "./",
