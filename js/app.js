@@ -86,15 +86,29 @@ setTimeout(()=>{ if($('voice') && localStorage.getItem('nada_voice_index')!==nul
 $('voiceTestBtn') && ($('voiceTestBtn').onclick=()=>speak('Hello Nada. This is your selected English voice.'));
 
 function speak(text, rate){ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text || S[state.i].english); u.lang='en-US'; u.rate=rate || Number($('rate').value) || 0.85; const v=voices[Number($('voice').value)]; if(v) u.voice=v; speechSynthesis.speak(u); }
-function markKnown(n){ state.known[n]=Date.now(); delete state.review[n]; state.xp=(state.xp||0)+5; save(); updateStats(); }
-function markReview(n){ state.review[n]=Date.now(); save(); updateStats(); }
+function markKnown(n){
+  const wasKnown=Boolean(state.known?.[n]);
+  state.known[n]=Date.now();
+  delete state.review[n];
+  state.xp=(state.xp||0)+5;
+  save();
+  if(!wasKnown) trackLearningActivity('known',1);
+  updateStats();
+}
+function markReview(n){
+  const wasQueued=Boolean(state.review?.[n]);
+  state.review[n]=Date.now();
+  save();
+  if(!wasQueued) trackLearningActivity('review',1);
+  updateStats();
+}
 $('speakBtn').onclick=()=>speak(); $('slowBtn').onclick=()=>speak(S[state.i].english,0.62); $('toggleBtn').onclick=()=>$('ar').classList.toggle('blur');
 $('prevBtn').onclick=()=>{state.i--; render();}; $('nextBtn').onclick=()=>{state.i++; render();};
 $('knowBtn').onclick=()=>{markKnown(S[state.i].number); toast('+5 XP'); render();}; $('againBtn').onclick=()=>{markReview(S[state.i].number); toast('اتضافت للمراجعة');}; $('favBtn').onclick=()=>{const n=S[state.i].number; state.fav[n]?delete state.fav[n]:state.fav[n]=Date.now(); toast(state.fav[n]?'مفضلة':'اتشالت من المفضلة'); render();};
 $('darkBtn').onclick=()=>{document.body.classList.toggle('dark'); localStorage.setItem('nada_v13_dark',document.body.classList.contains('dark')?'1':'0');}; if(localStorage.getItem('nada_v13_dark')==='1') document.body.classList.add('dark');
 document.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{document.querySelectorAll('.tab,.screen').forEach(e=>e.classList.remove('active')); tab.classList.add('active'); $(tab.dataset.screen).classList.add('active'); if(tab.dataset.screen==='review') nextReview(); if(tab.dataset.screen==='quiz') newQuiz(); if(tab.dataset.screen==='stats') updateStats();});
 $('search').oninput=e=>{const q=e.target.value.trim(); if(!q) return; const low=q.toLowerCase(); const f=S.find(x=>String(x.number)===q || x.english.toLowerCase().includes(low) || x.arabic.includes(q)); if(f){state.i=S.indexOf(f); render();}};
-function updateStats(){ const known=Object.keys(state.known||{}).length, rev=Object.keys(state.review||{}).length, fav=Object.keys(state.fav||{}).length, pct=Math.round(known/S.length*100); $('progressBar').style.width=pct+'%'; $('xpPill').textContent=(state.xp||0)+' XP'; $('levelPill').textContent='Level '+(1+Math.floor((state.xp||0)/100)); if($('sKnown')){$('sKnown').textContent=known; $('sReview').textContent=rev; $('sFav').textContent=fav; $('sPct').textContent=pct+'%'; $('topicStats').innerHTML=T.map(t=>{const arr=S.slice(t.start_index,t.start_index+t.count); const k=arr.filter(x=>state.known[x.number]).length; const p=Math.round(k/arr.length*100); return `<div class="box"><b>${t.number}. ${t.title_en}</b><div class="progress"><span style="width:${p}%"></span></div><small>${k} / ${arr.length}</small></div>`;}).join('');} }
+function updateStats(){ const known=Object.keys(state.known||{}).length, rev=Object.keys(state.review||{}).length, fav=Object.keys(state.fav||{}).length, pct=Math.round(known/S.length*100); $('progressBar').style.width=pct+'%'; $('xpPill').textContent=(state.xp||0)+' XP'; $('levelPill').textContent='Level '+(1+Math.floor((state.xp||0)/100)); if($('sKnown')){$('sKnown').textContent=known; $('sReview').textContent=rev; $('sFav').textContent=fav; $('sPct').textContent=pct+'%'; $('topicStats').innerHTML=T.map(t=>{const arr=S.slice(t.start_index,t.start_index+t.count); const k=arr.filter(x=>state.known[x.number]).length; const p=Math.round(k/arr.length*100); return `<div class="box"><b>${t.number}. ${t.title_en}</b><div class="progress"><span style="width:${p}%"></span></div><small>${k} / ${arr.length}</small></div>`;}).join('');} refreshDashboard(); refreshLearningSummary(); }
 function buildDaily(){ const rev=Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean).slice(0,6); const neu=S.filter(x=>!state.known[x.number]).slice(0,14); daily=[...rev,...neu]; $('dNew').textContent=neu.length; $('dRev').textContent=rev.length; $('dailyList').innerHTML=daily.map(x=>`<div class="row" data-n="${x.number}"><b>${x.number}. ${x.english}</b><small>${x.arabic}</small></div>`).join(''); document.querySelectorAll('#dailyList .row').forEach(r=>r.onclick=()=>{state.i=Number(r.dataset.n)-1; render(); document.querySelector('[data-screen="learn"]').click();}); }
 $('buildDaily').onclick=buildDaily; $('startDaily').onclick=()=>{ if(!daily.length) buildDaily(); if(daily[0]){state.i=daily[0].number-1; render(); document.querySelector('[data-screen="learn"]').click();}}; $('printDaily').onclick=()=>window.print();
 function nextReview(){ const arr=Object.keys(state.review||{}); if(!arr.length){$('revEn').textContent='لا توجد جمل للمراجعة'; $('revAr').textContent=''; return;} currentReview=S[Number(arr[0])-1]; $('revEn').textContent=currentReview.english; $('revAr').textContent=currentReview.arabic; }
@@ -801,9 +815,10 @@ window.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSidebar(); });
 // ===== V19.4 Modern Dashboard =====
 function openScreen(screen){
   const btn=document.querySelector(`.navItem[data-screen="${screen}"]`);
-  if(btn){ btn.click(); return; }
+  if(btn){ btn.click(); if(screen==='favorites') setTimeout(renderFavoritesScreen,0); return; }
   document.querySelectorAll('.tab,.screen').forEach(e=>e.classList.remove('active'));
   const target=document.getElementById(screen); if(target) target.classList.add('active');
+  if(screen==='favorites') renderFavoritesScreen();
 }
 function refreshDashboard(){
   const known=Object.keys(state.known||{}).length;
@@ -819,8 +834,6 @@ function refreshDashboard(){
   set('streakPill','🔥 '+(state.streak||1)+' يوم');
   const bar=document.getElementById('dashProgressBar'); if(bar) bar.style.width=pct+'%';
 }
-const oldUpdateStatsV194=updateStats;
-updateStats=function(){ oldUpdateStatsV194(); refreshDashboard(); };
 ['dashContinue','dashResume'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openScreen('learn')));
 document.getElementById('dashDaily')?.addEventListener('click',()=>openScreen('daily'));
 document.getElementById('dashReview')?.addEventListener('click',()=>openScreen('review'));
@@ -1064,33 +1077,56 @@ function renderFavoritesScreen(){
   out.querySelectorAll('[data-fav-open]').forEach(btn=>btn.onclick=()=>{state.i=Number(btn.dataset.favOpen)-1;render();openScreen('learn');});
   out.querySelectorAll('[data-fav-remove]').forEach(btn=>btn.onclick=()=>{delete state.fav[btn.dataset.favRemove];save();renderFavoritesScreen();updateStats();});
 }
-const oldOpenScreenV1957=openScreen;
-openScreen=function(screen){oldOpenScreenV1957(screen);if(screen==='favorites')renderFavoritesScreen();};
 document.querySelectorAll('.navItem[data-screen="favorites"]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(renderFavoritesScreen,0)));
 
 
-// ===== V20.0.1 Learning Summary restored =====
-const V2001_ACTIVITY_KEY='nada_v2001_daily_activity';
-function v2001DateKey(date=new Date()){return date.toISOString().slice(0,10);}
-function v2001ReadActivity(){try{return JSON.parse(localStorage.getItem(V2001_ACTIVITY_KEY)||localStorage.getItem('nada_v199_daily_activity')||'{}')||{};}catch(_){return {};}}
-function v2001WriteActivity(data){localStorage.setItem(V2001_ACTIVITY_KEY,JSON.stringify(data));}
-function v2001Track(type,amount=1){const data=v2001ReadActivity();const key=v2001DateKey();data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};data[key][type]=Number(data[key][type]||0)+Number(amount||0);data[key].visits=Math.max(1,Number(data[key].visits||0));v2001WriteActivity(data);refreshLearningSummary();}
-function v2001EnsureVisit(){const data=v2001ReadActivity();const key=v2001DateKey();data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};if(!data[key].visits)data[key].visits=1;v2001WriteActivity(data);}
-function v2001Streak(data){let count=0;const d=new Date();for(let i=0;i<365;i++){const k=v2001DateKey(d);const x=data[k];if(x&&(Number(x.known||0)+Number(x.review||0)+Number(x.minutes||0)+Number(x.visits||0)>0)){count++;d.setDate(d.getDate()-1);}else if(i===0){d.setDate(d.getDate()-1);}else break;}return Math.max(1,count);}
-function refreshLearningSummary(){
-  const data=v2001ReadActivity(),today=data[v2001DateKey()]||{};
-  const focusStats=(typeof readFocusStats==='function'?readFocusStats():{})||{};
-  const todayMinutes=Math.round(Number(today.minutes||0)+Number(focusStats[v2001DateKey()]||0));
-  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
-  set('insightKnownToday',Number(today.known||0));set('insightReviewToday',Number(today.review||0));set('insightMinutesToday',todayMinutes+' د');set('insightStreak',v2001Streak(data)+' يوم');
-  const labels=['أحد','اثن','ثلا','أرب','خمي','جمع','سبت'];const wrap=document.getElementById('weeklyTimeline');
-  if(wrap){const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=v2001DateKey(d),x=data[k]||{};const mins=Number(x.minutes||0)+Number(focusStats[k]||0);const score=Math.min(100,Number(x.known||0)*18+Number(x.review||0)*10+mins*3+Number(x.visits||0)*8);days.push(`<div class="weekDayCard ${i===0?'today':''}"><strong>${labels[d.getDay()]}</strong><small>${Number(x.known||0)} جملة · ${Math.round(mins)}د</small><div class="dayActivity"><span style="width:${score}%"></span></div></div>`);}wrap.innerHTML=days.join('');}
+// ===== Learning activity service (refactored in V26.4) =====
+const LEARNING_ACTIVITY_KEY='nada_v2001_daily_activity';
+function activityDateKey(date=new Date()){return date.toISOString().slice(0,10);}
+function readLearningActivity(){
+  try{return JSON.parse(localStorage.getItem(LEARNING_ACTIVITY_KEY)||localStorage.getItem('nada_v199_daily_activity')||'{}')||{};}
+  catch(error){console.warn('Could not read learning activity.',error);return {};}
 }
-if(typeof markKnown==='function'){const v2001OldMarkKnown=markKnown;markKnown=function(n){const before=Boolean(state.known?.[n]);v2001OldMarkKnown(n);if(!before)v2001Track('known',1);};}
-if(typeof markReview==='function'){const v2001OldMarkReview=markReview;markReview=function(n){const before=Boolean(state.review?.[n]);v2001OldMarkReview(n);if(!before)v2001Track('review',1);};}
-document.getElementById('insightOpenStats')?.addEventListener('click',()=>openScreen('stats'));
-document.getElementById('insightStartReview')?.addEventListener('click',()=>openScreen('review'));
-v2001EnsureVisit();
-const v2001OldRefreshDashboard=refreshDashboard;refreshDashboard=function(){v2001OldRefreshDashboard();refreshLearningSummary();};
+function writeLearningActivity(data){localStorage.setItem(LEARNING_ACTIVITY_KEY,JSON.stringify(data));}
+function trackLearningActivity(type,amount=1){
+  const data=readLearningActivity();
+  const key=activityDateKey();
+  data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};
+  data[key][type]=Number(data[key][type]||0)+Number(amount||0);
+  data[key].visits=Math.max(1,Number(data[key].visits||0));
+  writeLearningActivity(data);
+  refreshLearningSummary();
+}
+function ensureDailyVisit(){
+  const data=readLearningActivity();
+  const key=activityDateKey();
+  data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};
+  if(!data[key].visits)data[key].visits=1;
+  writeLearningActivity(data);
+}
+function calculateLearningStreak(data){
+  let count=0;
+  const day=new Date();
+  for(let i=0;i<365;i++){
+    const entry=data[activityDateKey(day)];
+    const active=entry&&(Number(entry.known||0)+Number(entry.review||0)+Number(entry.minutes||0)+Number(entry.visits||0)>0);
+    if(active){count++;day.setDate(day.getDate()-1);}
+    else if(i===0){day.setDate(day.getDate()-1);}
+    else break;
+  }
+  return Math.max(1,count);
+}
+function refreshLearningSummary(){
+  const data=readLearningActivity();
+  const today=data[activityDateKey()]||{};
+  const focusStats=(typeof readFocusStats==='function'?readFocusStats():{})||{};
+  const todayMinutes=Math.round(Number(today.minutes||0)+Number(focusStats[activityDateKey()]||0));
+  const set=(id,value)=>{const element=document.getElementById(id);if(element)element.textContent=value;};
+  set('insightKnownToday',Number(today.known||0));
+  set('insightReviewToday',Number(today.review||0));
+  set('insightMinutesToday',todayMinutes+' د');
+  set('insightStreak',calculateLearningStreak(data)+' يوم');
+}
+ensureDailyVisit();
 window.addEventListener('focus',refreshLearningSummary);
 setTimeout(refreshLearningSummary,700);
