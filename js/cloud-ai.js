@@ -15,8 +15,7 @@ const BUILTIN_FIREBASE_CONFIG={
 };
 const AUTO_SYNC_KEY='nada_auto_sync_v1';
 const FIREBASE_SDK_VERSION='12.16.0';
-const GEMINI_MODEL='gemini-3.5-flash';
-const APP_VERSION='22.6';
+const GEMINI_MODEL='gemini-3.1-flash-lite';
 const AI_REPLY_FIELDS=['englishReply','arabicTranslation','correction','explanationArabic','nextQuestion'];
 let aiHistory=[];
 let voiceRecognition=null;
@@ -76,7 +75,7 @@ function cleanJsonText(raw){
 }
 function parseTeacherReply(raw){
   const cleaned=cleanJsonText(raw);
-  let obj=null;
+  let obj;
   try{
     obj=JSON.parse(cleaned);
   }catch(error){
@@ -86,14 +85,11 @@ function parseTeacherReply(raw){
       .replace(/[*#`]/g,'')
       .trim();
     return {
-      display: plain || 'لم يصل رد واضح من المدرّس. حاولي مرة أخرى.',
+      display: plain || 'تعذر قراءة رد المدرّس. حاولي مرة أخرى.',
       spoken: plain
     };
   }
-  if(!obj||typeof obj!=='object'){
-    return {display:'لم يصل رد واضح من المدرّس. حاولي مرة أخرى.',spoken:''};
-  }
-  const v=k=>String(obj[k]||'').trim();
+  const v=k=>String(obj&&obj[k]||'').trim();
   const english=v('englishReply');
   const arabic=v('arabicTranslation');
   const correction=v('correction');
@@ -105,10 +101,9 @@ function parseTeacherReply(raw){
   if(correction)parts.push(`✍️ التصحيح\n${correction}`);
   if(explanation)parts.push(`💡 الشرح\n${explanation}`);
   if(next)parts.push(`❓ السؤال التالي\n${next}`);
-  const display=parts.join('\n\n');
   return {
-    display:display||'لم يصل رد واضح من المدرّس. حاولي مرة أخرى.',
-    spoken:[english,next].filter(Boolean).join(' ')
+    display: parts.join('\n\n') || 'تعذر قراءة رد المدرّس. حاولي مرة أخرى.',
+    spoken: [english,next].filter(Boolean).join(' ')
   };
 }
 async function loadFirebaseModules(){
@@ -125,7 +120,7 @@ async function ensureAiModel(){
   if(aiModel)return aiModel;
   if(!await ensureFirebase())throw new Error('تعذر تهيئة Firebase');
   const m=firebaseModules;
-  if(!m.Schema)throw new Error('إصدار Firebase الحالي لا يدعم Structured Output');
+  const ai=m.getAI(firebaseApp,{backend:new m.GoogleAIBackend()});
   const responseSchema=m.Schema.object({
     properties:{
       englishReply:m.Schema.string(),
@@ -135,12 +130,11 @@ async function ensureAiModel(){
       nextQuestion:m.Schema.string()
     }
   });
-  const ai=m.getAI(firebaseApp,{backend:new m.GoogleAIBackend()});
   aiModel=m.getGenerativeModel(ai,{
     model:GEMINI_MODEL,
     generationConfig:{
-      temperature:0.45,
-      maxOutputTokens:500,
+      temperature:0.4,
+      maxOutputTokens:450,
       topP:0.9,
       responseMimeType:'application/json',
       responseSchema
@@ -165,9 +159,19 @@ async function askAi(text){
     setNote('aiStatus','تم التصحيح والرد عبر Firebase AI Logic.');
     if(voiceMode)await speakAi(reply.spoken||reply.display);
   }catch(e){
+    console.error('Gemini error:',e);
     const msg=String(e&&e.message||e);
-    addAi('system','تعذر الاتصال بالمدرّس الذكي: '+msg);
-    setNote('aiStatus',msg.includes('app-check')||msg.includes('App Check')?'راجعي إعداد App Check في Firebase.':'تعذر الاتصال بـ Gemini. تأكدي من الإنترنت ثم حاولي مرة أخرى.');
+    const lower=msg.toLowerCase();
+    let userMessage='تعذر الوصول إلى المدرّس الآن. حاولي مرة أخرى بعد قليل.';
+    if(lower.includes('quota')||lower.includes('429')||lower.includes('rate limit')){
+      userMessage='تم الوصول إلى الحد المجاني المؤقت لـ Gemini. انتظري قليلًا ثم حاولي مرة أخرى.';
+    }else if(lower.includes('app check')||lower.includes('app-check')){
+      userMessage='تعذر التحقق من حماية التطبيق. راجعي إعداد Firebase App Check.';
+    }else if(lower.includes('network')||lower.includes('fetch')){
+      userMessage='تعذر الاتصال بالإنترنت. تحققي من الشبكة ثم حاولي مرة أخرى.';
+    }
+    addAi('system',userMessage);
+    setNote('aiStatus',userMessage);
   }finally{
     aiBusy=false;
     if(el('aiSendBtn'))el('aiSendBtn').disabled=false;
