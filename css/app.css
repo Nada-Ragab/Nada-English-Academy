@@ -869,3 +869,33 @@ body.dark .dashCoachTabs button.active{color:#c4b5fd;background:#151c2e}
  .dashboardTabs button span{white-space:nowrap}
  #dashboard[data-active-tab="odoo"] .homeOdooModules{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* V27.2 - Dedicated Topics Screen */
+.topicsScreen{padding-bottom:36px}
+.topicsScreenHero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px;border-radius:24px;background:linear-gradient(135deg,#eef8ff,#f5f1ff);border:1px solid #dbeafe;margin-bottom:18px}
+.topicsScreenHero small{font-weight:900;letter-spacing:.12em;color:#2563eb}
+.topicsScreenHero h2{font-size:30px;margin:5px 0 4px}
+.topicsScreenHero p{margin:0;color:var(--muted,#64748b)}
+.topicsScreenSummary{display:flex;gap:10px}
+.topicsScreenSummary article{min-width:105px;text-align:center;background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:14px}
+.topicsScreenSummary b{display:block;font-size:24px;color:#2563eb}.topicsScreenSummary span{font-size:12px;color:#64748b}
+.topicsScreenToolbar{padding:16px;margin-bottom:18px}
+.topicsScreenSearchWrap{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #dbe4ef;border-radius:15px;padding:0 14px}
+.topicsScreenSearchWrap input{flex:1;border:0!important;background:transparent!important;padding:13px 0!important;outline:0}
+.topicsScreenSearchWrap button{border:0;background:transparent;font-size:22px;cursor:pointer;color:#64748b}
+.topicsScreenActions,.topicsScreenFilters{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.topicsScreenFilters button{border:1px solid #dbe4ef;background:#fff;border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:800}
+.topicsScreenFilters button.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.topicsScreenGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.topicsScreenCard{position:relative;background:#fff;border:1px solid #e2e8f0;border-top:5px solid var(--topic-accent,#dbeafe);border-radius:21px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.06);cursor:pointer;transition:.2s ease;overflow:hidden}
+.topicsScreenCard:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(15,23,42,.1)}
+.topicsScreenCardTop,.topicsScreenMeta{display:flex;align-items:center;justify-content:space-between;gap:10px}.topicsScreenCardTop>span:last-child{font-size:11px;font-weight:900;color:#64748b;letter-spacing:.08em}
+.topicsScreenIcon{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:var(--topic-accent,#dbeafe);font-size:24px}
+.topicsScreenCard h3{margin:14px 0 4px;font-size:19px}.topicsScreenCard p{margin:0 0 16px;color:#64748b;min-height:24px}
+.topicsScreenMeta{font-size:12px;color:#64748b;font-weight:800}.topicsScreenProgress{height:7px;background:#edf2f7;border-radius:999px;overflow:hidden;margin:8px 0 14px}.topicsScreenProgress i{display:block;height:100%;background:#22c55e;border-radius:inherit}
+.topicsScreenStart{width:100%;border:0;border-radius:12px;padding:10px;background:#eff6ff;color:#1d4ed8;font-weight:900;cursor:pointer}
+.topicsScreenCardActions{display:flex;gap:6px;margin-top:10px}.topicsScreenCardActions button{border:1px solid #e2e8f0;background:#fff;border-radius:9px;padding:6px 8px;cursor:pointer}
+.topicsScreenMore{margin-top:18px}.topicsScreenEmpty{grid-column:1/-1;text-align:center;padding:44px;background:#fff;border:1px dashed #cbd5e1;border-radius:20px;color:#64748b}
+body.dark .topicsScreenHero{background:linear-gradient(135deg,#172554,#2e1065);border-color:#334155}body.dark .topicsScreenSummary article,body.dark .topicsScreenCard,body.dark .topicsScreenFilters button,body.dark .topicsScreenCardActions button{background:#111827;border-color:#334155}body.dark .topicsScreenSearchWrap{background:#0f172a;border-color:#334155}
+@media(max-width:1050px){.topicsScreenGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.topicsScreenHero{align-items:flex-start;flex-direction:column;padding:20px}.topicsScreenHero h2{font-size:25px}.topicsScreenSummary{width:100%}.topicsScreenSummary article{flex:1;min-width:0}.topicsScreenGrid{grid-template-columns:1fr}.topicsScreenActions .btn{flex:1}.topicsScreenFilters{overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px}.topicsScreenFilters button{white-space:nowrap}}

@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V26.4 - Safe Refactor</title>
+<title>Nada English Academy V27.2 - Topics Screen</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V26.4</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V27.2</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side sidebarV260" id="appSidebar">
   <div class="sidebarHeader">
@@ -21,7 +21,8 @@
       <button type="button" class="sideGroupToggle"><span>🏠 الرئيسية</span><i>⌃</i></button>
       <div class="sideGroupBody">
         <button class="tab navItem active" data-screen="dashboard"><span class="navIcon">🏠</span><span>الرئيسية</span></button>
-        <button class="tab navItem" data-screen="learn"><span class="navIcon">📚</span><span>حقيبة التعلّم</span></button>
+        <button class="tab navItem" data-screen="topicscreen" id="sidebarTopicsShortcut"><span class="navIcon">📚</span><span>الموضوعات</span></button>
+        <button class="tab navItem" data-screen="learn"><span class="navIcon">🎒</span><span>حقيبة التعلّم</span></button>
         <button class="tab navItem" data-screen="daily"><span class="navIcon">📅</span><span>دروس اليوم</span></button>
         <button class="tab navItem" data-screen="myday"><span class="navIcon">🎯</span><span>خطة يومي</span></button>
         <button class="tab navItem" data-screen="myweek"><span class="navIcon">📆</span><span>تقريري الأسبوعي</span></button>
@@ -268,6 +269,36 @@
   </div>
 
 </section>
+<section class="screen topicsScreen" id="topicscreen">
+  <div class="topicsScreenHero">
+    <div>
+      <small>TOPIC LIBRARY</small>
+      <h2>📚 الموضوعات</h2>
+      <p>اختاري موضوعًا وابدئي التعلّم مباشرة.</p>
+    </div>
+    <div class="topicsScreenSummary">
+      <article><b id="topicsScreenCount">0</b><span>موضوع</span></article>
+      <article><b id="topicsScreenKnown">0</b><span>جملة متقنة</span></article>
+    </div>
+  </div>
+  <div class="topicsScreenToolbar panelCard">
+    <div class="topicsScreenSearchWrap"><span>⌕</span><input id="topicsScreenSearch" placeholder="ابحثي عن موضوع بالعربي أو الإنجليزي..."><button type="button" id="topicsScreenClear" title="مسح البحث">×</button></div>
+    <div class="topicsScreenActions">
+      <button class="btn green" id="topicsScreenAdd" type="button">➕ إضافة موضوع</button>
+      <button class="btn blue" id="topicsScreenImport" type="button">⇧ استيراد</button>
+      <button class="btn purple" id="topicsScreenExport" type="button">⇩ تصدير</button>
+    </div>
+    <div class="topicsScreenFilters">
+      <button class="active" data-topics-screen-filter="all">الكل</button>
+      <button data-topics-screen-filter="recent">الأخيرة</button>
+      <button data-topics-screen-filter="custom">المرفوعة</button>
+      <button data-topics-screen-filter="progress">قيد الدراسة</button>
+    </div>
+  </div>
+  <div class="topicsScreenGrid" id="topicsScreenGrid"></div>
+  <button class="btn blue wide topicsScreenMore" id="topicsScreenMore" type="button">عرض المزيد من الموضوعات</button>
+</section>
+
 <section class="screen" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
 <section class="screen" id="daily"><h2>📅 درس اليوم</h2><div class="grid"><div class="stat"><b id="dNew">0</b>جمل جديدة</div><div class="stat"><b id="dRev">0</b>مراجعة</div><div class="stat"><b>15</b>دقيقة</div></div><div class="controls"><button class="btn green" id="buildDaily">تجهيز درس اليوم</button><button class="btn blue" id="startDaily">ابدئي الدرس</button><button class="btn orange" id="printDaily">طباعة</button></div><div class="resultBox" id="dailyList"></div></section>
 <section class="screen" id="review"><h2>🔁 مراجعة ذكية</h2><div class="box"><div class="en" id="revEn"></div><div class="ar" id="revAr"></div><div class="controls"><button class="btn blue" id="revSpeak">🔊</button><button class="btn green" id="revOk">عرفتها</button><button class="btn orange" id="revBad">لسه صعبة</button></div></div></section>
@@ -767,9 +798,10 @@
 <script src="js/ui-v254.js?v=27.0"></script>
 <script src="js/my-day-v255.js?v=27.0"></script>
 <script src="js/my-week-v256.js?v=27.0"></script>
-<script src="js/sidebar-v260.js?v=27.0"></script>
+<script src="js/sidebar-v260.js?v=27.1"></script>
 <script src="js/dashboard-v262.js?v=27.0"></script>
 <script src="js/dashboard-v265.js?v=27.0"></script>
-<script src="js/dashboard-v270.js?v=27.0"></script>
+<script src="js/dashboard-v270.js?v=27.2"></script>
+<script src="js/topics-screen-v272.js?v=27.2"></script>
 </body>
 </html>
