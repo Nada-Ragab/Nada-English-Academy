@@ -1,1170 +1,694 @@
-const consolidatedData = safeParse(localStorage.getItem(APP_DATA_KEY), null);
-const DATA = {"topics": [{"id": 1, "number": "01", "title_en": "Greetings and Polite Expressions", "title_ar": "التحية والمجاملة", "start_index": 0, "count": 20}, {"id": 2, "number": "02", "title_en": "Introducing Yourself", "title_ar": "تقديم نفسك", "start_index": 20, "count": 20}, {"id": 3, "number": "03", "title_en": "Personal Information", "title_ar": "المعلومات الشخصية", "start_index": 40, "count": 20}, {"id": 4, "number": "04", "title_en": "Family and Friends", "title_ar": "العائلة واألصدقاء", "start_index": 60, "count": 20}, {"id": 5, "number": "05", "title_en": "Daily Routine", "title_ar": "الروتين اليومي", "start_index": 80, "count": 20}, {"id": 6, "number": "06", "title_en": "At Home", "title_ar": "في المنزل", "start_index": 100, "count": 20}, {"id": 7, "number": "07", "title_en": "Food and Drink", "title_ar": "الطعام والشراب", "start_index": 120, "count": 20}, {"id": 8, "number": "08", "title_en": "At the Restaurant or Cafe", "title_ar": "في المطعم أو المقهى", "start_index": 140, "count": 20}, {"id": 9, "number": "09", "title_en": "Shopping", "title_ar": "التسوق", "start_index": 160, "count": 20}, {"id": 10, "number": "10", "title_en": "Money and Prices", "title_ar": "المال واألسعار", "start_index": 180, "count": 20}, {"id": 11, "number": "11", "title_en": "Time and Appointments", "title_ar": "الوقت والمواعيد", "start_index": 200, "count": 20}, {"id": 12, "number": "12", "title_en": "Days and Dates", "title_ar": "األيام والتواريخ", "start_index": 220, "count": 20}, {"id": 13, "number": "13", "title_en": "Weather", "title_ar": "الطقس", "start_index": 240, "count": 20}, {"id": 14, "number": "14", "title_en": "Directions", "title_ar": "االتجاهات", "start_index": 260, "count": 20}, {"id": 15, "number": "15", "title_en": "Transportation", "title_ar": "المواصالت", "start_index": 280, "count": 20}, {"id": 16, "number": "16", "title_en": "Travel and Airport", "title_ar": "السفر والمطار", "start_index": 300, "count": 20}, {"id": 17, "number": "17", "title_en": "At the Hotel", "title_ar": "في الفندق", "start_index": 320, "count": 20}, {"id": 18, "number": "18", "title_en": "School and Classroom", "title_ar": "المدرسة والفصل", "start_index": 340, "count": 20}, {"id": 19, "number": "19", "title_en": "Studying and Exams", "title_ar": "المذاكرة واالمتحانات", "start_index": 360, "count": 20}, {"id": 20, "number": "20", "title_en": "Work and Office", "title_ar": "العمل والمكتب", "start_index": 380, "count": 20}, {"id": 21, "number": "21", "title_en": "Meetings", "title_ar": "االجتماعات", "start_index": 400, "count": 20}, {"id": 22, "number": "22", "title_en": "Job Interviews", "title_ar": "مقابالت العمل", "start_index": 420, "count": 20}, {"id": 23, "number": "23", "title_en": "Email and Writing", "title_ar": "البريد والكتابة", "start_index": 440, "count": 20}, {"id": 24, "number": "24", "title_en": "Phone and Messages", "title_ar": "الهاتف والرسائل", "start_index": 460, "count": 20}, {"id": 25, "number": "25", "title_en": "Internet and Social Media", "title_ar": "اإلنترنت ووسائل التواصل", "start_index": 480, "count": 20}, {"id": 26, "number": "26", "title_en": "Asking for Help and Requests", "title_ar": "طلب المساعدة والطلبات", "start_index": 500, "count": 20}, {"id": 27, "number": "27", "title_en": "Offers and Suggestions", "title_ar": "العروض واالقتراحات", "start_index": 520, "count": 20}, {"id": 28, "number": "28", "title_en": "Thanks and Apologies", "title_ar": "الشكر واالعتذار", "start_index": 540, "count": 20}, {"id": 29, "number": "29", "title_en": "Opinions", "title_ar": "التعبير عن الرأي", "start_index": 560, "count": 20}, {"id": 30, "number": "30", "title_en": "Agreement and Disagreement", "title_ar": "الموافقة واالختالف", "start_index": 580, "count": 20}, {"id": 31, "number": "31", "title_en": "Feelings and Emotions", "title_ar": "المشاعر واألحاسيس", "start_index": 600, "count": 20}, {"id": 32, "number": "32", "title_en": "Health and Doctor", "title_ar": "الصحة والطبيب", "start_index": 620, "count": 20}, {"id": 33, "number": "33", "title_en": "Emergency", "title_ar": "الطوارئ", "start_index": 640, "count": 20}, {"id": 34, "number": "34", "title_en": "Problems and Solutions", "title_ar": "المشاكل والحلول", "start_index": 660, "count": 20}, {"id": 35, "number": "35", "title_en": "Plans and Goals", "title_ar": "الخطط واألهداف", "start_index": 680, "count": 20}, {"id": 36, "number": "36", "title_en": "Past Experiences", "title_ar": "التجارب الماضية", "start_index": 700, "count": 20}, {"id": 37, "number": "37", "title_en": "Future Intentions", "title_ar": "النوايا المستقبلية", "start_index": 720, "count": 20}, {"id": 38, "number": "38", "title_en": "Ability and Permission", "title_ar": "القدرة واإلذن", "start_index": 740, "count": 20}, {"id": 39, "number": "39", "title_en": "Hobbies and Free Time", "title_ar": "الهوايات ووقت الفراغ", "start_index": 760, "count": 20}, {"id": 40, "number": "40", "title_en": "Sports and Exercise", "title_ar": "الرياضة والتمارين", "start_index": 780, "count": 20}, {"id": 41, "number": "41", "title_en": "Clothes and Colors", "title_ar": "المالبس واأللوان", "start_index": 800, "count": 20}, {"id": 42, "number": "42", "title_en": "House Chores", "title_ar": "األعمال المنزلية", "start_index": 820, "count": 20}, {"id": 43, "number": "43", "title_en": "Around Town", "title_ar": "في المدينة", "start_index": 840, "count": 20}, {"id": 44, "number": "44", "title_en": "Bank and Post Office", "title_ar": "البنك ومكتب البريد", "start_index": 860, "count": 20}, {"id": 45, "number": "45", "title_en": "At the Pharmacy", "title_ar": "في الصيدلية", "start_index": 880, "count": 20}, {"id": 46, "number": "46", "title_en": "Travel Conversations", "title_ar": "محادثات السفر", "start_index": 900, "count": 20}, {"id": 47, "number": "47", "title_en": "Making Friends", "title_ar": "تكوين الصداقات", "start_index": 920, "count": 20}, {"id": 48, "number": "48", "title_en": "Learning English", "title_ar": "تعلم اإلنجليزية", "start_index": 940, "count": 20}, {"id": 49, "number": "49", "title_en": "Common Connectors", "title_ar": "روابط شائعة في الكالم", "start_index": 960, "count": 20}, {"id": 50, "number": "50", "title_en": "Everyday Questions", "title_ar": "أسئلة يومية قصيرة", "start_index": 980, "count": 20}], "sentences": [{"number": 1, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Hello, how are you?", "arabic": "مرحبًا، كيف حالك؟"}, {"number": 2, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Good morning. I hope you are well.", "arabic": "صباح الخير. أتمنى أن تكون بخير"}, {"number": 3, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Good evening. Nice to see you.", "arabic": "مساء الخير. سعيد برؤيتك"}, {"number": 4, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "How is everything going?", "arabic": "كيف تسير األمور؟"}, {"number": 5, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "I am fine, thank you.", "arabic": "أنا بخير، شكرًا لك"}, {"number": 6, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "It is nice to meet you.", "arabic": "من الجميل أن ألتقي بك"}, {"number": 7, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Please come in.", "arabic": "تفضل بالدخول"}, {"number": 8, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Please have a seat.", "arabic": "تفضل بالجلوس"}, {"number": 9, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Thank you very much.", "arabic": "شكرًا جزيلً لك"}, {"number": 10, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "You are welcome.", "arabic": "عىل الرحب والسعة"}, {"number": 11, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Excuse me for a moment.", "arabic": "اعذرني للحظة"}, {"number": 12, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "I am sorry for being late.", "arabic": "آسف عىل التأخير"}, {"number": 13, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "No problem at all.", "arabic": "ال توجد مشكلة إطلقًا"}, {"number": 14, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Have a nice day.", "arabic": "ًأتمنى لك يومً ا سعيدا"}, {"number": 15, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "See you soon.", "arabic": "أراك قريبًا"}, {"number": 16, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Take care of yourself.", "arabic": "اعتنِ بنفسك"}, {"number": 17, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "I hope to see you again.", "arabic": "أتمنى أن أراك مرة أخرى"}, {"number": 18, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "It was a pleasure talking to you.", "arabic": "كان من دواعي سروري التحدث معك"}, {"number": 19, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Let us keep in touch.", "arabic": "دعنا نبقى عىل تواصل"}, {"number": 20, "topic_id": 1, "topic_en": "Greetings and Polite Expressions", "topic_ar": "التحية والمجاملة", "english": "Goodbye and see you later.", "arabic": "إىل اللقاء، أراك الحقًا"}, {"number": 21, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "My name is Ahmed.", "arabic": "اسمي أحمد"}, {"number": 22, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am from Egypt.", "arabic": "أنا من مصر"}, {"number": 23, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I live in Cairo.", "arabic": "أعيش في القاهرة"}, {"number": 24, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am a student.", "arabic": "أنا طالب"}, {"number": 25, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I work as a teacher.", "arabic": "ًأعمل مدرسا"}, {"number": 26, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am learning English.", "arabic": "أنا أتعلم اللغة اإلنجليزية"}, {"number": 27, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am interested in technology.", "arabic": "أنا مهتم بالتكنولوجيا"}, {"number": 28, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I enjoy reading books.", "arabic": "أستمتع بقراءة الكتب"}, {"number": 29, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I like meeting new people.", "arabic": "أحب التعرف عىل أشخاص جدد"}, {"number": 30, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am twenty years old.", "arabic": "ًعمري عشرون عاما"}, {"number": 31, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I graduated last year.", "arabic": "تخرجت العام الماضي"}, {"number": 32, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I have two brothers.", "arabic": "لدي أخوان"}, {"number": 33, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am married.", "arabic": "أنا متزوج"}, {"number": 34, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am single.", "arabic": "أنا أعزب"}, {"number": 35, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I want to improve my English.", "arabic": "أريد تحسين لغتي اإلنجليزية"}, {"number": 36, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I speak Arabic and a little English.", "arabic": "أتحدث العربية وقليلً من اإلنجليزية"}, {"number": 37, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am looking for a new opportunity.", "arabic": "أبحث عن فرصة جديدة"}, {"number": 38, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am a beginner in English.", "arabic": "أنا مبتدئ في اللغة اإلنجليزية"}, {"number": 39, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "I am happy to be here.", "arabic": "أنا سعيد بوجودي هنا"}, {"number": 40, "topic_id": 2, "topic_en": "Introducing Yourself", "topic_ar": "تقديم نفسك", "english": "That is a short introduction about me.", "arabic": "هذه نبذة قصيرة عني"}, {"number": 41, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "What is your full name?", "arabic": "ما اسمك الكامل؟"}, {"number": 42, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "Where are you from?", "arabic": "من أين أنت؟"}, {"number": 43, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "Where do you live?", "arabic": "أين تعيش؟"}, {"number": 44, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "What is your phone number?", "arabic": "ما رقم هاتفك؟"}, {"number": 45, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "What is your email address?", "arabic": "ما عنوان بريدك اإللكتروني؟"}, {"number": 46, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "How old are you?", "arabic": "كم عمرك؟"}, {"number": 47, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "What do you do?", "arabic": "ماذا تعمل؟"}, {"number": 48, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "Are you a student?", "arabic": "هل أنت طالب؟"}, {"number": 49, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "What is your nationality?", "arabic": "ما جنسيتك؟"}, {"number": 50, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "What languages do you speak?", "arabic": "ما اللغات التي تتحدثها؟"}, {"number": 51, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "I was born in Alexandria.", "arabic": "وُلدت في اإلسكندرية"}, {"number": 52, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "My address is not far from here.", "arabic": "عنواني ليس بعيدًا عن هنا"}, {"number": 53, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "I live with my family.", "arabic": "أعيش مع عائلتي"}, {"number": 54, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "My phone is out of charge.", "arabic": "هاتفي نفدت بطاريته"}, {"number": 55, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "Please write your name here.", "arabic": "من فضلك اكتب اسمك هنا"}, {"number": 56, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "Can I have your number?", "arabic": "هل يمكنني الحصول عىل رقمك؟"}, {"number": 57, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "I will send you my details.", "arabic": "سأرسل لك بياناتي"}, {"number": 58, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "My birthday is in July.", "arabic": "عيد ميلدي في شهر يوليو"}, {"number": 59, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "I moved here recently.", "arabic": "انتقلت إىل هنا مؤخرًا"}, {"number": 60, "topic_id": 3, "topic_en": "Personal Information", "topic_ar": "المعلومات الشخصية", "english": "This is my personal information.", "arabic": "هذه معلوماتي الشخصية"}, {"number": 61, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "This is my family.", "arabic": "هذه عائلتي"}, {"number": 62, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "I love my parents very much.", "arabic": "أحب والديّ كثيرًا"}, {"number": 63, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "My father works in a bank.", "arabic": "والدي يعمل في بنك"}, {"number": 64, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "My mother is a kind person.", "arabic": "والدتي إنسانة طيبة"}, {"number": 65, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "I have a younger sister.", "arabic": "لدي أخت أصغر مني"}, {"number": 66, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "My brother studies engineering.", "arabic": "أخي يدرس الهندسة"}, {"number": 67, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "We usually eat together.", "arabic": "نحن عادة نأكل معًا"}, {"number": 68, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "My friend helped me yesterday.", "arabic": "ساعدني صديقي أمس"}, {"number": 69, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "I am visiting my grandparents today.", "arabic": "سأزور جدي وجدتي اليوم"}, {"number": 70, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "My cousin lives abroad.", "arabic": "ابن عمي يعيش في الخارج"}, {"number": 71, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "We are planning a family trip.", "arabic": "نحن نخطط لرحلة عائلية"}, {"number": 72, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "I miss my old friends.", "arabic": "أفتقد أصدقائي القدامى"}, {"number": 73, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "She is my best friend.", "arabic": "هي أفضل صديقة لي"}, {"number": 74, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "We have known each other for years.", "arabic": "نحن نعرف بعضنا منذ سنوات"}, {"number": 75, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "Do you have any brothers or sisters?", "arabic": "هل لديك إخوة أو أخوات؟"}, {"number": 76, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "My family supports me.", "arabic": "عائلتي تدعمني"}, {"number": 77, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "I called my uncle last night.", "arabic": "اتصلت بعمي الليلة الماضية"}, {"number": 78, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "The children are playing outside.", "arabic": "األطفال يلعبون في الخارج"}, {"number": 79, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "We celebrate birthdays together.", "arabic": "نحتفل بأعياد الميلد معًا"}, {"number": 80, "topic_id": 4, "topic_en": "Family and Friends", "topic_ar": "العائلة واألصدقاء", "english": "Family is very important to me.", "arabic": "العائلة مهمة جدًا بالنسبة لي"}, {"number": 81, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I wake up at six o'clock.", "arabic": "أستيقظ في الساعة السادسة"}, {"number": 82, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I brush my teeth every morning.", "arabic": "أغسل أسناني كل صباح"}, {"number": 83, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I take a shower before work.", "arabic": "أستحم قبل العمل"}, {"number": 84, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I usually have breakfast at home.", "arabic": "عادة أتناول اإلفطار في المنزل"}, {"number": 85, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I go to work by bus.", "arabic": "أذهب إىل العمل بالحافلة"}, {"number": 86, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I start work at nine.", "arabic": "أبدأ العمل في التاسعة"}, {"number": 87, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I check my emails in the morning.", "arabic": "أراجع بريدي اإللكتروني في الصباح"}, {"number": 88, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I have lunch at two o'clock.", "arabic": "أتناول الغداء في الساعة الثانية"}, {"number": 89, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I finish work at five.", "arabic": "أنهي العمل في الساعة الخامسة"}, {"number": 90, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I go back home in the evening.", "arabic": "أعود إىل المنزل في المساء"}, {"number": 91, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I help my family after work.", "arabic": "أساعد عائلتي بعد العمل"}, {"number": 92, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I study English for one hour.", "arabic": "أدرس اإلنجليزية لمدة ساعة"}, {"number": 93, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I watch a lesson online.", "arabic": "أشاهد درساً عىل اإلنترنت"}, {"number": 94, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I prepare my clothes for tomorrow.", "arabic": "أجهز ملبسي للغد"}, {"number": 95, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I read before I sleep.", "arabic": "أقرأ قبل أن أنام"}, {"number": 96, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I usually sleep early.", "arabic": "عادة أنام مبكرًا"}, {"number": 97, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "My day is very busy.", "arabic": "يومي مزدحم جدًا"}, {"number": 98, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I do the same routine every day.", "arabic": "أفعل نفس الروتين كل يوم"}, {"number": 99, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "On weekends, I wake up late.", "arabic": "ًفي عطلة نهاية األسبوع، أستيقظ متأخرا"}, {"number": 100, "topic_id": 5, "topic_en": "Daily Routine", "topic_ar": "الروتين اليومي", "english": "I need to organize my time better.", "arabic": "أحتاج إىل تنظيم وقتي بشكل أفضل"}, {"number": 101, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "I am at home now.", "arabic": "أنا في المنزل اآلن"}, {"number": 102, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "Please close the door.", "arabic": "من فضلك أغلق الباب"}, {"number": 103, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "Open the window, please.", "arabic": "افتح النافذة من فضلك"}, {"number": 104, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "The room is clean.", "arabic": "الغرفة نظيفة"}, {"number": 105, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "The kitchen is small but comfortable.", "arabic": "المطبخ صغير لكنه مريح"}, {"number": 106, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "I need to clean my room.", "arabic": "أحتاج إىل تنظيف غرفتي"}, {"number": 107, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "Where is the remote control?", "arabic": "أين جهاز التحكم؟"}, {"number": 108, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "The light is not working.", "arabic": "المصباح ال يعمل"}, {"number": 109, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "I will fix it later.", "arabic": "سأصلحه الحقًا"}, {"number": 110, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "The house is very quiet.", "arabic": "المنزل هادئ جدًا"}, {"number": 111, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "Please turn off the TV.", "arabic": "من فضلك أطفئ التلفاز"}, {"number": 112, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "I am cooking dinner.", "arabic": "أنا أعد العشاء"}, {"number": 113, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "The food smells good.", "arabic": "رائحة الطعام جميلة"}, {"number": 114, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "Put the keys on the table.", "arabic": "ضع المفاتيح عىل الطاولة"}, {"number": 115, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "The bathroom is upstairs.", "arabic": "الحمام في الطابق العلوي"}, {"number": 116, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "I forgot my bag at home.", "arabic": "نسيت حقيبتي في المنزل"}, {"number": 117, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "Make yourself at home.", "arabic": "اعتبر نفسك في بيتك"}, {"number": 118, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "We need more chairs.", "arabic": "نحتاج إىل المزيد من الكراسي"}, {"number": 119, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "The house needs some repairs.", "arabic": "المنزل يحتاج إىل بعض اإلصلحات"}, {"number": 120, "topic_id": 6, "topic_en": "At Home", "topic_ar": "في المنزل", "english": "I feel comfortable at home.", "arabic": "أشعر بالراحة في المنزل"}, {"number": 121, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I am hungry.", "arabic": "أنا جائع"}, {"number": 122, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I am thirsty.", "arabic": "أنا عطشان"}, {"number": 123, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "What would you like to eat?", "arabic": "ماذا تريد أن تأكل؟"}, {"number": 124, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I would like some water.", "arabic": "أريد بعض الماء"}, {"number": 125, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "This food is delicious.", "arabic": "هذا الطعام لذيذ"}, {"number": 126, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I do not eat spicy food.", "arabic": "أنا ال آكل الطعام الحار"}, {"number": 127, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "Can I have a cup of tea?", "arabic": "هل يمكنني الحصول عىل كوب من الشاي؟"}, {"number": 128, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I drink coffee every morning.", "arabic": "أشرب القهوة كل صباح"}, {"number": 129, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "The soup is too hot.", "arabic": "الحساء ساخن جدًا"}, {"number": 130, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "Please pass me the salt.", "arabic": "من فضلك ناولني الملح"}, {"number": 131, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I prefer chicken to meat.", "arabic": "أفضل الدجاج عىل اللحم"}, {"number": 132, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I do not like onions.", "arabic": "ال أحب البصل"}, {"number": 133, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "This fruit is fresh.", "arabic": "هذه الفاكهة طازجة"}, {"number": 134, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I want something light.", "arabic": "ًأريد شيעًا خفيفا"}, {"number": 135, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "Do you have any juice?", "arabic": "هل لديكم أي عصير؟"}, {"number": 136, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I am full now.", "arabic": "أنا شبعان اآلن"}, {"number": 137, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "Let us eat together.", "arabic": "دعنا نأكل معًا"}, {"number": 138, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "The meal was excellent.", "arabic": "كانت الوجبة ممتازة"}, {"number": 139, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "I need to buy some bread.", "arabic": "أحتاج إىل شراء بعض الخبز"}, {"number": 140, "topic_id": 7, "topic_en": "Food and Drink", "topic_ar": "الطعام والشراب", "english": "Breakfast is ready.", "arabic": "اإلفطار جاهز"}, {"number": 141, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Can I see the menu, please?", "arabic": "هل يمكنني رؤية قائمة الطعام من فضلك؟"}, {"number": 142, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "I would like to order now.", "arabic": "أود أن أطلب اآلن"}, {"number": 143, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "What do you recommend?", "arabic": "ماذا تنصحني أن أطلب؟"}, {"number": 144, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "I will have the chicken sandwich.", "arabic": "سآخذ ساندويتش الدجاج"}, {"number": 145, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Can I have it without onions?", "arabic": "هل يمكنني الحصول عليه بدون بصل؟"}, {"number": 146, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "I need a table for two.", "arabic": "أحتاج إىل طاولة لشخصين"}, {"number": 147, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Is this table available?", "arabic": "هل هذه الطاولة متاحة؟"}, {"number": 148, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "The service is very good.", "arabic": "الخدمة جيدة جدًا"}, {"number": 149, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Could you bring the bill, please?", "arabic": "هل يمكنك إحضار الفاتورة من فضلك؟"}, {"number": 150, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Can I pay by card?", "arabic": "هل يمكنني الدفع بالبطاقة؟"}, {"number": 151, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "The order is late.", "arabic": "الطلب متأخر"}, {"number": 152, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "This is not what I ordered.", "arabic": "هذا ليس ما طلبته"}, {"number": 153, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Could you change this, please?", "arabic": "هل يمكنك تغيير هذا من فضلك؟"}, {"number": 154, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "I would like another coffee.", "arabic": "أريد قهوة أخرى"}, {"number": 155, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "The food is cold.", "arabic": "الطعام بارد"}, {"number": 156, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Do you have vegetarian meals?", "arabic": "هل لديكم وجبات نباتية؟"}, {"number": 157, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Can I take this to go?", "arabic": "هل يمكنني أخذ هذا سفريًا؟"}, {"number": 158, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Keep the change.", "arabic": "احتفظ بالباقي"}, {"number": 159, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "Thank you for the good service.", "arabic": "شكرًا عىل الخدمة الجيدة"}, {"number": 160, "topic_id": 8, "topic_en": "At the Restaurant or Cafe", "topic_ar": "في المطعم أو المقهى", "english": "We enjoyed the meal.", "arabic": "استمتعنا بالوجبة"}, {"number": 161, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "How much is this?", "arabic": "كم سعر هذا؟"}, {"number": 162, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "I am just looking, thank you.", "arabic": "أنا أتصفح فقط، شكرًا"}, {"number": 163, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "Do you have this in blue?", "arabic": "هل لديكم هذا باللون األزرق؟"}, {"number": 164, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "Can I try it on?", "arabic": "هل يمكنني تجربته؟"}, {"number": 165, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "This size is too small.", "arabic": "هذا المقاس صغير جدًا"}, {"number": 166, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "Do you have a larger size?", "arabic": "هل لديكم مقاس أكبر؟"}, {"number": 167, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "I will take this one.", "arabic": "سآخذ هذا"}, {"number": 168, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "Can you give me a discount?", "arabic": "هل يمكنك أن تعطيني خصماً؟"}, {"number": 169, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "Where is the fitting room?", "arabic": "أين غرفة القياس؟"}, {"number": 170, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "The price is too high.", "arabic": "السعر مرتفع جدًا"}, {"number": 171, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "This is a good deal.", "arabic": "هذه صفقة جيدة"}, {"number": 172, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "I need a receipt, please.", "arabic": "أحتاج إىل إيصال من فضلك"}, {"number": 173, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "Can I return it later?", "arabic": "هل يمكنني إرجاعه الحقًا؟"}, {"number": 174, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "The quality is excellent.", "arabic": "الجودة ممتازة"}, {"number": 175, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "I am looking for a gift.", "arabic": "أبحث عن هدية"}, {"number": 176, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "Do you accept credit cards?", "arabic": "هل تقبلون بطاقات االئتمان؟"}, {"number": 177, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "The cashier is over there.", "arabic": "أمين الصندوق هناك"}, {"number": 178, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "I bought it online.", "arabic": "اشتريته عبر اإلنترنت"}, {"number": 179, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "The store closes at ten.", "arabic": "يغلق المتجر في الساعة العاشرة"}, {"number": 180, "topic_id": 9, "topic_en": "Shopping", "topic_ar": "التسوق", "english": "I need a shopping bag.", "arabic": "أحتاج إىل حقيبة تسوق"}, {"number": 181, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "How much does it cost?", "arabic": "كم يكلف هذا؟"}, {"number": 182, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I do not have enough money.", "arabic": "ًال أملك ماالً كافيا"}, {"number": 183, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "Can I pay in cash?", "arabic": "هل يمكنني الدفع نقداً؟"}, {"number": 184, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I paid by card.", "arabic": "دفعت بالبطاقة"}, {"number": 185, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "The price includes tax.", "arabic": "السعر يشمل الضريبة"}, {"number": 186, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "This is too expensive for me.", "arabic": "هذا غالٍ جدًا بالنسبة لي"}, {"number": 187, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I need to save money.", "arabic": "أحتاج إىل ادخار المال"}, {"number": 188, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I will pay for you today.", "arabic": "سأدفع عنك اليوم"}, {"number": 189, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "Can you lend me some money?", "arabic": "هل يمكنك إقراضي بعض المال؟"}, {"number": 190, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I will pay you back tomorrow.", "arabic": "ًسأرد لك المال غدا"}, {"number": 191, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "The bill is wrong.", "arabic": "الفاتورة غير صحيحة"}, {"number": 192, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "Please check the price again.", "arabic": "من فضلك تحقق من السعر مرة أخرى"}, {"number": 193, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I received my salary today.", "arabic": "استلمت راتبي اليوم"}, {"number": 194, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I need to withdraw some cash.", "arabic": "أحتاج إىل سحب بعض النقود"}, {"number": 195, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "The ATM is not working.", "arabic": "ماكينة الصراف ال تعمل"}, {"number": 196, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "I forgot my wallet.", "arabic": "نسيت محفظتي"}, {"number": 197, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "Do you have change?", "arabic": "هل لديك فكة؟"}, {"number": 198, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "Keep the receipt.", "arabic": "احتفظ باإليصال"}, {"number": 199, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "The total is fifty pounds.", "arabic": "ًاإلجمالي خمسون جنيها"}, {"number": 200, "topic_id": 10, "topic_en": "Money and Prices", "topic_ar": "المال واألسعار", "english": "Money is important, but health is more important.", "arabic": "المال مهم، لكن الصحة أهم"}, {"number": 201, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "What time is it?", "arabic": "كم الساعة؟"}, {"number": 202, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "It is half past eight.", "arabic": "الساعة الثامنة والنصف"}, {"number": 203, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "I am running late.", "arabic": "أنا متأخر"}, {"number": 204, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "The meeting starts at ten.", "arabic": "يبدأ االجتماع في العاشرة"}, {"number": 205, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "Please be on time.", "arabic": "من فضلك كن في الموعد"}, {"number": 206, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "Can we meet tomorrow?", "arabic": "هل يمكننا أن نلتقي غداً؟"}, {"number": 207, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "I have an appointment today.", "arabic": "لدي موعد اليوم"}, {"number": 208, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "I need to change the appointment.", "arabic": "أحتاج إىل تغيير الموعد"}, {"number": 209, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "What time works for you?", "arabic": "ما الوقت المناسب لك؟"}, {"number": 210, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "I am free after six.", "arabic": "أنا متفرغ بعد السادسة"}, {"number": 211, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "Let us meet in the morning.", "arabic": "دعنا نلتقي في الصباح"}, {"number": 212, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "The class ends at four.", "arabic": "ينتهي الدرس في الرابعة"}, {"number": 213, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "I waited for an hour.", "arabic": "انتظرت لمدة ساعة"}, {"number": 214, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "We arrived on time.", "arabic": "وصلنا في الموعد"}, {"number": 215, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "I missed the appointment.", "arabic": "فاتني الموعد"}, {"number": 216, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "Please remind me later.", "arabic": "من فضلك ذكرني الحقًا"}, {"number": 217, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "The deadline is tomorrow.", "arabic": "ًالموعد النهائي غدا"}, {"number": 218, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "I need more time.", "arabic": "أحتاج إىل مزيد من الوقت"}, {"number": 219, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "Time passes quickly.", "arabic": "الوقت يمر بسرعة"}, {"number": 220, "topic_id": 11, "topic_en": "Time and Appointments", "topic_ar": "الوقت والمواعيد", "english": "Do not waste your time.", "arabic": "ال تضيع وقتك"}, {"number": 221, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "What day is it today?", "arabic": "أي يوم اليوم؟"}, {"number": 222, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "Today is Monday.", "arabic": "اليوم هو االثنين"}, {"number": 223, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "My birthday is next week.", "arabic": "عيد ميالدي األسبوع القادم"}, {"number": 224, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The exam is on Sunday.", "arabic": "االمتحان يوم األحد"}, {"number": 225, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "We will travel in August.", "arabic": "سنسافر في أغسطس"}, {"number": 226, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The meeting was yesterday.", "arabic": "كان االجتماع أمس"}, {"number": 227, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "I will call you tomorrow.", "arabic": "ًسأتصل بك غدا"}, {"number": 228, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The course starts next month.", "arabic": "تبدأ الدورة الشهر القادم"}, {"number": 229, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "I have been here since morning.", "arabic": "أنا هنا منذ الصباح"}, {"number": 230, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "We met two days ago.", "arabic": "التقينا منذ يومين"}, {"number": 231, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The holiday begins on Friday.", "arabic": "تبدأ العطلة يوم الجمعة"}, {"number": 232, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "What is today's date?", "arabic": "ما تاريخ اليوم؟"}, {"number": 233, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The date is June twentieth.", "arabic": "التاريخ هو العشرون من يونيو"}, {"number": 234, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "I finished the report last night.", "arabic": "أنهيت التقرير الليلة الماضية"}, {"number": 235, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "I will see you next year.", "arabic": "سأراك العام القادم"}, {"number": 236, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The deadline is at the end of the month.", "arabic": "الموعد النهائي في نهاية الشهر"}, {"number": 237, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "We usually meet every week.", "arabic": "عادة نلتقي كل أسبوع"}, {"number": 238, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The shop is closed on Fridays.", "arabic": "المتجر مغلق أيام الجمعة"}, {"number": 239, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "The event is in two weeks.", "arabic": "الحدث بعد أسبوعين"}, {"number": 240, "topic_id": 12, "topic_en": "Days and Dates", "topic_ar": "األيام والتواريخ", "english": "Mark the date on your calendar.", "arabic": "ضع عالمة عىل التاريخ في تقويمك"}, {"number": 241, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The weather is nice today.", "arabic": "الطقس جميل اليوم"}, {"number": 242, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "It is very hot outside.", "arabic": "الجو حار جدًا في الخارج"}, {"number": 243, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "It is cold this morning.", "arabic": "الجو بارد هذا الصباح"}, {"number": 244, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "It might rain later.", "arabic": "قد تمطر الحقًا"}, {"number": 245, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "Take an umbrella with you.", "arabic": "خذ مظلة معك"}, {"number": 246, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The sky is cloudy.", "arabic": "السماء غائمة"}, {"number": 247, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The sun is shining.", "arabic": "الشمس مشرقة"}, {"number": 248, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "It is windy today.", "arabic": "الجو عاصف اليوم"}, {"number": 249, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The weather is getting better.", "arabic": "الطقس يتحسن"}, {"number": 250, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "I do not like humid weather.", "arabic": "ال أحب الطقس الرطب"}, {"number": 251, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "It rained all night.", "arabic": "أمطرت طوال الليل"}, {"number": 252, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The temperature is very high.", "arabic": "درجة الحرارة مرتفعة جدًا"}, {"number": 253, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The weather forecast says it will rain.", "arabic": "توقعات الطقس تقول إنها ستمطر"}, {"number": 254, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "Wear a jacket.", "arabic": "ارتدِ سترة"}, {"number": 255, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The air feels fresh.", "arabic": "ًالهواء يبدو منعشا"}, {"number": 256, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "It is too cold to go out.", "arabic": "الجو بارد جدًا للخروج"}, {"number": 257, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "The storm caused problems.", "arabic": "تسببت العاصفة في مشاكل"}, {"number": 258, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "I love rainy days.", "arabic": "أحب األيام الممطرة"}, {"number": 259, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "Spring weather is beautiful.", "arabic": "طقس الربيع جميل"}, {"number": 260, "topic_id": 13, "topic_en": "Weather", "topic_ar": "الطقس", "english": "Let us stay inside today.", "arabic": "دعنا نبقى في الداخل اليوم"}, {"number": 261, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Where is the nearest bank?", "arabic": "أين أقرب بنك؟"}, {"number": 262, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Go straight ahead.", "arabic": "اذهب إىل األمام مباشرة"}, {"number": 263, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Turn right at the corner.", "arabic": "انعطف يميناً عند الزاوية"}, {"number": 264, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Turn left after the bridge.", "arabic": "انعطف يساراً بعد الجسر"}, {"number": 265, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "It is next to the pharmacy.", "arabic": "إنه بجوار الصيدلية"}, {"number": 266, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "It is across from the school.", "arabic": "إنه أمام المدرسة في الجهة المقابلة"}, {"number": 267, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "The station is behind the mall.", "arabic": "المحطة خلف المركز التجاري"}, {"number": 268, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "How can I get there?", "arabic": "كيف يمكنني الوصول إىل هناك؟"}, {"number": 269, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Is it far from here?", "arabic": "هل هو بعيد من هنا؟"}, {"number": 270, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "It is only five minutes away.", "arabic": "إنه يبعد خمس دقائق فقط"}, {"number": 271, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "You can walk there.", "arabic": "يمكنك المشي إىل هناك"}, {"number": 272, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Take the first street on the left.", "arabic": "خذ أول شارع عىل اليسار"}, {"number": 273, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "The entrance is on the right.", "arabic": "المدخل عىل اليمين"}, {"number": 274, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "I think we are lost.", "arabic": "أعتقد أننا تائهون"}, {"number": 275, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Can you show me on the map?", "arabic": "هل يمكنك أن تريني عىل الخريطة؟"}, {"number": 276, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Follow this road.", "arabic": "اتبع هذا الطريق"}, {"number": 277, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "The building is at the end of the street.", "arabic": "المبنى في نهاية الشارع"}, {"number": 278, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "There is a sign over there.", "arabic": "توجد الفتة هناك"}, {"number": 279, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Ask someone for directions.", "arabic": "اسأل شخصً ا عن االتجاهات"}, {"number": 280, "topic_id": 14, "topic_en": "Directions", "topic_ar": "االتجاهات", "english": "Thank you for your help.", "arabic": "شكرًا لمساعدتك"}, {"number": 281, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "I take the bus every day.", "arabic": "أستقل الحافلة كل يوم"}, {"number": 282, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "Where is the bus stop?", "arabic": "أين موقف الحافالت؟"}, {"number": 283, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "The train is late.", "arabic": "القطار متأخر"}, {"number": 284, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "I need a taxi.", "arabic": "أحتاج إىل سيارة أجرة"}, {"number": 285, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "How much is the fare?", "arabic": "كم األجرة؟"}, {"number": 286, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "Please stop here.", "arabic": "من فضلك توقف هنا"}, {"number": 287, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "I missed the bus.", "arabic": "فاتتني الحافلة"}, {"number": 288, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "The traffic is terrible today.", "arabic": "المرور سيئ جدًا اليوم"}, {"number": 289, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "I will drive to work.", "arabic": "سأقود إىل العمل"}, {"number": 290, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "The car needs fuel.", "arabic": "السيارة تحتاج إىل وقود"}, {"number": 291, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "Fasten your seat belt.", "arabic": "اربط حزام األمان"}, {"number": 292, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "The road is crowded.", "arabic": "الطريق مزدحم"}, {"number": 293, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "The metro is faster.", "arabic": "المترو أسرع"}, {"number": 294, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "Which platform is the train on?", "arabic": "عىل أي رصيف يوجد القطار؟"}, {"number": 295, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "I bought a ticket online.", "arabic": "اشتريت تذكرة عبر اإلنترنت"}, {"number": 296, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "The bus arrives every ten minutes.", "arabic": "تصل الحافلة كل عشر دقائق"}, {"number": 297, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "Do you have a travel card?", "arabic": "هل لديك بطاقة مواصالت؟"}, {"number": 298, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "I prefer walking short distances.", "arabic": "أفضل المشي للمسافات القصيرة"}, {"number": 299, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "The driver was very polite.", "arabic": "كان السائق مهذباً جدًا"}, {"number": 300, "topic_id": 15, "topic_en": "Transportation", "topic_ar": "المواصالت", "english": "We arrived safely.", "arabic": "وصلنا بسالم"}, {"number": 301, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "I am going to the airport.", "arabic": "أنا ذاهب إىل المطار"}, {"number": 302, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "Where is the check-in counter?", "arabic": "أين مكتب تسجيل الوصول؟"}, {"number": 303, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "Here is my passport.", "arabic": "هذا هو جواز سفري"}, {"number": 304, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "I have one suitcase.", "arabic": "لدي حقيبة واحدة"}, {"number": 305, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "My flight is delayed.", "arabic": "رحلتي تأخرت"}, {"number": 306, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "What gate should I go to?", "arabic": "إىل أي بوابة يجب أن أذهب؟"}, {"number": 307, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "The plane leaves at midnight.", "arabic": "تغادر الطائرة في منتصف الليل"}, {"number": 308, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "I need a boarding pass.", "arabic": "أحتاج إىل بطاقة صعود الطائرة"}, {"number": 309, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "Can I have a window seat?", "arabic": "هل يمكنني الحصول عىل مقعد بجوار النافذة؟"}, {"number": 310, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "My luggage is missing.", "arabic": "أمتعتي مفقودة"}, {"number": 311, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "I am traveling for business.", "arabic": "أسافر من أجل العمل"}, {"number": 312, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "I am traveling for vacation.", "arabic": "أسافر من أجل اإلجازة"}, {"number": 313, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "How long is the flight?", "arabic": "كم مدة الرحلة؟"}, {"number": 314, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "Do I need a visa?", "arabic": "هل أحتاج إىل تأشيرة؟"}, {"number": 315, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "The passport control is over there.", "arabic": "مراقبة الجوازات هناك"}, {"number": 316, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "I need to exchange money.", "arabic": "أحتاج إىل تبديل المال"}, {"number": 317, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "The flight was comfortable.", "arabic": "كانت الرحلة مريحة"}, {"number": 318, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "Welcome to our country.", "arabic": "مرحباً بك في بلدنا"}, {"number": 319, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "I have a hotel reservation.", "arabic": "لدي حجز في فندق"}, {"number": 320, "topic_id": 16, "topic_en": "Travel and Airport", "topic_ar": "السفر والمطار", "english": "Enjoy your trip.", "arabic": "استمتع برحلتك"}, {"number": 321, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "I have a reservation.", "arabic": "لدي حجز"}, {"number": 322, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "I would like to check in.", "arabic": "أود تسجيل الدخول"}, {"number": 323, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "I would like to check out.", "arabic": "أود تسجيل الخروج"}, {"number": 324, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Can I see your passport?", "arabic": "هل يمكنني رؤية جواز سفرك؟"}, {"number": 325, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "What is your reservation number?", "arabic": "ما رقم الحجز الخاص بك؟"}, {"number": 326, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Is breakfast included?", "arabic": "هل اإلفطار مشمول؟"}, {"number": 327, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "What time is breakfast?", "arabic": "في أي وقت يكون اإلفطار؟"}, {"number": 328, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "The room is very clean.", "arabic": "الغرفة نظيفة جدًا"}, {"number": 329, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "The air conditioner is not working.", "arabic": "مكيف الهواء ال يعمل"}, {"number": 330, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Can I change my room?", "arabic": "هل يمكنني تغيير غرفتي؟"}, {"number": 331, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "I need an extra towel.", "arabic": "أحتاج إىل منشفة إضافية"}, {"number": 332, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Where is the elevator?", "arabic": "أين المصعد؟"}, {"number": 333, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "The Wi-Fi password is not working.", "arabic": "كلمة مرور الواي فاي ال تعمل"}, {"number": 334, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Can I have the Wi-Fi password?", "arabic": "هل يمكنني الحصول عىل كلمة مرور الواي فاي؟"}, {"number": 335, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "There is no hot water.", "arabic": "ال يوجد ماء ساخن"}, {"number": 336, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Please clean my room.", "arabic": "من فضلك نظف غرفتي"}, {"number": 337, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "I lost my room key.", "arabic": "فقدت مفتاح غرفتي"}, {"number": 338, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Can I leave my bags here?", "arabic": "هل يمكنني ترك حقائبي هنا؟"}, {"number": 339, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "The view is beautiful.", "arabic": "اإلطاللة جميلة"}, {"number": 340, "topic_id": 17, "topic_en": "At the Hotel", "topic_ar": "في الفندق", "english": "Thank you for your service.", "arabic": "شكرًا عىل خدمتكم"}, {"number": 341, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Open your books, please.", "arabic": "افتحوا كتبكم من فضلكم"}, {"number": 342, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Close your books now.", "arabic": "أغلقوا كتبكم اآلن"}, {"number": 343, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Listen carefully.", "arabic": "ًاستمعوا جيدا"}, {"number": 344, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Repeat after me.", "arabic": "كرروا بعدي"}, {"number": 345, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Write the answer in your notebook.", "arabic": "اكتب اإلجابة في كراستك"}, {"number": 346, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Raise your hand before speaking.", "arabic": "ارفع يدك قبل أن تتكلم"}, {"number": 347, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Can you read this sentence?", "arabic": "هل يمكنك قراءة هذه الجملة؟"}, {"number": 348, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Please speak louder.", "arabic": "من فضلك تحدث بصوت أعىل"}, {"number": 349, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "I do not understand this word.", "arabic": "أنا ال أفهم هذه الكلمة"}, {"number": 350, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Can you explain it again?", "arabic": "هل يمكنك شرحها مرة أخرى؟"}, {"number": 351, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "The lesson is easy.", "arabic": "الدرس سهل"}, {"number": 352, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "The homework is difficult.", "arabic": "الواجب صعب"}, {"number": 353, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Do you have any questions?", "arabic": "هل لديكم أي أسئلة؟"}, {"number": 354, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "The class is over.", "arabic": "انتهى الدرس"}, {"number": 355, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "See you in the next lesson.", "arabic": "أراكم في الدرس القادم"}, {"number": 356, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Please be quiet.", "arabic": "من فضلكم كونوا هادئين"}, {"number": 357, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Work in pairs.", "arabic": "اعملوا في أزواج"}, {"number": 358, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Check your answers.", "arabic": "راجعوا إجاباتكم"}, {"number": 359, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Do not forget your homework.", "arabic": "ال تنسوا واجبكم"}, {"number": 360, "topic_id": 18, "topic_en": "School and Classroom", "topic_ar": "المدرسة والفصل", "english": "Great job, everyone.", "arabic": "عمل رائع يا جماعة"}, {"number": 361, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I have an exam tomorrow.", "arabic": "ًلدي امتحان غدا"}, {"number": 362, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I need to study harder.", "arabic": "أحتاج إىل أن أذاكر بجدية أكبر"}, {"number": 363, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "This chapter is important.", "arabic": "هذا الفصل مهم"}, {"number": 364, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I made a study plan.", "arabic": "وضعت خطة مذاكرة"}, {"number": 365, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I reviewed the lesson twice.", "arabic": "راجعت الدرس مرتين"}, {"number": 366, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I forgot the answer.", "arabic": "نسيت اإلجابة"}, {"number": 367, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "The exam was easy.", "arabic": "ًكان االمتحان سهال"}, {"number": 368, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "The exam was difficult.", "arabic": "ًكان االمتحان صعبا"}, {"number": 369, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I hope I pass.", "arabic": "أتمنى أن أنجح"}, {"number": 370, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I got a good grade.", "arabic": "حصلت عىل درجة جيدة"}, {"number": 371, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I need to improve my writing.", "arabic": "أحتاج إىل تحسين كتابتي"}, {"number": 372, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "Practice makes progress.", "arabic": "الممارسة تصنع التقدم"}, {"number": 373, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "Do not study at the last minute.", "arabic": "ال تذاكر في آخر لحظة"}, {"number": 374, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "Take a short break.", "arabic": "خذ استراحة قصيرة"}, {"number": 375, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "Focus on the main ideas.", "arabic": "ركز عىل األفكار الرئيسية"}, {"number": 376, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "Read the question carefully.", "arabic": "اقرأ السؤال بعناية"}, {"number": 377, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "Manage your time during the exam.", "arabic": "نظم وقتك أثناء االمتحان"}, {"number": 378, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I made a mistake.", "arabic": "ارتكبت خطأ"}, {"number": 379, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "I learned from my mistakes.", "arabic": "تعلمت من أخطائي"}, {"number": 380, "topic_id": 19, "topic_en": "Studying and Exams", "topic_ar": "المذاكرة واالمتحانات", "english": "Success needs patience.", "arabic": "النجاح يحتاج إىل صبر"}, {"number": 381, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I have a lot of work today.", "arabic": "لدي الكثير من العمل اليوم"}, {"number": 382, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I need to finish this task.", "arabic": "أحتاج إىل إنهاء هذه المهمة"}, {"number": 383, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "The office is very busy.", "arabic": "المكتب مزدحم جدًا"}, {"number": 384, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "My manager is in a meeting.", "arabic": "مديري في اجتماع"}, {"number": 385, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "Please send me the report.", "arabic": "من فضلك أرسل لي التقرير"}, {"number": 386, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I will call the client.", "arabic": "سأتصل بالعميل"}, {"number": 387, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "The project is going well.", "arabic": "المشروع يسير بشكل جيد"}, {"number": 388, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "We need to meet the deadline.", "arabic": "نحتاج إىل االلتزام بالموعد النهائي"}, {"number": 389, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I am working from home today.", "arabic": "أعمل من المنزل اليوم"}, {"number": 390, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "Can you print this document?", "arabic": "هل يمكنك طباعة هذا المستند؟"}, {"number": 391, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I need your feedback.", "arabic": "أحتاج إىل مالحظاتك"}, {"number": 392, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "The printer is not working.", "arabic": "الطابعة ال تعمل"}, {"number": 393, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I will update the file.", "arabic": "سأحدث الملف"}, {"number": 394, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "Let us discuss the plan.", "arabic": "دعنا نناقش الخطة"}, {"number": 395, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "The team is very helpful.", "arabic": "الفريق متعاون جدًا"}, {"number": 396, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I have to reply to this email.", "arabic": "يجب أن أرد عىل هذا البريد اإللكتروني"}, {"number": 397, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "The meeting room is available.", "arabic": "غرفة االجتماعات متاحة"}, {"number": 398, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I need a short break.", "arabic": "أحتاج إىل استراحة قصيرة"}, {"number": 399, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "Thank you for your cooperation.", "arabic": "شكرًا لتعاونك"}, {"number": 400, "topic_id": 20, "topic_en": "Work and Office", "topic_ar": "العمل والمكتب", "english": "I finished my work for today.", "arabic": "أنهيت عملي لهذا اليوم"}, {"number": 401, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "The meeting starts in five minutes.", "arabic": "يبدأ االجتماع بعد خمس دقائق"}, {"number": 402, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Can everyone hear me?", "arabic": "هل يستطيع الجميع سماعي؟"}, {"number": 403, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Let us start the meeting.", "arabic": "دعونا نبدأ االجتماع"}, {"number": 404, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Today we will discuss the plan.", "arabic": "اليوم سنناقش الخطة"}, {"number": 405, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "I agree with this idea.", "arabic": "أنا أتفق مع هذه الفكرة"}, {"number": 406, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "I have a different opinion.", "arabic": "لدي رأي مختلف"}, {"number": 407, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Can you explain your point?", "arabic": "هل يمكنك شرح وجهة نظرك؟"}, {"number": 408, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Please keep it brief.", "arabic": "ًمن فضلك اجعل كالمك مختصرا"}, {"number": 409, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "We need more details.", "arabic": "نحتاج إىل مزيد من التفاصيل"}, {"number": 410, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Let us move to the next point.", "arabic": "دعنا ننتقل إىل النقطة التالية"}, {"number": 411, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Who will take notes?", "arabic": "من سيكتب المالحظات؟"}, {"number": 412, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "What is the next step?", "arabic": "ما الخطوة التالية؟"}, {"number": 413, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "We should make a decision today.", "arabic": "يجب أن نتخذ قراراً اليوم"}, {"number": 414, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "This idea needs more work.", "arabic": "هذه الفكرة تحتاج إىل مزيد من العمل"}, {"number": 415, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "I will share the file after the meeting.", "arabic": "سأشارك الملف بعد االجتماع"}, {"number": 416, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Thank you for joining us.", "arabic": "شكرًا النضمامكم إلينا"}, {"number": 417, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Does anyone have a question?", "arabic": "هل لدى أي شخص سؤال؟"}, {"number": 418, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "Let us schedule another meeting.", "arabic": "دعنا نحدد اجتماعاً آخر"}, {"number": 419, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "The meeting was useful.", "arabic": "كان االجتماع مفيدًا"}, {"number": 420, "topic_id": 21, "topic_en": "Meetings", "topic_ar": "االجتماعات", "english": "We will follow up tomorrow.", "arabic": "ًسنتابع األمر غدا"}, {"number": 421, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "Tell me about yourself.", "arabic": "حدثني عن نفسك"}, {"number": 422, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "Why do you want this job?", "arabic": "لماذا تريد هذه الوظيفة؟"}, {"number": 423, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "What are your strengths?", "arabic": "ما نقاط قوتك؟"}, {"number": 424, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "What are your weaknesses?", "arabic": "ما نقاط ضعفك؟"}, {"number": 425, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I have experience in customer service.", "arabic": "لدي خبرة في خدمة العمالء"}, {"number": 426, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I am a fast learner.", "arabic": "أنا سريع التعلم"}, {"number": 427, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I work well under pressure.", "arabic": "أعمل جيداً تحت الضغط"}, {"number": 428, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I enjoy working with a team.", "arabic": "أستمتع بالعمل مع فريق"}, {"number": 429, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I can solve problems quickly.", "arabic": "أستطيع حل المشكالت بسرعة"}, {"number": 430, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I am looking for a new challenge.", "arabic": "أبحث عن تحدٍ جديد"}, {"number": 431, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I left my last job for personal reasons.", "arabic": "تركت عملي السابق ألسباب شخصية"}, {"number": 432, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I want to develop my skills.", "arabic": "أريد تطوير مهاراتي"}, {"number": 433, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I am available to start next week.", "arabic": "أنا متاح للبدء األسبوع القادم"}, {"number": 434, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "What are the working hours?", "arabic": "ما ساعات العمل؟"}, {"number": 435, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "What is the salary range?", "arabic": "ما نطاق الراتب؟"}, {"number": 436, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "Thank you for the opportunity.", "arabic": "شكرًا عىل هذه الفرصة"}, {"number": 437, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I look forward to hearing from you.", "arabic": "أتطلع إىل سماع ردكم"}, {"number": 438, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "Do you have any questions for us?", "arabic": "هل لديك أي أسئلة لنا؟"}, {"number": 439, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I believe I am suitable for this position.", "arabic": "أعتقد أنني مناسب لهذه الوظيفة"}, {"number": 440, "topic_id": 22, "topic_en": "Job Interviews", "topic_ar": "مقابالت العمل", "english": "I appreciate your time.", "arabic": "أقدر وقتكم"}, {"number": 441, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I hope this email finds you well.", "arabic": "أتمنى أن تصلك هذه الرسالة وأنت بخير"}, {"number": 442, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I am writing to ask about the course.", "arabic": "أكتب لالستفسار عن الدورة"}, {"number": 443, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Please find the attached file.", "arabic": "يرجى االطالع عىل الملف المرفق"}, {"number": 444, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Could you send me more details?", "arabic": "هل يمكنك إرسال مزيد من التفاصيل؟"}, {"number": 445, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Thank you for your quick reply.", "arabic": "شكرًا عىل ردك السريع"}, {"number": 446, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I apologize for the late response.", "arabic": "أعتذر عن الرد المتأخر"}, {"number": 447, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Please let me know if you need anything.", "arabic": "من فضلك أخبرني إذا احتجت إىل أي شيء"}, {"number": 448, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I will get back to you soon.", "arabic": "سأعود إليك قريبًا"}, {"number": 449, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "The file is attached below.", "arabic": "الملف مرفق باألسفل"}, {"number": 450, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I look forward to your reply.", "arabic": "أتطلع إىل ردك"}, {"number": 451, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Best regards.", "arabic": "مع أطيب التحيات"}, {"number": 452, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Can you confirm the meeting time?", "arabic": "هل يمكنك تأكيد وقت االجتماع؟"}, {"number": 453, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I have a question about your message.", "arabic": "لدي سؤال بخصوص رسالتك"}, {"number": 454, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Please check the information again.", "arabic": "يرجى مراجعة المعلومات مرة أخرى"}, {"number": 455, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I received your email.", "arabic": "استلمت بريدك اإللكتروني"}, {"number": 456, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "I did not receive the attachment.", "arabic": "لم أستلم المرفق"}, {"number": 457, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Can you resend the file?", "arabic": "هل يمكنك إعادة إرسال الملف؟"}, {"number": 458, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "This email is very important.", "arabic": "هذا البريد مهم جدًا"}, {"number": 459, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Please reply as soon as possible.", "arabic": "يرجى الرد في أسرع وقت ممكن"}, {"number": 460, "topic_id": 23, "topic_en": "Email and Writing", "topic_ar": "البريد والكتابة", "english": "Thank you for your support.", "arabic": "شكرًا عىل دعمك"}, {"number": 461, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Can I call you now?", "arabic": "هل يمكنني االتصال بك اآلن؟"}, {"number": 462, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I will call you later.", "arabic": "سأتصل بك الحقًا"}, {"number": 463, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Sorry, I missed your call.", "arabic": "آسف، فاتتني مكالمتك"}, {"number": 464, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "My phone battery is low.", "arabic": "بطارية هاتفي منخفضة"}, {"number": 465, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I cannot hear you clearly.", "arabic": "ال أستطيع سماعك بوضوح"}, {"number": 466, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Please speak slowly.", "arabic": "من فضلك تحدث ببطء"}, {"number": 467, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Can you send me a message?", "arabic": "هل يمكنك إرسال رسالة لي؟"}, {"number": 468, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I sent you the address.", "arabic": "أرسلت لك العنوان"}, {"number": 469, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Did you get my message?", "arabic": "هل وصلتك رسالتي؟"}, {"number": 470, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I will text you the details.", "arabic": "سأرسل لك التفاصيل برسالة"}, {"number": 471, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "The line is busy.", "arabic": "الخط مشغول"}, {"number": 472, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I have no signal.", "arabic": "ال توجد لدي شبكة"}, {"number": 473, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Please call me back.", "arabic": "من فضلك اتصل بي مرة أخرى"}, {"number": 474, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I am in a meeting now.", "arabic": "أنا في اجتماع اآلن"}, {"number": 475, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Leave me a voice message.", "arabic": "اترك لي رسالة صوتية"}, {"number": 476, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I will send you a voice note.", "arabic": "سأرسل لك رسالة صوتية"}, {"number": 477, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Do not forget to reply.", "arabic": "ال تنسَ أن ترد"}, {"number": 478, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "I need your number again.", "arabic": "أحتاج إىل رقمك مرة أخرى"}, {"number": 479, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "My phone is on silent.", "arabic": "هاتفي عىل الوضع الصامت"}, {"number": 480, "topic_id": 24, "topic_en": "Phone and Messages", "topic_ar": "الهاتف والرسائل", "english": "Let us talk later.", "arabic": "دعنا نتحدث الحقًا"}, {"number": 481, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "The internet is not working.", "arabic": "اإلنترنت ال يعمل"}, {"number": 482, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "The Wi-Fi is very slow.", "arabic": "الواي فاي بطيء جدًا"}, {"number": 483, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "Can you send me the link?", "arabic": "هل يمكنك إرسال الرابط لي؟"}, {"number": 484, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I found it online.", "arabic": "وجدته عىل اإلنترنت"}, {"number": 485, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I follow this page.", "arabic": "أنا أتابع هذه الصفحة"}, {"number": 486, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "Please share this post.", "arabic": "من فضلك شارك هذا المنشور"}, {"number": 487, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I liked your photo.", "arabic": "أعجبتني صورتك"}, {"number": 488, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "Send me a direct message.", "arabic": "أرسل لي رسالة خاصة"}, {"number": 489, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I need to reset my password.", "arabic": "أحتاج إىل إعادة تعيين كلمة المرور"}, {"number": 490, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "Do not share your password.", "arabic": "ال تشارك كلمة مرورك"}, {"number": 491, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "This website is useful.", "arabic": "هذا الموقع مفيد جدًا"}, {"number": 492, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I downloaded the app.", "arabic": "قمت بتنزيل التطبيق"}, {"number": 493, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "The video is loading.", "arabic": "الفيديو يتم تحميله"}, {"number": 494, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I watched the lesson on YouTube.", "arabic": "شاهدت الدرس عىل يوتيوب"}, {"number": 495, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "Follow us for daily lessons.", "arabic": ""}, {"number": 496, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "The page is not opening.", "arabic": "الصفحة ال تفتح"}, {"number": 497, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "Check your internet connection.", "arabic": "تحقق من اتصال اإلنترنت"}, {"number": 498, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I posted a new story.", "arabic": "نشرت قصة جديدة"}, {"number": 499, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "I need to update the app.", "arabic": "أحتاج إىل تحديث التطبيق"}, {"number": 500, "topic_id": 25, "topic_en": "Internet and Social Media", "topic_ar": "اإلنترنت ووسائل التواصل", "english": "This account looks fake.", "arabic": "ًهذا الحساب يبدو مزيفا"}, {"number": 501, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Can you help me, please?", "arabic": "هل يمكنك مساعدتي من فضلك؟"}, {"number": 502, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "I need your help.", "arabic": "أحتاج إىل مساعدتك"}, {"number": 503, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Could you explain this to me?", "arabic": "هل يمكنك شرح هذا لي؟"}, {"number": 504, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Please wait a moment.", "arabic": "من فضلك انتظر لحظة"}, {"number": 505, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Can you repeat that?", "arabic": "هل يمكنك تكرار ذلك؟"}, {"number": 506, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Could you speak more slowly?", "arabic": "هل يمكنك التحدث ببطء أكثر؟"}, {"number": 507, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Can I ask you a question?", "arabic": "هل يمكنني أن أسألك سؤاالً؟"}, {"number": 508, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Please show me how to do it.", "arabic": "من فضلك أرني كيف أفعل ذلك"}, {"number": 509, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "I do not know what to do.", "arabic": "ال أعرف ماذا أفعل"}, {"number": 510, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Can you give me an example?", "arabic": "هل يمكنك إعطائي مثاالً؟"}, {"number": 511, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Please send me the file.", "arabic": "من فضلك أرسل لي الملف"}, {"number": 512, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Can you check this for me?", "arabic": "هل يمكنك مراجعة هذا من أجلي؟"}, {"number": 513, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "I need some advice.", "arabic": "أحتاج إىل بعض النصيحة"}, {"number": 514, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Could you open the door?", "arabic": "هل يمكنك فتح الباب؟"}, {"number": 515, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Please do not forget.", "arabic": "َمن فضلك ال تنس"}, {"number": 516, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Can you wait for me?", "arabic": "هل يمكنك انتظاري؟"}, {"number": 517, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "I need a favor.", "arabic": "أحتاج إىل خدمة"}, {"number": 518, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Could you write it down?", "arabic": "هل يمكنك كتابته؟"}, {"number": 519, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Please tell me the truth.", "arabic": "من فضلك أخبرني الحقيقة"}, {"number": 520, "topic_id": 26, "topic_en": "Asking for Help and Requests", "topic_ar": "طلب المساعدة والطلبات", "english": "Thank you for helping me.", "arabic": "شكرًا لمساعدتي"}, {"number": 521, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Would you like some tea?", "arabic": "هل تريد بعض الشاي؟"}, {"number": 522, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Can I help you with that?", "arabic": "هل يمكنني مساعدتك في ذلك؟"}, {"number": 523, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Let me carry this for you.", "arabic": "دعني أحمل هذا عنك"}, {"number": 524, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Why do not we go outside?", "arabic": "لماذا ال نخرج؟"}, {"number": 525, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Let us take a short break.", "arabic": "دعنا نأخذ استراحة قصيرة"}, {"number": 526, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "How about watching a movie?", "arabic": "ما رأيك أن نشاهد فيلماً؟"}, {"number": 527, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "We should start early.", "arabic": "ينبغي أن نبدأ مبكرًا"}, {"number": 528, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "You should drink more water.", "arabic": "ينبغي أن تشرب ماءً أكثر"}, {"number": 529, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "I suggest studying every day.", "arabic": "أقترح المذاكرة كل يوم"}, {"number": 530, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Maybe we can try again.", "arabic": "ربما يمكننا المحاولة مرة أخرى"}, {"number": 531, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "You can ask your teacher.", "arabic": "يمكنك سؤال معلمك"}, {"number": 532, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Let us solve this problem together.", "arabic": "دعنا نحل هذه المشكلة معًا"}, {"number": 533, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Would you like to join us?", "arabic": "هل ترغب في االنضمام إلينا؟"}, {"number": 534, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "I can show you the way.", "arabic": "يمكنني أن أدلك عىل الطريق"}, {"number": 535, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Let me know what you think.", "arabic": "أخبرني بما تفكر فيه"}, {"number": 536, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "We could meet tomorrow.", "arabic": "ًيمكننا أن نلتقي غدا"}, {"number": 537, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "I recommend this book.", "arabic": "أنصح بهذا الكتاب"}, {"number": 538, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "You might enjoy this course.", "arabic": "قد تستمتع بهذه الدورة"}, {"number": 539, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "Let us choose another option.", "arabic": "دعنا نختار خياراً آخر"}, {"number": 540, "topic_id": 27, "topic_en": "Offers and Suggestions", "topic_ar": "العروض واالقتراحات", "english": "That sounds like a good idea.", "arabic": "يبدو هذا كفكرة جيدة"}, {"number": 541, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Thank you for your help.", "arabic": "شكرًا لمساعدتك"}, {"number": 542, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Thanks for your time.", "arabic": "شكرًا عىل وقتك"}, {"number": 543, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I really appreciate it.", "arabic": "ًأنا أقدر ذلك حقا"}, {"number": 544, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "That is very kind of you.", "arabic": "هذا لطف كبير منك"}, {"number": 545, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Thanks for everything.", "arabic": "شكرًا عىل كل شيء"}, {"number": 546, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I am sorry.", "arabic": "أنا آسف"}, {"number": 547, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I am sorry for the mistake.", "arabic": "أنا آسف عىل الخطأ"}, {"number": 548, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I apologize for the delay.", "arabic": "أعتذر عن التأخير"}, {"number": 549, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Please forgive me.", "arabic": "من فضلك سامحني"}, {"number": 550, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "It was my fault.", "arabic": "كان هذا خطئي"}, {"number": 551, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I did not mean that.", "arabic": "لم أقصد ذلك"}, {"number": 552, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "No need to apologize.", "arabic": "ال داعي لالعتذار"}, {"number": 553, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Do not worry about it.", "arabic": "ال تقلق بشأن ذلك"}, {"number": 554, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I understand.", "arabic": "أنا أتفهم"}, {"number": 555, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Thank you for understanding.", "arabic": "شكرًا لتفهمك"}, {"number": 556, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Sorry to bother you.", "arabic": "آسف إلزعاجك"}, {"number": 557, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I hope you can forgive me.", "arabic": "أتمنى أن تسامحني"}, {"number": 558, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "Thanks for reminding me.", "arabic": "شكرًا لتذكيري"}, {"number": 559, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I owe you one.", "arabic": "أنا مدين لك بخدمة"}, {"number": 560, "topic_id": 28, "topic_en": "Thanks and Apologies", "topic_ar": "الشكر واالعتذار", "english": "I am grateful for your support.", "arabic": "أنا ممتن لدعمك"}, {"number": 561, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I think this is a good idea.", "arabic": "أعتقد أن هذه فكرة جيدة"}, {"number": 562, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "In my opinion, it is useful.", "arabic": "في رأيي، هذا مفيد"}, {"number": 563, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I believe we should try it.", "arabic": "أعتقد أننا يجب أن نجربه"}, {"number": 564, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I do not think this will work.", "arabic": "ال أعتقد أن هذا سينجح"}, {"number": 565, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "What do you think?", "arabic": "ما رأيك؟"}, {"number": 566, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I agree with you.", "arabic": "أنا أتفق معك"}, {"number": 567, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I disagree with you.", "arabic": "أنا ال أتفق معك"}, {"number": 568, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "That makes sense.", "arabic": "هذا منطقي"}, {"number": 569, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I am not sure about that.", "arabic": "لست متأكداً من ذلك"}, {"number": 570, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "This is very important.", "arabic": "هذا مهم جدًا"}, {"number": 571, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "This is not necessary.", "arabic": "ًهذا ليس ضروريا"}, {"number": 572, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I prefer the first option.", "arabic": "أفضل الخيار األول"}, {"number": 573, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "The second choice is better.", "arabic": "الخيار الثاني أفضل"}, {"number": 574, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "That sounds interesting.", "arabic": "ًهذا يبدو ممتعا"}, {"number": 575, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "It depends on the situation.", "arabic": "يعتمد األمر عىل الموقف"}, {"number": 576, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I have another point of view.", "arabic": "لدي وجهة نظر أخرى"}, {"number": 577, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "Let us look at it differently.", "arabic": "دعنا ننظر إىل األمر بطريقة مختلفة"}, {"number": 578, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "Your opinion matters.", "arabic": "رأيك مهم"}, {"number": 579, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "I respect your opinion.", "arabic": "أحترم رأيك"}, {"number": 580, "topic_id": 29, "topic_en": "Opinions", "topic_ar": "التعبير عن الرأي", "english": "We can discuss it calmly.", "arabic": "يمكننا مناقشة األمر بهدوء"}, {"number": 581, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I totally agree.", "arabic": "أنا أتفق تمامً ا"}, {"number": 582, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I agree to some extent.", "arabic": "أتفق إىل حد ما"}, {"number": 583, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "You are right.", "arabic": "أنت عىل حق"}, {"number": 584, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "That is exactly what I mean.", "arabic": "هذا بالضبط ما أعنيه"}, {"number": 585, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I see your point.", "arabic": "أفهم وجهة نظرك"}, {"number": 586, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I am afraid I disagree.", "arabic": "أخشى أنني ال أتفق"}, {"number": 587, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I do not agree with this point.", "arabic": "ال أتفق مع هذه النقطة"}, {"number": 588, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I think there is another solution.", "arabic": "أعتقد أن هناك حالً آخر"}, {"number": 589, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "Let us agree to disagree.", "arabic": "دعنا نتفق عىل أن نختلف"}, {"number": 590, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "That is not completely true.", "arabic": "هذا ليس صحيحاً تمامً ا"}, {"number": 591, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I understand your idea, but I disagree.", "arabic": "أفهم فكرتك، لكنني ال أتفق"}, {"number": 592, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "You may be right.", "arabic": "ربما تكون عىل حق"}, {"number": 593, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I have a different suggestion.", "arabic": "لدي اقتراح مختلف"}, {"number": 594, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "Can we find a middle solution?", "arabic": "هل يمكننا إيجاد حل وسط؟"}, {"number": 595, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "This is a fair point.", "arabic": "هذه نقطة عادلة"}, {"number": 596, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I need more information first.", "arabic": "ًأحتاج إىل مزيد من المعلومات أوال"}, {"number": 597, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "Let us not argue.", "arabic": "دعنا ال نتجادل"}, {"number": 598, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "We can solve this together.", "arabic": "يمكننا حل هذا معًا"}, {"number": 599, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "I agree with the final decision.", "arabic": "أنا أوافق عىل القرار النهائي"}, {"number": 600, "topic_id": 30, "topic_en": "Agreement and Disagreement", "topic_ar": "الموافقة واالختالف", "english": "Thank you for sharing your opinion.", "arabic": "شكرًا لمشاركة رأيك"}, {"number": 601, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I am happy today.", "arabic": "أنا سعيد اليوم"}, {"number": 602, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I feel tired.", "arabic": "أشعر بالتعب"}, {"number": 603, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I am a little nervous.", "arabic": "ًأنا متوتر قليال"}, {"number": 604, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I am excited about the trip.", "arabic": "أنا متحمس للرحلة"}, {"number": 605, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I feel sad for him.", "arabic": "أشعر بالحزن من أجله"}, {"number": 606, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "Do not be afraid.", "arabic": "ال تخف"}, {"number": 607, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I am proud of you.", "arabic": "أنا فخور بك"}, {"number": 608, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I feel comfortable here.", "arabic": "أشعر بالراحة هنا"}, {"number": 609, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I am worried about the exam.", "arabic": "أنا قلق بشأن االمتحان"}, {"number": 610, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "She looks upset.", "arabic": "تبدو منزعجة"}, {"number": 611, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "He is very angry.", "arabic": "هو غاضب جدًا"}, {"number": 612, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I need some rest.", "arabic": "أحتاج إىل بعض الراحة"}, {"number": 613, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I feel better now.", "arabic": "أشعر بتحسن اآلن"}, {"number": 614, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "That made me smile.", "arabic": "هذا جعلني أبتسم"}, {"number": 615, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I am disappointed with the result.", "arabic": "أنا محبط من النتيجة"}, {"number": 616, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I hope things get better.", "arabic": "أتمنى أن تتحسن األمور"}, {"number": 617, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "Try to stay calm.", "arabic": "ًحاول أن تبقى هادئا"}, {"number": 618, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "I feel lonely sometimes.", "arabic": "ًأشعر بالوحدة أحيانا"}, {"number": 619, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "This news made me happy.", "arabic": "هذا الخبر أسعدني"}, {"number": 620, "topic_id": 31, "topic_en": "Feelings and Emotions", "topic_ar": "المشاعر واألحاسيس", "english": "It is okay to feel tired.", "arabic": "من الطبيعي أن تشعر بالتعب"}, {"number": 621, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I do not feel well.", "arabic": "ال أشعر أنني بخير"}, {"number": 622, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I have a headache.", "arabic": "لدي صداع"}, {"number": 623, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I have a stomachache.", "arabic": "لدي ألم في المعدة"}, {"number": 624, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I have a sore throat.", "arabic": "لدي التهاب في الحلق"}, {"number": 625, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I need to see a doctor.", "arabic": "أحتاج إىل رؤية طبيب"}, {"number": 626, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "Where is the nearest clinic?", "arabic": "أين أقرب عيادة؟"}, {"number": 627, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "Take this medicine twice a day.", "arabic": "ًخذ هذا الدواء مرتين يوميا"}, {"number": 628, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "Drink plenty of water.", "arabic": "اشرب الكثير من الماء"}, {"number": 629, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "You need to rest.", "arabic": "تحتاج إىل الراحة"}, {"number": 630, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I have a fever.", "arabic": "لدي حمى"}, {"number": 631, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "My back hurts.", "arabic": "ظهري يؤلمني"}, {"number": 632, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I feel dizzy.", "arabic": "أشعر بالدوار"}, {"number": 633, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "Do you have any allergies?", "arabic": "هل لديك أي حساسية؟"}, {"number": 634, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I am allergic to penicillin.", "arabic": "لدي حساسية من البنسلين"}, {"number": 635, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "The doctor checked my blood pressure.", "arabic": "فحص الطبيب ضغط دمي"}, {"number": 636, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I need a prescription.", "arabic": "أحتاج إىل وصفة طبية"}, {"number": 637, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "The pain is getting worse.", "arabic": "ًاأللم يزداد سوءا"}, {"number": 638, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "The medicine helped me.", "arabic": "ساعدني الدواء"}, {"number": 639, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "I feel much better today.", "arabic": "أشعر بتحسن كبير اليوم"}, {"number": 640, "topic_id": 32, "topic_en": "Health and Doctor", "topic_ar": "الصحة والطبيب", "english": "Health is more important than anything.", "arabic": "الصحة أهم من أي شيء"}, {"number": 641, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Call the police!", "arabic": "اتصل بالشرطة"}, {"number": 642, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Call an ambulance!", "arabic": "اتصل باإلسعاف"}, {"number": 643, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "There has been an accident.", "arabic": "حدث حادث"}, {"number": 644, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "I need help immediately.", "arabic": "ًأحتاج إىل مساعدة فورا"}, {"number": 645, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Is anyone hurt?", "arabic": "هل أصيب أحد؟"}, {"number": 646, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Please stay calm.", "arabic": "ًمن فضلك ابق هادئا"}, {"number": 647, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Do not move him.", "arabic": "ال تحركه"}, {"number": 648, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Where is the nearest hospital?", "arabic": "أين أقرب مستشفى؟"}, {"number": 649, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "I lost my passport.", "arabic": "فقدت جواز سفري"}, {"number": 650, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "My wallet was stolen.", "arabic": "سُ رقت محفظتي"}, {"number": 651, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "There is a fire.", "arabic": "هناك حريق"}, {"number": 652, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Leave the building now.", "arabic": "غادر المبنى اآلن"}, {"number": 653, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "I cannot find my child.", "arabic": "ال أستطيع العثور عىل طفلي"}, {"number": 654, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Please help me find my bag.", "arabic": "من فضلك ساعدني في العثور عىل حقيبتي"}, {"number": 655, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "I need to report a problem.", "arabic": "أحتاج إىل اإلبالغ عن مشكلة"}, {"number": 656, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "This is an emergency.", "arabic": "هذه حالة طارئة"}, {"number": 657, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Can you call my family?", "arabic": "هل يمكنك االتصال بعائلتي؟"}, {"number": 658, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "The situation is under control.", "arabic": "الوضع تحت السيطرة"}, {"number": 659, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Thank you for saving me.", "arabic": "شكرًا إلنقاذي"}, {"number": 660, "topic_id": 33, "topic_en": "Emergency", "topic_ar": "الطوارئ", "english": "Stay here until help arrives.", "arabic": "ابق هنا حتى تصل المساعدة"}, {"number": 661, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "We have a problem.", "arabic": "لدينا مشكلة"}, {"number": 662, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "What is the problem?", "arabic": "ما المشكلة؟"}, {"number": 663, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "I do not know the answer.", "arabic": "ال أعرف اإلجابة"}, {"number": 664, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "Let us find a solution.", "arabic": "ًدعنا نجد حال"}, {"number": 665, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "This is not working.", "arabic": "هذا ال يعمل"}, {"number": 666, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "Try again later.", "arabic": "حاول مرة أخرى الحقًا"}, {"number": 667, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "Maybe we should ask for help.", "arabic": "ربما يجب أن نطلب المساعدة"}, {"number": 668, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "There must be another way.", "arabic": "ال بد أن هناك طريقة أخرى"}, {"number": 669, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "Do not give up.", "arabic": "ال تستسلم"}, {"number": 670, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "We can fix this.", "arabic": "يمكننا إصالح هذا"}, {"number": 671, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "The problem is getting worse.", "arabic": "ًالمشكلة تزداد سوءا"}, {"number": 672, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "We need to act quickly.", "arabic": "نحتاج إىل التصرف بسرعة"}, {"number": 673, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "Let us break the problem into steps.", "arabic": "دعنا نقسم المشكلة إىل خطوات"}, {"number": 674, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "I found the mistake.", "arabic": "وجدت الخطأ"}, {"number": 675, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "The solution is simple.", "arabic": "الحل بسيط"}, {"number": 676, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "This will take some time.", "arabic": "سيستغرق هذا بعض الوقت"}, {"number": 677, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "We should learn from this mistake.", "arabic": "يجب أن نتعلم من هذا الخطأ"}, {"number": 678, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "Everything will be okay.", "arabic": "كل شيء سيكون عىل ما يرام"}, {"number": 679, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "Thank you for your patience.", "arabic": "شكرًا عىل صبرك"}, {"number": 680, "topic_id": 34, "topic_en": "Problems and Solutions", "topic_ar": "المشاكل والحلول", "english": "The issue has been solved.", "arabic": "تم حل المشكلة"}, {"number": 681, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I have a plan.", "arabic": "لدي خطة"}, {"number": 682, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "What is your goal?", "arabic": "ما هدفك؟"}, {"number": 683, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I want to learn English.", "arabic": "أريد تعلم اإلنجليزية"}, {"number": 684, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I plan to study every day.", "arabic": "أخطط للمذاكرة كل يوم"}, {"number": 685, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "My goal is to speak fluently.", "arabic": "هدفي أن أتحدث بطالقة"}, {"number": 686, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I need a clear schedule.", "arabic": "أحتاج إىل جدول واضح"}, {"number": 687, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "Let us start with small steps.", "arabic": "دعنا نبدأ بخطوات صغيرة"}, {"number": 688, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I will do my best.", "arabic": "سأبذل قصارى جهدي"}, {"number": 689, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I want to change my life.", "arabic": "أريد تغيير حياتي"}, {"number": 690, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I am working on myself.", "arabic": "أنا أعمل عىل تطوير نفسي"}, {"number": 691, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "Do not lose focus.", "arabic": "ال تفقد تركيزك"}, {"number": 692, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "Keep going.", "arabic": "استمر"}, {"number": 693, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "Success takes time.", "arabic": "النجاح يحتاج إىل وقت"}, {"number": 694, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I need to be more organized.", "arabic": "ًأحتاج إىل أن أكون أكثر تنظيما"}, {"number": 695, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I will finish this course.", "arabic": "سأنهي هذه الدورة"}, {"number": 696, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "My dream is important to me.", "arabic": "حلمي مهم بالنسبة لي"}, {"number": 697, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I will not give up.", "arabic": "لن أستسلم"}, {"number": 698, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "Let us make a realistic plan.", "arabic": "دعنا نضع خطة واقعية"}, {"number": 699, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "Every day is a new chance.", "arabic": "كل يوم فرصة جديدة"}, {"number": 700, "topic_id": 35, "topic_en": "Plans and Goals", "topic_ar": "الخطط واألهداف", "english": "I am proud of my progress.", "arabic": "أنا فخور بتقدمي"}, {"number": 701, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I visited Luxor last year.", "arabic": "زرت األقصر العام الماضي"}, {"number": 702, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I studied English at school.", "arabic": "درست اإلنجليزية في المدرسة"}, {"number": 703, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I worked in sales before.", "arabic": "عملت في المبيعات من قبل"}, {"number": 704, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I met him two years ago.", "arabic": "قابلته منذ عامين"}, {"number": 705, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I started learning English in 2020.", "arabic": "بدأت تعلم اإلنجليزية في عام"}, {"number": 706, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I lived in another city.", "arabic": "عشت في مدينة أخرى"}, {"number": 707, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I tried this method before.", "arabic": "جربت هذه الطريقة من قبل"}, {"number": 708, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I lost my phone yesterday.", "arabic": "فقدت هاتفي أمس"}, {"number": 709, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I watched that movie last week.", "arabic": "شاهدت ذلك الفيلم األسبوع الماضي"}, {"number": 710, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I finished the book yesterday.", "arabic": "أنهيت الكتاب أمس"}, {"number": 711, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I had a difficult day.", "arabic": "كان لدي يوم صعب"}, {"number": 712, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I made many mistakes at first.", "arabic": "ارتكبت أخطاء كثيرة في البداية"}, {"number": 713, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I learned a lot from that experience.", "arabic": "تعلمت الكثير من تلك التجربة"}, {"number": 714, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I did not understand the lesson at first.", "arabic": "لم أفهم الدرس في البداية"}, {"number": 715, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I spoke to the manager yesterday.", "arabic": "تحدثت مع المدير أمس"}, {"number": 716, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I forgot to send the message.", "arabic": "نسيت إرسال الرسالة"}, {"number": 717, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I bought a new laptop last month.", "arabic": "اشتريت حاسوباً محموالً جديداً الشهر الماضي"}, {"number": 718, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I had lunch with my friend.", "arabic": "تناولت الغداء مع صديقي"}, {"number": 719, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "I waited for a long time.", "arabic": "ًانتظرت وقتاً طويال"}, {"number": 720, "topic_id": 36, "topic_en": "Past Experiences", "topic_ar": "التجارب الماضية", "english": "That experience changed me.", "arabic": "تلك التجربة غيرتني"}, {"number": 721, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I will call you tomorrow.", "arabic": "ًسأتصل بك غدا"}, {"number": 722, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I am going to study tonight.", "arabic": "سأذاكر الليلة"}, {"number": 723, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "We will travel next month.", "arabic": "سنسافر الشهر القادم"}, {"number": 724, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I am going to buy a new phone.", "arabic": "ًسأشتري هاتفاً جديدا"}, {"number": 725, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I will help you later.", "arabic": "سأساعدك الحقًا"}, {"number": 726, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "She is going to start a new job.", "arabic": "ًهي ستبدأ عمالً جديدا"}, {"number": 727, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "They will arrive soon.", "arabic": "سيصلون قريبًا"}, {"number": 728, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I will send the file tonight.", "arabic": "سأرسل الملف الليلة"}, {"number": 729, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "We are going to meet after work.", "arabic": "سنلتقي بعد العمل"}, {"number": 730, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I will try again tomorrow.", "arabic": "ًسأحاول مرة أخرى غدا"}, {"number": 731, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I am going to learn ten new words.", "arabic": "سأتعلم عشر كلمات جديدة"}, {"number": 732, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "He will join us later.", "arabic": "سينضم إلينا الحقًا"}, {"number": 733, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "The weather will be better tomorrow.", "arabic": "ًسيكون الطقس أفضل غدا"}, {"number": 734, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I will not forget this.", "arabic": "لن أنسى هذا"}, {"number": 735, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I am going to save money.", "arabic": "سأدخر المال"}, {"number": 736, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "We will discuss it next week.", "arabic": "سنناقش األمر األسبوع القادم"}, {"number": 737, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I will be more careful.", "arabic": "ًسأكون أكثر حذرا"}, {"number": 738, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "She is going to call you.", "arabic": "هي ستتصل بك"}, {"number": 739, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "I will do it as soon as possible.", "arabic": "سأفعل ذلك في أسرع وقت ممكن"}, {"number": 740, "topic_id": 37, "topic_en": "Future Intentions", "topic_ar": "النوايا المستقبلية", "english": "Everything will be fine.", "arabic": "كل شيء سيكون بخير"}, {"number": 741, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "Can you swim?", "arabic": "هل تستطيع السباحة؟"}, {"number": 742, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "I can speak English a little.", "arabic": "ًأستطيع التحدث باإلنجليزية قليال"}, {"number": 743, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "I cannot drive.", "arabic": "ال أستطيع القيادة"}, {"number": 744, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "Can I ask a question?", "arabic": "هل يمكنني أن أسأل سؤاالً؟"}, {"number": 745, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "May I come in?", "arabic": "هل يمكنني الدخول؟"}, {"number": 746, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "You can use my pen.", "arabic": "يمكنك استخدام قلمي"}, {"number": 747, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "You cannot park here.", "arabic": "ال يمكنك الوقوف هنا"}, {"number": 748, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "Can you help me carry this?", "arabic": "هل يمكنك مساعدتي في حمل هذا؟"}, {"number": 749, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "I could read English when I was young.", "arabic": "ًكنت أستطيع قراءة اإلنجليزية عندما كنت صغيرا"}, {"number": 750, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "I was able to solve the problem.", "arabic": "تمكنت من حل المشكلة"}, {"number": 751, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "Can we leave early?", "arabic": "هل يمكننا المغادرة مبكرًا؟"}, {"number": 752, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "You may sit here.", "arabic": "يمكنك الجلوس هنا"}, {"number": 753, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "I cannot understand this sentence.", "arabic": "ال أستطيع فهم هذه الجملة"}, {"number": 754, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "Can you open this file?", "arabic": "هل يمكنك فتح هذا الملف؟"}, {"number": 755, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "I can finish it today.", "arabic": "أستطيع إنهاءه اليوم"}, {"number": 756, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "You should not use your phone here.", "arabic": "ال ينبغي أن تستخدم هاتفك هنا"}, {"number": 757, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "May I borrow your book?", "arabic": "هل يمكنني استعارة كتابك؟"}, {"number": 758, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "I can learn if I practice.", "arabic": "أستطيع التعلم إذا تدربت"}, {"number": 759, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "Can I take a photo?", "arabic": "هل يمكنني التقاط صورة؟"}, {"number": 760, "topic_id": 38, "topic_en": "Ability and Permission", "topic_ar": "القدرة واإلذن", "english": "You are allowed to enter.", "arabic": "مسموح لك بالدخول"}, {"number": 761, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "What do you do in your free time?", "arabic": "ماذا تفعل في وقت فراغك؟"}, {"number": 762, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I like reading novels.", "arabic": "أحب قراءة الروايات"}, {"number": 763, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I enjoy watching movies.", "arabic": "أستمتع بمشاهدة األفالم"}, {"number": 764, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I play football with my friends.", "arabic": "ألعب كرة القدم مع أصدقائي"}, {"number": 765, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I listen to music every day.", "arabic": "أستمع إىل الموسيقى كل يوم"}, {"number": 766, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "She likes drawing.", "arabic": "هي تحب الرسم"}, {"number": 767, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "He enjoys playing video games.", "arabic": "هو يستمتع بلعب ألعاب الفيديو"}, {"number": 768, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I go for a walk in the evening.", "arabic": "أذهب للمشي في المساء"}, {"number": 769, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "My hobby is photography.", "arabic": "هوايتي هي التصوير"}, {"number": 770, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I am learning to cook.", "arabic": "أنا أتعلم الطبخ"}, {"number": 771, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "Do you like traveling?", "arabic": "هل تحب السفر؟"}, {"number": 772, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I spend my free time with my family.", "arabic": "أقضي وقت فراغي مع عائلتي"}, {"number": 773, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I do not have much free time.", "arabic": "ال أملك الكثير من وقت الفراغ"}, {"number": 774, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "Reading helps me relax.", "arabic": "القراءة تساعدني عىل االسترخاء"}, {"number": 775, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I want to try a new hobby.", "arabic": "أريد تجربة هواية جديدة"}, {"number": 776, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "He plays the guitar.", "arabic": "هو يعزف عىل الجيتار"}, {"number": 777, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I prefer outdoor activities.", "arabic": "أفضل األنشطة الخارجية"}, {"number": 778, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "We watched a match yesterday.", "arabic": "شاهدنا مباراة أمس"}, {"number": 779, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "I like learning new skills.", "arabic": "أحب تعلم مهارات جديدة"}, {"number": 780, "topic_id": 39, "topic_en": "Hobbies and Free Time", "topic_ar": "الهوايات ووقت الفراغ", "english": "Free time is important for balance.", "arabic": "وقت الفراغ مهم للتوازن"}, {"number": 781, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "I exercise three times a week.", "arabic": "أمارس الرياضة ثالث مرات في األسبوع"}, {"number": 782, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "I go to the gym after work.", "arabic": "أذهب إىل صالة الرياضة بعد العمل"}, {"number": 783, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Walking is good for your health.", "arabic": "المشي مفيد لصحتك"}, {"number": 784, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "I need to lose some weight.", "arabic": "أحتاج إىل إنقاص بعض الوزن"}, {"number": 785, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "He plays football every Friday.", "arabic": "هو يلعب كرة القدم كل جمعة"}, {"number": 786, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "She runs in the morning.", "arabic": "هي تجري في الصباح"}, {"number": 787, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Do you like basketball?", "arabic": "هل تحب كرة السلة؟"}, {"number": 788, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "The match starts at eight.", "arabic": "تبدأ المباراة في الثامنة"}, {"number": 789, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Our team won the game.", "arabic": "فاز فريقنا بالمباراة"}, {"number": 790, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "I am tired after training.", "arabic": "أنا متعب بعد التدريب"}, {"number": 791, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Drink water during exercise.", "arabic": "اشرب الماء أثناء التمرين"}, {"number": 792, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Warm up before you start.", "arabic": "قم باإلحماء قبل أن تبدأ"}, {"number": 793, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Do not exercise too hard.", "arabic": "ال تتمرن بشدة زائدة"}, {"number": 794, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "I want to be stronger.", "arabic": "أريد أن أصبح أقوى"}, {"number": 795, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Swimming is my favorite sport.", "arabic": "السباحة هي رياضتي المفضلة"}, {"number": 796, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "The coach gave us advice.", "arabic": "أعطانا المدرب نصيحة"}, {"number": 797, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "I need new sports shoes.", "arabic": "أحتاج إىل حذاء رياضي جديد"}, {"number": 798, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Exercise improves your mood.", "arabic": "الرياضة تحسن مزاجك"}, {"number": 799, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "We lost the game, but we played well.", "arabic": "ًخسرنا المباراة، لكننا لعبنا جيدا"}, {"number": 800, "topic_id": 40, "topic_en": "Sports and Exercise", "topic_ar": "الرياضة والتمارين", "english": "Health needs movement.", "arabic": "الصحة تحتاج إىل حركة"}, {"number": 801, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "What are you wearing today?", "arabic": "ماذا ترتدي اليوم؟"}, {"number": 802, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "I am wearing a blue shirt.", "arabic": "أرتدي قميصاً أزرق"}, {"number": 803, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "This jacket looks nice.", "arabic": "هذه السترة تبدو جميلة"}, {"number": 804, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "The shoes are comfortable.", "arabic": "الحذاء مريح"}, {"number": 805, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "I need a larger size.", "arabic": "أحتاج إىل مقاس أكبر"}, {"number": 806, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "Do you have this in black?", "arabic": "هل لديك هذا باللون األسود؟"}, {"number": 807, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "The dress is too expensive.", "arabic": "الفستان غالٍ جدًا"}, {"number": 808, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "I prefer simple clothes.", "arabic": "أفضل المالبس البسيطة"}, {"number": 809, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "This color suits you.", "arabic": "هذا اللون يناسبك"}, {"number": 810, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "I bought new jeans.", "arabic": "ًاشتريت بنطال جينز جديدا"}, {"number": 811, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "The shirt is dirty.", "arabic": "القميص متسخ"}, {"number": 812, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "I need to wash my clothes.", "arabic": "أحتاج إىل غسل مالبسي"}, {"number": 813, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "Where are my socks?", "arabic": "أين جواربي؟"}, {"number": 814, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "Put on your coat.", "arabic": "ارتدِ معطفك"}, {"number": 815, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "Take off your shoes.", "arabic": "اخلع حذاءك"}, {"number": 816, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "The hat is too small.", "arabic": "القبعة صغيرة جدًا"}, {"number": 817, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "I like light colors.", "arabic": "أحب األلوان الفاتحة"}, {"number": 818, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "Red is my favorite color.", "arabic": "األحمر هو لوني المفضل"}, {"number": 819, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "These clothes are on sale.", "arabic": "هذه المالبس عليها تخفيض"}, {"number": 820, "topic_id": 41, "topic_en": "Clothes and Colors", "topic_ar": "المالبس واأللوان", "english": "You look very elegant.", "arabic": "تبدو أنيقاً جدًا"}, {"number": 821, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "I need to wash the dishes.", "arabic": "أحتاج إىل غسل األطباق"}, {"number": 822, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Please clean the table.", "arabic": "من فضلك نظف الطاولة"}, {"number": 823, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "I will sweep the floor.", "arabic": "سأكنس األرض"}, {"number": 824, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Take out the trash.", "arabic": "أخرج القمامة"}, {"number": 825, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Make your bed.", "arabic": "رتب سريرك"}, {"number": 826, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "The laundry is ready.", "arabic": "الغسيل جاهز"}, {"number": 827, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "I have to iron my shirt.", "arabic": "يجب أن أكوي قميصي"}, {"number": 828, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Can you help me in the kitchen?", "arabic": "هل يمكنك مساعدتي في المطبخ؟"}, {"number": 829, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "We need to buy cleaning supplies.", "arabic": "نحتاج إىل شراء أدوات تنظيف"}, {"number": 830, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "The room is messy.", "arabic": "الغرفة غير مرتبة"}, {"number": 831, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "I will clean the bathroom.", "arabic": "سأنظف الحمام"}, {"number": 832, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Please water the plants.", "arabic": "من فضلك اسقِ النباتات"}, {"number": 833, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "The fridge is empty.", "arabic": "الثالجة فارغة"}, {"number": 834, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "I need to cook dinner.", "arabic": "أحتاج إىل إعداد العشاء"}, {"number": 835, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "The floor is wet.", "arabic": "األرض مبللة"}, {"number": 836, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Close the curtains.", "arabic": "أغلق الستائر"}, {"number": 837, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Open the cupboard.", "arabic": "افتح الخزانة"}, {"number": 838, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Put the clothes away.", "arabic": "ضع المالبس في مكانها"}, {"number": 839, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "The house looks better now.", "arabic": "المنزل يبدو أفضل اآلن"}, {"number": 840, "topic_id": 42, "topic_en": "House Chores", "topic_ar": "األعمال المنزلية", "english": "Everyone should help at home.", "arabic": "يجب أن يساعد الجميع في المنزل"}, {"number": 841, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "There is a bank near here.", "arabic": "يوجد بنك قريب من هنا"}, {"number": 842, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The pharmacy is open.", "arabic": "الصيدلية مفتوحة"}, {"number": 843, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The supermarket is crowded.", "arabic": "السوبر ماركت مزدحم"}, {"number": 844, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "I live near the park.", "arabic": "أعيش بالقرب من الحديقة"}, {"number": 845, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The library is very quiet.", "arabic": "المكتبة هادئة جدًا"}, {"number": 846, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "Where is the post office?", "arabic": "أين مكتب البريد؟"}, {"number": 847, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The hospital is on the main road.", "arabic": "المستشفى عىل الطريق الرئيسي"}, {"number": 848, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "There is a mosque next to the school.", "arabic": "يوجد مسجد بجوار المدرسة"}, {"number": 849, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The market is open in the morning.", "arabic": "السوق مفتوح في الصباح"}, {"number": 850, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "This city is beautiful.", "arabic": "هذه المدينة جميلة"}, {"number": 851, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The street is very busy.", "arabic": "الشارع مزدحم جدًا"}, {"number": 852, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "We went to the museum.", "arabic": "ذهبنا إىل المتحف"}, {"number": 853, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The cinema is closed today.", "arabic": "السينما مغلقة اليوم"}, {"number": 854, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "I need to go to the police station.", "arabic": "أحتاج إىل الذهاب إىل قسم الشرطة"}, {"number": 855, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The restaurant is on the corner.", "arabic": "المطعم عند الزاوية"}, {"number": 856, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The mall is far from here.", "arabic": "المركز التجاري بعيد عن هنا"}, {"number": 857, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "There are many shops downtown.", "arabic": "توجد متاجر كثيرة في وسط المدينة"}, {"number": 858, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The bridge is under repair.", "arabic": "الجسر قيد اإلصالح"}, {"number": 859, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "The neighborhood is safe.", "arabic": "الحي آمن"}, {"number": 860, "topic_id": 43, "topic_en": "Around Town", "topic_ar": "في المدينة", "english": "I know this area well.", "arabic": "ًأعرف هذه المنطقة جيدا"}, {"number": 861, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I want to open a bank account.", "arabic": "أريد فتح حساب بنكي"}, {"number": 862, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I need to deposit some money.", "arabic": "أحتاج إىل إيداع بعض المال"}, {"number": 863, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I want to withdraw cash.", "arabic": "أريد سحب نقود"}, {"number": 864, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "Can I transfer money online?", "arabic": "هل يمكنني تحويل المال عبر اإلنترنت؟"}, {"number": 865, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "My card is not working.", "arabic": "بطاقتي ال تعمل"}, {"number": 866, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I forgot my PIN number.", "arabic": "نسيت الرقم السري"}, {"number": 867, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "Where can I sign?", "arabic": "أين يمكنني التوقيع؟"}, {"number": 868, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "Please fill out this form.", "arabic": "من فضلك امأل هذا النموذج"}, {"number": 869, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I need to send a package.", "arabic": "أحتاج إىل إرسال طرد"}, {"number": 870, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "How much is the postage?", "arabic": "كم تكلفة البريد؟"}, {"number": 871, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "When will it arrive?", "arabic": "متى سيصل؟"}, {"number": 872, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I need a stamp.", "arabic": "أحتاج إىل طابع بريد"}, {"number": 873, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "Do you have my package?", "arabic": "هل لديكم طردي؟"}, {"number": 874, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "Please write the address clearly.", "arabic": "من فضلك اكتب العنوان بوضوح"}, {"number": 875, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "The bank closes at three.", "arabic": "يغلق البنك في الثالثة"}, {"number": 876, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "The line is very long.", "arabic": "الطابور طويل جدًا"}, {"number": 877, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I need customer service.", "arabic": "أحتاج إىل خدمة العمالء"}, {"number": 878, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "Can I speak to the manager?", "arabic": "هل يمكنني التحدث إىل المدير؟"}, {"number": 879, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "I received a money transfer.", "arabic": "استلمت حوالة مالية"}, {"number": 880, "topic_id": 44, "topic_en": "Bank and Post Office", "topic_ar": "البنك ومكتب البريد", "english": "Keep the receipt safe.", "arabic": "احتفظ باإليصال في مكان آمن"}, {"number": 881, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "I need this medicine.", "arabic": "أحتاج إىل هذا الدواء"}, {"number": 882, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Do you have something for a headache?", "arabic": "هل لديكم شيء للصداع؟"}, {"number": 883, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "How often should I take it?", "arabic": "كم مرة يجب أن آخذه؟"}, {"number": 884, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Take it after meals.", "arabic": "خذه بعد الوجبات"}, {"number": 885, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Take it before meals.", "arabic": "خذه قبل الوجبات"}, {"number": 886, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Are there any side effects?", "arabic": "هل توجد أي آثار جانبية؟"}, {"number": 887, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "I need cough syrup.", "arabic": "أحتاج إىل شراب للسعال"}, {"number": 888, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Do you need a prescription?", "arabic": "هل تحتاج إىل وصفة طبية؟"}, {"number": 889, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "This medicine is not available.", "arabic": "هذا الدواء غير متوفر"}, {"number": 890, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Can you suggest an alternative?", "arabic": "هل يمكنك اقتراح بديل؟"}, {"number": 891, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "I have a cold.", "arabic": "لدي نزلة برد"}, {"number": 892, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "I need vitamins.", "arabic": "أحتاج إىل فيتامينات"}, {"number": 893, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "How much does it cost?", "arabic": "كم سعره؟"}, {"number": 894, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Do not take more than two tablets.", "arabic": "ال تأخذ أكثر من قرصين"}, {"number": 895, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Keep it away from children.", "arabic": "احفظه بعيداً عن األطفال"}, {"number": 896, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Read the instructions carefully.", "arabic": "اقرأ التعليمات بعناية"}, {"number": 897, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "I am allergic to this medicine.", "arabic": "لدي حساسية من هذا الدواء"}, {"number": 898, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "The painkiller helped me.", "arabic": "ساعدني المسكن"}, {"number": 899, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "Can I take this with food?", "arabic": "هل يمكنني أخذ هذا مع الطعام؟"}, {"number": 900, "topic_id": 45, "topic_en": "At the Pharmacy", "topic_ar": "في الصيدلية", "english": "I hope you feel better soon.", "arabic": "أتمنى أن تتحسن قريبًا"}, {"number": 901, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "Where are you staying?", "arabic": "أين تقيم؟"}, {"number": 902, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I am staying at a hotel.", "arabic": "أقيم في فندق"}, {"number": 903, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "How long will you stay?", "arabic": "كم مدة إقامتك؟"}, {"number": 904, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I will stay for one week.", "arabic": "سأقيم لمدة أسبوع"}, {"number": 905, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "Is this your first visit?", "arabic": "هل هذه زيارتك األوىل؟"}, {"number": 906, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "What places should I visit?", "arabic": "ما األماكن التي ينبغي أن أزورها؟"}, {"number": 907, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "Can you recommend a good restaurant?", "arabic": "هل يمكنك ترشيح مطعم جيد؟"}, {"number": 908, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I would like a city map.", "arabic": "أريد خريطة للمدينة"}, {"number": 909, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "How can I get to the museum?", "arabic": "كيف يمكنني الوصول إىل المتحف؟"}, {"number": 910, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "Is it safe to walk at night?", "arabic": "هل من اآلمن المشي ليالً؟"}, {"number": 911, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I need to book a tour.", "arabic": "أحتاج إىل حجز جولة"}, {"number": 912, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "The beach is beautiful.", "arabic": "الشاطئ جميل"}, {"number": 913, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I took many photos.", "arabic": "التقطت صوراً كثيرة"}, {"number": 914, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "The trip was amazing.", "arabic": "كانت الرحلة رائعة"}, {"number": 915, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I bought some souvenirs.", "arabic": "اشتريت بعض الهدايا التذكارية"}, {"number": 916, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I want to try local food.", "arabic": "أريد تجربة الطعام المحلي"}, {"number": 917, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I got lost in the old city.", "arabic": "تهت في المدينة القديمة"}, {"number": 918, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "Can you call a taxi for me?", "arabic": "هل يمكنك طلب سيارة أجرة لي؟"}, {"number": 919, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "I will come back next year.", "arabic": "سأعود العام القادم"}, {"number": 920, "topic_id": 46, "topic_en": "Travel Conversations", "topic_ar": "محادثات السفر", "english": "Travel teaches you a lot.", "arabic": "السفر يعلمك الكثير"}, {"number": 921, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Would you like to have coffee?", "arabic": "هل ترغب في تناول قهوة؟"}, {"number": 922, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "What do you like to do?", "arabic": "ماذا تحب أن تفعل؟"}, {"number": 923, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "We have a lot in common.", "arabic": "لدينا أشياء كثيرة مشتركة"}, {"number": 924, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Let us meet after class.", "arabic": "دعنا نلتقي بعد الدرس"}, {"number": 925, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Can I join you?", "arabic": "هل يمكنني االنضمام إليكم؟"}, {"number": 926, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "You are very friendly.", "arabic": "أنت ودود جدًا"}, {"number": 927, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "I enjoyed talking to you.", "arabic": "استمتعت بالتحدث معك"}, {"number": 928, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Do you want to exchange numbers?", "arabic": "هل تريد أن نتبادل األرقام؟"}, {"number": 929, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Let us stay in touch.", "arabic": "دعنا نبقى عىل تواصل"}, {"number": 930, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "I can introduce you to my friends.", "arabic": "يمكنني أن أعرّفك عىل أصدقائي"}, {"number": 931, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Do you use social media?", "arabic": "هل تستخدم وسائل التواصل االجتماعي؟"}, {"number": 932, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "We should hang out sometime.", "arabic": "ينبغي أن نخرج معًا في وقت ما"}, {"number": 933, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Thank you for inviting me.", "arabic": "شكرًا لدعوتي"}, {"number": 934, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "I had a great time.", "arabic": "ًقضيت وقتاً رائعا"}, {"number": 935, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "You can count on me.", "arabic": "يمكنك االعتماد علي"}, {"number": 936, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "I am here if you need anything.", "arabic": "أنا هنا إذا احتجت إىل أي شيء"}, {"number": 937, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Friendship needs trust.", "arabic": "الصداقة تحتاج إىل ثقة"}, {"number": 938, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Be honest with your friends.", "arabic": "كن صادقاً مع أصدقائك"}, {"number": 939, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "Good friends support each other.", "arabic": "األصدقاء الجيدون يدعمون بعضهم بعضً ا"}, {"number": 940, "topic_id": 47, "topic_en": "Making Friends", "topic_ar": "تكوين الصداقات", "english": "I am lucky to know you.", "arabic": "أنا محظوظ بمعرفتك"}, {"number": 941, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "English is important for my future.", "arabic": "اإلنجليزية مهمة لمستقبلي"}, {"number": 942, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I want to speak English confidently.", "arabic": "أريد التحدث باإلنجليزية بثقة"}, {"number": 943, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I need to improve my pronunciation.", "arabic": "أحتاج إىل تحسين نطقي"}, {"number": 944, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I learn new words every day.", "arabic": "أتعلم كلمات جديدة كل يوم"}, {"number": 945, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I practice speaking with my friends.", "arabic": "أتدرب عىل التحدث مع أصدقائي"}, {"number": 946, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I make mistakes, but I keep learning.", "arabic": "أرتكب أخطاء، لكنني أستمر في التعلم"}, {"number": 947, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "Can you correct my sentence?", "arabic": "هل يمكنك تصحيح جملتي؟"}, {"number": 948, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "This word is hard to pronounce.", "arabic": "هذه الكلمة صعبة النطق"}, {"number": 949, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I understand more than I speak.", "arabic": "أفهم أكثر مما أتكلم"}, {"number": 950, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "Listening helps me improve.", "arabic": "االستماع يساعدني عىل التحسن"}, {"number": 951, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I watch videos with subtitles.", "arabic": "أشاهد فيديوهات مع ترجمة"}, {"number": 952, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I write short sentences every day.", "arabic": "أكتب جمالً قصيرة كل يوم"}, {"number": 953, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "Do not translate every word.", "arabic": "ال تترجم كل كلمة"}, {"number": 954, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "Learn phrases, not only words.", "arabic": "تعلم العبارات، وليس الكلمات فقط"}, {"number": 955, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "Speak slowly and clearly.", "arabic": "تحدث ببطء ووضوح"}, {"number": 956, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I am getting better little by little.", "arabic": "أنا أتحسن شيעًا فشيעًا"}, {"number": 957, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "Practice is more important than fear.", "arabic": "الممارسة أهم من الخوف"}, {"number": 958, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I need a simple explanation.", "arabic": "أحتاج إىل شرح بسيط"}, {"number": 959, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "This lesson is very useful.", "arabic": "هذا الدرس مفيد جدًا"}, {"number": 960, "topic_id": 48, "topic_en": "Learning English", "topic_ar": "تعلم اإلنجليزية", "english": "I will continue learning English.", "arabic": "سأستمر في تعلم اإلنجليزية"}, {"number": 961, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "I was tired, but I finished the work.", "arabic": "كنت متعباً، لكنني أنهيت العمل"}, {"number": 962, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "I studied hard, so I passed the exam.", "arabic": "ذاكرت بجد، لذلك نجحت في االمتحان"}, {"number": 963, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "I stayed home because it was raining.", "arabic": "ًبقيت في المنزل ألن الجو كان ممطرا"}, {"number": 964, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "If you need help, call me.", "arabic": "إذا احتجت إىل مساعدة، اتصل بي"}, {"number": 965, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "When I arrived, the meeting had started.", "arabic": "عندما وصلت، كان االجتماع قد بدأ"}, {"number": 966, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "Although it was difficult, I tried.", "arabic": "رغم أنه كان صعباً، حاولت"}, {"number": 967, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "I like tea, and she likes coffee.", "arabic": "أنا أحب الشاي، وهي تحب القهوة"}, {"number": 968, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "You can come now or later.", "arabic": "يمكنك القدوم اآلن أو الحقًا"}, {"number": 969, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "First, read the question carefully.", "arabic": "أوالً ، اقرأ السؤال بعناية"}, {"number": 970, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "Then, write your answer.", "arabic": "ثم اكتب إجابتك"}, {"number": 971, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "Finally, check your work.", "arabic": "أخيرًا، راجع عملك"}, {"number": 972, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "For example, you can use this sentence.", "arabic": "عىل سبيل المثال، يمكنك استخدام هذه الجملة"}, {"number": 973, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "In addition, we need more practice.", "arabic": "باإلضافة إىل ذلك، نحتاج إىل مزيد من التدريب"}, {"number": 974, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "However, this is not always true.", "arabic": "ومع ذلك، هذا ليس صحيحاً دائمًا"}, {"number": 975, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "Therefore, we should be careful.", "arabic": "لذلك، ينبغي أن نكون حذرين"}, {"number": 976, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "Before you leave, close the door.", "arabic": "قبل أن تغادر، أغلق الباب"}, {"number": 977, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "After I finish, I will call you.", "arabic": "بعد أن أنتهي، سأتصل بك"}, {"number": 978, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "As a result, we saved time.", "arabic": "ونتيجة لذلك، وفرنا الوقت"}, {"number": 979, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "In fact, it was easier than I expected.", "arabic": "في الحقيقة، كان أسهل مما توقعت"}, {"number": 980, "topic_id": 49, "topic_en": "Common Connectors", "topic_ar": "روابط شائعة في الكالم", "english": "To sum up, practice every day.", "arabic": "باختصار، تدرب كل يوم"}, {"number": 981, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "What is your name?", "arabic": "ما اسمك؟"}, {"number": 982, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Where are you going?", "arabic": "إىل أين أنت ذاهب؟"}, {"number": 983, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "What are you doing?", "arabic": "ماذا تفعل؟"}, {"number": 984, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Who is calling?", "arabic": "من المتصل؟"}, {"number": 985, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Why are you late?", "arabic": "لماذا أنت متأخر؟"}, {"number": 986, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "How do you know that?", "arabic": "كيف تعرف ذلك؟"}, {"number": 987, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "When will you come?", "arabic": "متى ستأتي؟"}, {"number": 988, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Where can I find it?", "arabic": "أين يمكنني العثور عليه؟"}, {"number": 989, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "How much do you need?", "arabic": "كم تحتاج؟"}, {"number": 990, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Which one do you prefer?", "arabic": "أي واحد تفضل؟"}, {"number": 991, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Can you help me?", "arabic": "هل يمكنك مساعدتي؟"}, {"number": 992, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Do you understand?", "arabic": "هل تفهم؟"}, {"number": 993, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Are you ready?", "arabic": "هل أنت جاهز؟"}, {"number": 994, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Is this yours?", "arabic": "هل هذا لك؟"}, {"number": 995, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Was it difficult?", "arabic": "هل كان صعباً؟"}, {"number": 996, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Did you finish?", "arabic": "هل انتهيت؟"}, {"number": 997, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Have you eaten?", "arabic": "هل أكلت؟"}, {"number": 998, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Will you join us?", "arabic": "هل ستنضم إلينا؟"}, {"number": 999, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Should I wait?", "arabic": "هل ينبغي أن أنتظر؟"}, {"number": 1000, "topic_id": 50, "topic_en": "Everyday Questions", "topic_ar": "أسئلة يومية قصيرة", "english": "Could you repeat that?", "arabic": "هل يمكنك تكرار ذلك؟"}]};
-let S = [...DATA.sentences];
-let T = [...DATA.topics];
-let customTopics = consolidatedData?.customTopics || safeParse(localStorage.getItem('nada_custom_topics_v1'), []);
-let hiddenBuiltInTopicIds = consolidatedData?.hiddenBuiltInTopicIds || safeParse(localStorage.getItem('nada_hidden_topics_v1'), []);
-let pinnedBuiltInTopicIds = consolidatedData?.pinnedBuiltInTopicIds || safeParse(localStorage.getItem('nada_pinned_topics_v1'), []);
-function saveTopicWorkspace(){
-  localStorage.setItem('nada_hidden_topics_v1',JSON.stringify(hiddenBuiltInTopicIds));
-  localStorage.setItem('nada_pinned_topics_v1',JSON.stringify(pinnedBuiltInTopicIds));
-  saveCustomTopics();
-}
-function rebuildCustomData(){
-  const hidden=new Set((hiddenBuiltInTopicIds||[]).map(Number));
-  const pinned=new Set((pinnedBuiltInTopicIds||[]).map(Number));
-  S=[]; T=[];
-  DATA.topics.forEach(base=>{
-    if(hidden.has(Number(base.id))) return;
-    const lines=DATA.sentences.filter(x=>Number(x.topic_id)===Number(base.id));
-    const start=S.length;
-    lines.forEach(x=>S.push({...x,number:S.length+1}));
-    T.push({...base,start_index:start,count:lines.length,pinned:pinned.has(Number(base.id)),built_in:true});
-  });
-  customTopics.forEach((ct, idx)=>{
-    const topicId = 1000 + idx + 1;
-    const start = S.length;
-    const titleEn = ct.title_en || 'Custom Topic';
-    const titleAr = ct.title_ar || 'موضوع مخصص';
-    const lines = Array.isArray(ct.sentences) ? ct.sentences : [];
-    lines.forEach(pair=>{
-      S.push({number:S.length+1,topic_id:topicId,topic_en:titleEn,topic_ar:titleAr,english:pair.english||'',arabic:pair.arabic||''});
-    });
-    T.push({id:topicId,number:topicId,title_en:titleEn,title_ar:titleAr,start_index:start,count:lines.length,custom:true,custom_index:idx,pinned:Boolean(ct.pinned)});
-  });
-}
-function saveCustomTopics(){ localStorage.setItem('nada_custom_topics_v1', JSON.stringify(customTopics)); saveAllData(); }
-rebuildCustomData();
-let state = consolidatedData?.state || safeParse(localStorage.getItem('nada_v12_state'), {i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]});
-let voices = [], currentQuiz = null, currentReview = null, daily = [];
-const $ = id => document.getElementById(id);
-function saveAllData(){ if(!storageAvailable()) return; const payload={version:APP_VERSION,savedAt:new Date().toISOString(),state,customTopics,hiddenBuiltInTopicIds,pinnedBuiltInTopicIds,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); window.dispatchEvent(new CustomEvent('nada:data-changed')); }
-function save(){ localStorage.setItem('nada_v12_state', JSON.stringify(state)); saveAllData(); }
-function toast(msg){ const t=$('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1400); }
-function clean(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim(); }
-function clampIndex(){ state.i = Math.max(0, Math.min(S.length-1, state.i||0)); }
-function renderTopics(){
-  const tid=S[state.i]?.topic_id;
-  const query=($('sidebarTopicSearch')?.value||'').trim().toLowerCase();
-  let rows=[...T];
-  rows.sort((a,b)=>Number(Boolean(b.pinned))-Number(Boolean(a.pinned)) || Number(a.start_index)-Number(b.start_index));
-  if(query) rows=rows.filter(t=>String(t.title_en||'').toLowerCase().includes(query)||String(t.title_ar||'').includes(query));
-  if($('topicCountBadge')) $('topicCountBadge').textContent=rows.length;
-  $('topics').innerHTML=rows.map(t=>{
-    const active=t.id===tid||t.number===tid;
-    const known=S.slice(t.start_index,t.start_index+t.count).filter(x=>state.known?.[x.number]).length;
-    const pct=t.count?Math.round(known/t.count*100):0;
-    return `<article class="topicCard ${active?'active':''} ${t.pinned?'pinned':''}" data-start="${t.start_index}">
-      <button class="topic topicMain" data-start="${t.start_index}">
-        <span class="topicTitle"><b>${t.pinned?'📌 ':''}${t.custom?'⭐ ':''}${escapeHtml(t.title_en)}</b><small>${escapeHtml(t.title_ar)} · ${t.count} جملة</small></span>
-        <span class="topicPct">${pct}%</span>
-      </button>
-      <div class="topicMiniProgress"><i style="width:${pct}%"></i></div>
-      <div class="customTopicActions">
-        <button class="topicAction topicManageAny" data-topic-id="${t.id}" title="تعديل الموضوع والجمل">✏️</button>
-        <button class="topicAction topicDuplicateAny" data-topic-id="${t.id}" title="نسخ الموضوع">📋</button>
-        <button class="topicAction topicPinAny" data-topic-id="${t.id}" title="تثبيت">${t.pinned?'📍':'📌'}</button>
-        <button class="topicAction topicDeleteAny" data-topic-id="${t.id}" title="حذف الموضوع">🗑️</button>
-      </div>
-    </article>`;
-  }).join('') || '<div class="topicEmpty">لا توجد موضوعات مطابقة.</div>';
-  document.querySelectorAll('.topicMain').forEach(b=>b.onclick=()=>{state.i=Number(b.dataset.start); render();});
-  document.querySelectorAll('.topicManageAny').forEach(b=>b.onclick=e=>{e.stopPropagation();manageAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
-  document.querySelectorAll('.topicDuplicateAny').forEach(b=>b.onclick=e=>{e.stopPropagation();duplicateAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
-  document.querySelectorAll('.topicPinAny').forEach(b=>b.onclick=e=>{e.stopPropagation();togglePinAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
-  document.querySelectorAll('.topicDeleteAny').forEach(b=>b.onclick=e=>{e.stopPropagation();deleteAnyTopic(T.find(t=>String(t.id)===String(b.dataset.topicId)));});
-}
-function render(){ clampIndex(); const x=S[state.i]; $('badge').textContent = `${x.number} / ${S.length} - ${x.topic_en}`; $('en').textContent=x.english; $('ar').textContent=x.arabic; $('wordSentence').textContent=x.english; renderTopics(); renderWords(); updateStats(); save(); }
-function loadVoices(){ voices = speechSynthesis.getVoices().filter(v=>/en|English/i.test(v.lang+' '+v.name)); $('voice').innerHTML = voices.length ? voices.map((v,i)=>`<option value="${i}">${v.name} - ${v.lang}</option>`).join('') : '<option value="">Default</option>'; }
-loadVoices(); if('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices;
-function updateRateValue(){ const el=$('rateValue'); if(el&&$('rate')) el.textContent=Number($('rate').value||0.85).toFixed(2)+'x'; }
-$('rate') && ($('rate').oninput=()=>{ updateRateValue(); localStorage.setItem('nada_voice_rate',$('rate').value); });
-if($('rate') && localStorage.getItem('nada_voice_rate')) $('rate').value=localStorage.getItem('nada_voice_rate');
-updateRateValue();
-$('voice') && ($('voice').onchange=()=>localStorage.setItem('nada_voice_index',$('voice').value));
-setTimeout(()=>{ if($('voice') && localStorage.getItem('nada_voice_index')!==null) $('voice').value=localStorage.getItem('nada_voice_index'); },300);
-$('voiceTestBtn') && ($('voiceTestBtn').onclick=()=>speak('Hello Nada. This is your selected English voice.'));
+:root{--green:#58cc02;--blue:#1cb0f6;--orange:#ff9600;--red:#ff4b4b;--purple:#8b5cf6;--bg:#f6fbff;--card:#ffffff;--text:#102033;--muted:#667085;--line:#d8e6f3;--soft:#f1f7ff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:linear-gradient(135deg,#effcff,#fff7ed);color:var(--text)}body.dark{--bg:#0b1220;--card:#101827;--text:#f8fafc;--muted:#cbd5e1;--line:#344155;--soft:#0f172a;background:linear-gradient(135deg,#020617,#111827)}
+.top{position:sticky;top:0;z-index:5;background:rgba(246,251,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}body.dark .top{background:rgba(11,18,32,.92)}.topin{max-width:1180px;margin:auto;padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.brand{font-weight:900;font-size:22px;color:var(--green);margin-left:auto}.pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-weight:800}.progress{height:12px;background:#dbe5ef;border-radius:20px;overflow:hidden;flex:1;min-width:180px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),#b7f34a)}
+.layout{max-width:1180px;margin:auto;padding:16px;display:grid;grid-template-columns:300px 1fr;gap:16px}.side,.main{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:0 10px 30px #0f172a14}.side{padding:14px;height:fit-content;position:sticky;top:82px}.main{padding:18px;min-height:680px}@media(max-width:900px){.layout{grid-template-columns:1fr}.side{position:static}.brand{width:100%}}
+input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:13px;padding:10px;background:#fff;color:#0f172a}body.dark input,body.dark select,body.dark textarea{background:#0b1220;color:#f8fafc;border-color:#475569}label{font-size:12px;color:var(--muted);font-weight:900;display:block;margin:10px 0 6px}.btn,.tab{border:0;border-radius:14px;padding:10px 13px;font-weight:900;cursor:pointer;background:#e2e8f0;color:#0f172a}.btn:active,.tab:active{transform:translateY(1px)}.btn.green{background:var(--green);color:white}.btn.blue{background:var(--blue);color:white}.btn.orange{background:var(--orange);color:white}.btn.red{background:var(--red);color:white}.btn.purple{background:var(--purple);color:white}.btn.small{padding:7px 10px;font-size:13px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab.active{background:#0f172a;color:#fff}body.dark .tab.active{background:#f8fafc;color:#0f172a}
+.topicList{max-height:420px;overflow:auto}.topic{width:100%;border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:14px;padding:10px;margin:6px 0;cursor:pointer;text-align:left;direction:ltr}.topic.active{outline:3px solid #58cc0233;border-color:var(--green)}.topic small{display:block;direction:rtl;text-align:right;color:var(--muted)}
+.screen{display:none}.screen.active{display:block}.card{background:linear-gradient(180deg,var(--card),var(--soft));border:1px solid var(--line);border-radius:28px;padding:24px;min-height:460px;display:flex;flex-direction:column;gap:16px}.num{align-self:flex-start;background:#ecfeff;color:#0369a1;border-radius:999px;padding:8px 12px;font-weight:900}.en{direction:ltr;text-align:left;font-size:38px;line-height:1.22;font-weight:900}.ar{font-size:22px;line-height:1.65;background:var(--card);border:1px dashed var(--line);border-radius:18px;padding:14px}.blur{filter:blur(7px);user-select:none}.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:auto}.note{color:var(--muted);font-size:13px}.box{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:15px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.stat{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:16px;text-align:center}.stat b{font-size:28px;color:var(--green);display:block}.resultBox{max-height:440px;overflow:auto;border:1px solid var(--line);border-radius:16px}.row{padding:12px;border-bottom:1px solid var(--line);cursor:pointer}.row b{display:block;direction:ltr;text-align:left}.choice{display:block;width:100%;text-align:right;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:14px;margin:8px 0;padding:12px;font-weight:800;cursor:pointer}.ok{background:#dcfce7!important;color:#14532d!important}.bad{background:#fee2e2!important;color:#7f1d1d!important}.word{display:inline-block;direction:ltr;margin:5px;padding:8px 10px;border-radius:999px;background:#e0f2fe;color:#075985;font-weight:900}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;border-radius:999px;padding:12px 18px;font-weight:900;display:none;z-index:30}.compare span{display:inline-block;margin:3px;padding:5px 8px;border-radius:8px}.good{background:#dcfce7;color:#166534}.miss{background:#fee2e2;color:#991b1b}@media(max-width:650px){.en{font-size:28px}.main{padding:12px}.topin{gap:6px}.pill{font-size:13px}}
 
-function speak(text, rate){ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text || S[state.i].english); u.lang='en-US'; u.rate=rate || Number($('rate').value) || 0.85; const v=voices[Number($('voice').value)]; if(v) u.voice=v; speechSynthesis.speak(u); }
-function markKnown(n){
-  const wasKnown=Boolean(state.known?.[n]);
-  state.known[n]=Date.now();
-  delete state.review[n];
-  state.xp=(state.xp||0)+5;
-  save();
-  if(!wasKnown) trackLearningActivity('known',1);
-  updateStats();
-}
-function markReview(n){
-  const wasQueued=Boolean(state.review?.[n]);
-  state.review[n]=Date.now();
-  save();
-  if(!wasQueued) trackLearningActivity('review',1);
-  updateStats();
-}
-$('speakBtn').onclick=()=>speak(); $('slowBtn').onclick=()=>speak(S[state.i].english,0.62); $('toggleBtn').onclick=()=>$('ar').classList.toggle('blur');
-$('prevBtn').onclick=()=>{state.i--; render();}; $('nextBtn').onclick=()=>{state.i++; render();};
-$('knowBtn').onclick=()=>{markKnown(S[state.i].number); toast('+5 XP'); render();}; $('againBtn').onclick=()=>{markReview(S[state.i].number); toast('اتضافت للمراجعة');}; $('favBtn').onclick=()=>{const n=S[state.i].number; state.fav[n]?delete state.fav[n]:state.fav[n]=Date.now(); toast(state.fav[n]?'مفضلة':'اتشالت من المفضلة'); render();};
-$('darkBtn').onclick=()=>{document.body.classList.toggle('dark'); localStorage.setItem('nada_v13_dark',document.body.classList.contains('dark')?'1':'0');}; if(localStorage.getItem('nada_v13_dark')==='1') document.body.classList.add('dark');
-document.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{document.querySelectorAll('.tab,.screen').forEach(e=>e.classList.remove('active')); tab.classList.add('active'); $(tab.dataset.screen).classList.add('active'); if(tab.dataset.screen==='review') nextReview(); if(tab.dataset.screen==='quiz') newQuiz(); if(tab.dataset.screen==='stats') updateStats();});
-$('search').oninput=e=>{const q=e.target.value.trim(); if(!q) return; const low=q.toLowerCase(); const f=S.find(x=>String(x.number)===q || x.english.toLowerCase().includes(low) || x.arabic.includes(q)); if(f){state.i=S.indexOf(f); render();}};
-function updateStats(){ const known=Object.keys(state.known||{}).length, rev=Object.keys(state.review||{}).length, fav=Object.keys(state.fav||{}).length, pct=Math.round(known/S.length*100); $('progressBar').style.width=pct+'%'; $('xpPill').textContent=(state.xp||0)+' XP'; $('levelPill').textContent='Level '+(1+Math.floor((state.xp||0)/100)); if($('sKnown')){$('sKnown').textContent=known; $('sReview').textContent=rev; $('sFav').textContent=fav; $('sPct').textContent=pct+'%'; $('topicStats').innerHTML=T.map(t=>{const arr=S.slice(t.start_index,t.start_index+t.count); const k=arr.filter(x=>state.known[x.number]).length; const p=Math.round(k/arr.length*100); return `<div class="box"><b>${t.number}. ${t.title_en}</b><div class="progress"><span style="width:${p}%"></span></div><small>${k} / ${arr.length}</small></div>`;}).join('');} refreshDashboard(); refreshLearningSummary(); }
-function buildDaily(){ const rev=Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean).slice(0,6); const neu=S.filter(x=>!state.known[x.number]).slice(0,14); daily=[...rev,...neu]; $('dNew').textContent=neu.length; $('dRev').textContent=rev.length; $('dailyList').innerHTML=daily.map(x=>`<div class="row" data-n="${x.number}"><b>${x.number}. ${x.english}</b><small>${x.arabic}</small></div>`).join(''); document.querySelectorAll('#dailyList .row').forEach(r=>r.onclick=()=>{state.i=Number(r.dataset.n)-1; render(); document.querySelector('[data-screen="learn"]').click();}); }
-$('buildDaily').onclick=buildDaily; $('startDaily').onclick=()=>{ if(!daily.length) buildDaily(); if(daily[0]){state.i=daily[0].number-1; render(); document.querySelector('[data-screen="learn"]').click();}}; $('printDaily').onclick=()=>window.print();
-function nextReview(){ const arr=Object.keys(state.review||{}); if(!arr.length){$('revEn').textContent='لا توجد جمل للمراجعة'; $('revAr').textContent=''; return;} currentReview=S[Number(arr[0])-1]; $('revEn').textContent=currentReview.english; $('revAr').textContent=currentReview.arabic; }
-$('revSpeak').onclick=()=>currentReview&&speak(currentReview.english); $('revOk').onclick=()=>{ if(currentReview){ markKnown(currentReview.number); nextReview(); toast('+5 XP'); } }; $('revBad').onclick=()=>{ if(currentReview){ state.review[currentReview.number]=Date.now(); state.xp=(state.xp||0)+1; save(); toast('هتظهر تاني'); nextReview(); } };
-function rand(a){return a[Math.floor(Math.random()*a.length)];} function shuffle(a){return a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);}
-function newQuiz(){ currentQuiz=rand(S); $('qText').textContent=currentQuiz.english; let options=shuffle([currentQuiz,...shuffle(S.filter(x=>x.topic_id===currentQuiz.topic_id && x.number!==currentQuiz.number)).slice(0,3)]); $('choices').innerHTML=options.map(x=>`<button class="choice" data-ok="${x.number===currentQuiz.number}">${x.arabic}</button>`).join(''); $('qFeedback').textContent=''; document.querySelectorAll('#choices .choice').forEach(c=>c.onclick=()=>{const ok=c.dataset.ok==='true'; c.classList.add(ok?'ok':'bad'); $('qFeedback').textContent=ok?'صح ✅':'غلط. الإجابة: '+currentQuiz.arabic; if(ok) markKnown(currentQuiz.number); else markReview(currentQuiz.number);}); }
-$('newQuiz').onclick=newQuiz;
-$('dictSpeak').onclick=()=>speak(); $('dictClear').onclick=()=>$('dictInput').value=''; $('dictCheck').onclick=()=>{ const target=clean(S[state.i].english).split(' '), ans=clean($('dictInput').value).split(' '); const hit=target.filter((w,k)=>w===ans[k]).length; const score=Math.round(hit/Math.max(target.length,1)*100); $('dictOut').innerHTML=`<h3>${score}%</h3><div class="compare">${target.map((w,k)=>`<span class="${w===ans[k]?'good':'miss'}">${w}</span>`).join('')}</div>`; score>=75?markKnown(S[state.i].number):markReview(S[state.i].number); };
-// ===== Free pronunciation / speech recognition =====
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let activeRecognition = null;
-let micStream = null;
-let freeTranscript = '';
-let recognitionStartedAt = 0;
-let confidenceValues = [];
+.v13Badge{display:inline-block;background:linear-gradient(90deg,#fef3c7,#dcfce7);border:1px solid var(--line);border-radius:999px;padding:7px 10px;margin:4px;font-weight:900;color:#0f172a}.flash{min-height:260px;display:grid;place-items:center;text-align:center;border:2px dashed var(--line);border-radius:24px;background:var(--soft);padding:20px}.flash .big{direction:ltr;font-size:34px;font-weight:900}.miniTable{width:100%;border-collapse:collapse}.miniTable td,.miniTable th{border-bottom:1px solid var(--line);padding:10px;text-align:right}.focus body{} .focus .side,.focus .tabs,.focus .top{display:none}.focus .layout{display:block;max-width:900px}.focus .main{min-height:100vh;border:0;box-shadow:none}.plainList li{margin:8px 0;line-height:1.7}
 
-function micErrorMessage(errorName){
-  const messages = {
-    NotAllowedError: 'تم رفض إذن الميكروفون. اضغطي على رمز القفل بجوار العنوان واسمحي باستخدام الميكروفون.',
-    NotFoundError: 'لم يجد المتصفح ميكروفونًا. تأكدي من اختيار الميكروفون في إعدادات الصوت.',
-    NotReadableError: 'الميكروفون مستخدم في برنامج آخر. أغلقي Teams أو Zoom ثم حاولي مرة أخرى.',
-    AbortError: 'تم إيقاف الميكروفون.',
-    SecurityError: 'افتحي الأكاديمية من رابط GitHub Pages الآمن HTTPS.',
-    'no-speech': 'لم يتم سماع كلام. اقتربي من الميكروفون وتحدثي بوضوح.',
-    'audio-capture': 'تعذر التقاط الصوت من الميكروفون.',
-    network: 'خدمة التعرف على الكلام تحتاج اتصال إنترنت.',
-    'not-allowed': 'تم رفض إذن الميكروفون من المتصفح.',
-    'service-not-allowed': 'خدمة التعرف على الكلام غير متاحة في هذا المتصفح.'
-  };
-  return messages[errorName] || ('حدث خطأ في الميكروفون: ' + errorName);
+
+.erpCard{padding:14px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.05);margin:8px 0}.badge2{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(124,92,255,.16);margin:3px;font-size:12px}.miniWord{display:inline-block;margin:4px;padding:8px 10px;border-radius:12px;background:rgba(34,197,94,.12);border:1px solid var(--border)}
+
+/* V15 additions */
+.v15Card{border:1px solid var(--line);background:var(--card);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 8px 25px rgba(15,23,42,.06)}
+.v15Progress{height:12px;background:var(--soft);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.v15Progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#22c55e,#06b6d4)}
+.kbd{display:inline-block;border:1px solid var(--line);border-bottom-width:3px;border-radius:8px;padding:3px 7px;background:var(--soft);font-weight:900;direction:ltr}
+.noteBox{background:var(--soft);border:1px dashed var(--line);border-radius:14px;padding:10px;margin:6px 0}
+.playItem{display:flex;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:9px}
+.playItem b{direction:ltr;text-align:left;display:block;flex:1}
+.modePill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:7px 11px;margin:4px;background:var(--soft);font-weight:900}
+
+.modalOverlay{position:fixed;inset:0;background:#0f172acc;display:none;align-items:center;justify-content:center;z-index:100;padding:18px}.modalOverlay.show{display:flex}.modalCard{width:min(720px,96vw);max-height:92vh;overflow:auto;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 24px 80px #0006}.modalCard h2{margin-top:0}.modalCard textarea{min-height:170px}.customTopicActions{display:flex;gap:6px;margin-top:6px}.topicDelete{background:#fee2e2;color:#991b1b;border:0;border-radius:10px;padding:6px 9px;cursor:pointer;font-weight:800}
+
+.freeChatWrap{display:grid;grid-template-columns:220px 1fr;gap:12px}.freeChatSide,.freeChatMain{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:12px}.freeChatMessages{height:360px;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:9px}.chatMsg{max-width:82%;padding:10px 13px;border-radius:16px;line-height:1.55}.chatMsg.bot{align-self:flex-start;background:#e0f2fe;color:#0c4a6e;direction:ltr;text-align:left}.chatMsg.user{align-self:flex-end;background:#dcfce7;color:#14532d;direction:ltr;text-align:left}.chatMsg small{display:block;color:inherit;opacity:.72;margin-top:4px;direction:rtl;text-align:right}.freeChatInput{display:flex;gap:8px;margin-top:10px}.freeChatInput input{flex:1}.scenarioBtn{width:100%;margin:5px 0;text-align:right}.scenarioBtn.active{background:var(--purple);color:#fff}@media(max-width:750px){.freeChatWrap{grid-template-columns:1fr}.freeChatMessages{height:320px}}
+
+/* V19.1 Free Pronunciation */
+.brand span{font-size:12px;background:var(--purple);color:#fff;border-radius:999px;padding:4px 8px;margin-inline-start:5px;vertical-align:middle}
+.layout{grid-template-columns:280px minmax(0,1fr);gap:18px;align-items:start}
+.side{padding:0;overflow:hidden;max-height:calc(100vh - 96px);display:flex;flex-direction:column;background:linear-gradient(180deg,var(--card),var(--soft))}
+.sidebarHeader{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid var(--line)}
+.sidebarLogo{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#dcfce7,#dbeafe);font-size:24px}
+.sidebarHeader strong{display:block;font-size:15px}.sidebarHeader small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.sidebarClose{display:none;margin-inline-start:auto;border:0;background:transparent;color:var(--text);font-size:28px;cursor:pointer}
+.sidebarNav{padding:10px;overflow:auto;max-height:52vh;scrollbar-width:thin}
+.navSectionTitle{font-size:11px;font-weight:900;color:var(--muted);padding:12px 10px 5px;text-transform:uppercase;letter-spacing:.5px}
+.tab.navItem{width:100%;display:flex;align-items:center;gap:11px;margin:3px 0;padding:10px 12px;border-radius:13px;background:transparent;color:var(--text);text-align:right;justify-content:flex-start;transition:.18s}
+.tab.navItem:hover{background:var(--soft);transform:translateX(-2px)}
+.tab.navItem.active{background:linear-gradient(135deg,var(--green),#22c55e);color:#fff;box-shadow:0 8px 18px rgba(34,197,94,.22)}
+.navIcon{width:26px;text-align:center;font-size:18px;flex:0 0 26px}.navItem span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebarTools,.sidebarTopics{margin:8px 10px 10px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:0 10px 10px}
+.sidebarTools summary,.sidebarTopics summary{cursor:pointer;padding:11px 2px;font-weight:900;list-style:none}.sidebarTools summary::-webkit-details-marker,.sidebarTopics summary::-webkit-details-marker{display:none}
+.sidebarTools summary::after,.sidebarTopics summary::after{content:'⌄';float:left;color:var(--muted)}details[open]>summary::after{content:'⌃'}
+.sidebarTopics{min-height:0}.sidebarTopics[open]{overflow:auto}.sidebarTopics .topicList{max-height:260px}
+.main{min-width:0}.mobileMenuBtn{display:none;border:0;border-radius:12px;background:var(--card);color:var(--text);font-size:22px;padding:7px 10px;cursor:pointer}.sidebarBackdrop{display:none}
+.focus .side{display:none}.focus .layout{grid-template-columns:1fr}
+@media(max-width:900px){
+  .mobileMenuBtn{display:inline-grid;place-items:center}.layout{display:block;padding:10px}.main{border-radius:18px;padding:12px}
+  .side{position:fixed;top:0;right:0;height:100vh;max-height:none;width:min(310px,88vw);z-index:80;border-radius:0;transform:translateX(105%);transition:transform .25s ease;box-shadow:-18px 0 40px #0f172a38}
+  .side.open{transform:translateX(0)}.sidebarClose{display:block}.sidebarNav{max-height:45vh}
+  .sidebarBackdrop{position:fixed;inset:0;background:#0f172a99;z-index:70}.sidebarBackdrop.show{display:block}
+  .topin{padding:9px 12px}.brand{font-size:17px;width:auto;margin-left:auto}.brand span{font-size:10px}.progress{order:5;width:100%}
+}
+@media(max-width:520px){.pill{padding:6px 9px;font-size:11px}.brand{font-size:15px}.main{border:0;box-shadow:none}.card{padding:16px;border-radius:20px}.en{font-size:26px}.ar{font-size:18px}}
+
+/* ===== V19.4 Modern UI ===== */
+:root{--shadow:0 18px 50px rgba(15,23,42,.10);--shadow-soft:0 10px 30px rgba(15,23,42,.08)}
+body{background:radial-gradient(circle at 15% 0%,#e0f7ff 0,transparent 32%),radial-gradient(circle at 90% 8%,#fff0dc 0,transparent 28%),#f7fbff}
+body.dark{background:radial-gradient(circle at 20% 0%,#0b3142 0,transparent 30%),radial-gradient(circle at 90% 8%,#2d1b09 0,transparent 24%),#07101d}
+.top{box-shadow:0 8px 28px rgba(15,23,42,.07)}
+.topin{max-width:1440px;padding:14px 22px}.brandBlock{margin-left:auto}.brandBlock small{display:block;color:var(--muted);font-weight:700;margin-top:3px}.brand{margin-left:0;font-size:24px}.headerStats{display:flex;gap:8px;align-items:center}.headerAction{border:1px solid var(--line);background:var(--card)}.headerProgress{flex-basis:100%;height:8px;order:5}
+.layout{max-width:1440px;grid-template-columns:290px minmax(0,1fr);padding:22px;gap:22px}.side,.main{border-radius:28px;box-shadow:var(--shadow);border:1px solid rgba(216,230,243,.85)}.side{top:104px}.main{padding:24px}
+.sidebarHeader{padding:20px}.sidebarLogo{width:50px;height:50px;border-radius:17px;font-size:28px}.sidebarHeader strong{font-size:17px}.sidebarNav{max-height:55vh}.tab.navItem{padding:12px 14px;border-radius:15px}.navIcon{width:28px;height:28px;display:grid;place-items:center;background:rgba(255,255,255,.55);border-radius:9px}.tab.navItem.active .navIcon{background:rgba(255,255,255,.22)}
+.dashboardHero{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:24px;align-items:center;background:linear-gradient(135deg,#0f172a,#153e75 58%,#1cb0f6);color:#fff;border-radius:30px;padding:32px;box-shadow:0 24px 60px rgba(30,64,175,.25);overflow:hidden;position:relative}.dashboardHero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08);left:-70px;top:-100px}.dashboardHero h1{font-size:34px;line-height:1.25;margin:8px 0 10px}.dashboardHero p{color:#dbeafe;max-width:720px;line-height:1.8}.eyebrow{font-size:11px;font-weight:900;letter-spacing:1.5px;color:#86efac}.heroActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.heroBadge{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;align-content:center;justify-self:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(12px);box-shadow:inset 0 0 0 10px rgba(255,255,255,.05)}.heroBadge span{font-size:32px}.heroBadge b{font-size:30px}.heroBadge small{color:#dbeafe}.dashboardGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}.dashCard{display:flex;gap:13px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow-soft)}.dashCard b{display:block;font-size:26px;margin:3px 0}.dashCard small,.dashCard span{display:block;color:var(--muted)}.dashCard span{font-size:11px}.dashIcon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:22px;color:#fff}.dashIcon.green{background:linear-gradient(135deg,#58cc02,#22c55e)}.dashIcon.blue{background:linear-gradient(135deg,#1cb0f6,#2563eb)}.dashIcon.orange{background:linear-gradient(135deg,#ff9600,#f97316)}.dashIcon.purple{background:linear-gradient(135deg,#8b5cf6,#d946ef)}.dashboardColumns{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.panelCard{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow-soft)}.panelHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.panelHead small{color:var(--muted);font-weight:900;letter-spacing:.8px}.panelHead h3{margin:4px 0 0;font-size:20px}.panelIcon{font-size:30px}.continueSentence{direction:ltr;text-align:left;font-weight:900;font-size:22px;line-height:1.4;padding:18px;background:var(--soft);border-radius:18px}.mutedText{color:var(--muted);line-height:1.7;margin:10px 0}.wide{width:100%;margin-top:10px}.quickGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quickGrid button{border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:18px;padding:18px 10px;font-size:24px;cursor:pointer;font-weight:900}.quickGrid button span{display:block;font-size:12px;margin-top:7px}.quickGrid button:hover{transform:translateY(-2px);box-shadow:var(--shadow-soft)}.goalPanel{margin-top:16px}.modernProgress{height:14px;background:var(--soft);border-radius:999px;overflow:hidden}.modernProgress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),#1cb0f6);border-radius:999px;transition:.4s}
+@media(max-width:1100px){.dashboardGrid{grid-template-columns:repeat(2,1fr)}.dashboardColumns{grid-template-columns:1fr}.dashboardHero{grid-template-columns:1fr}.heroBadge{display:none}}
+@media(max-width:900px){.layout{display:block;padding:12px}.main{padding:14px;border-radius:22px}.brandBlock{margin-left:0;flex:1}.brand{font-size:19px}.brandBlock small{display:none}.headerStats{gap:4px}.headerStats .pill{padding:7px 9px}.dashboardHero{padding:22px;border-radius:24px}.dashboardHero h1{font-size:26px}.dashboardGrid{grid-template-columns:1fr 1fr}.side{position:fixed}}
+@media(max-width:560px){.dashboardGrid{grid-template-columns:1fr}.dashboardHero h1{font-size:23px}.heroActions .btn{width:100%}.headerStats #streakPill{display:none}.quickGrid{grid-template-columns:1fr 1fr}.topin{padding:10px}.main{border-radius:18px}.dashCard{padding:14px}}
+
+
+/* ===== V19.4.1 Visible UI Upgrade ===== */
+.headerSearch{min-width:280px;max-width:420px;flex:1;display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:9px 12px;box-shadow:0 6px 18px rgba(15,23,42,.05)}
+.headerSearch>span{font-size:22px;color:var(--muted)}.headerSearch input{border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;min-width:0;flex:1;color:var(--text);font-weight:700}.headerSearch input:focus{outline:0}.headerSearch kbd{font-size:10px;color:var(--muted);border:1px solid var(--line);border-bottom-width:2px;background:var(--soft);border-radius:7px;padding:3px 6px;white-space:nowrap}
+.iconAction{width:42px;height:42px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--text);font-size:19px;cursor:pointer;display:grid;place-items:center;transition:.2s}.iconAction:hover{transform:translateY(-2px);box-shadow:var(--shadow-soft);border-color:#9ec8ff}
+.profileChip{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 10px 6px 7px}.profileAvatar{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#7c3aed,#1cb0f6);color:#fff;display:grid;place-items:center;font-weight:900}.profileChip b,.profileChip small{display:block;line-height:1.15}.profileChip small{color:var(--muted);font-size:10px;margin-top:3px}
+.sidebarFooter{margin-top:auto;padding:14px 16px 18px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,rgba(28,176,246,.06))}.miniGoal{display:flex;justify-content:space-between;font-size:12px;font-weight:900}.miniGoal b{color:var(--blue)}.miniGoalBar{height:7px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:8px}.miniGoalBar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#58cc02,#1cb0f6);border-radius:99px;transition:.4s}
+.activityCard{margin-top:16px;background:linear-gradient(180deg,var(--card),var(--soft));border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow-soft)}.activityBadge{font-size:10px;font-weight:900;letter-spacing:1px;color:#2563eb;background:#dbeafe;border-radius:999px;padding:7px 10px}.activityBars{height:160px;display:grid;grid-template-columns:repeat(7,1fr);align-items:end;gap:12px;padding:12px 8px 0}.activityBars>div{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}.activityBars span{width:min(34px,70%);height:var(--h);min-height:10px;border-radius:12px 12px 5px 5px;background:linear-gradient(180deg,#93c5fd,#2563eb);box-shadow:0 8px 18px rgba(37,99,235,.18);transition:.25s}.activityBars .today span{background:linear-gradient(180deg,#86efac,#22c55e);box-shadow:0 8px 18px rgba(34,197,94,.2)}.activityBars small{font-weight:900;color:var(--muted)}
+body.sidebar-collapsed .layout{grid-template-columns:92px minmax(0,1fr)}body.sidebar-collapsed .side{width:92px}body.sidebar-collapsed .sidebarHeader>div:not(.sidebarLogo),body.sidebar-collapsed .navSectionTitle,body.sidebar-collapsed .navItem span:last-child,body.sidebar-collapsed .sidebarTools,body.sidebar-collapsed .sidebarTopics,body.sidebar-collapsed .sidebarFooter{display:none}body.sidebar-collapsed .sidebarHeader{justify-content:center;padding:18px 8px}body.sidebar-collapsed .sidebarNav{padding:10px 8px}body.sidebar-collapsed .tab.navItem{justify-content:center;padding:11px 8px}body.sidebar-collapsed .navIcon{flex-basis:34px;width:34px;height:34px;font-size:20px}body.sidebar-collapsed #sidebarCollapse{transform:rotate(180deg)}
+.searchFlash{animation:searchFlash 1.1s ease}@keyframes searchFlash{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:0 0 0 5px rgba(28,176,246,.22),var(--shadow)}}
+@media(max-width:1180px){.profileChip span:last-child{display:none}.headerSearch{min-width:220px}.headerStats #levelPill{display:none}}
+@media(max-width:900px){#sidebarCollapse{display:none}.headerSearch{order:6;min-width:100%;max-width:none}.profileChip{display:none}.topin{flex-wrap:wrap}.activityBars{gap:7px}.activityBars span{width:70%}}
+@media(max-width:560px){.headerSearch kbd{display:none}.activityBars{height:130px;padding-inline:0}.activityCard{padding:16px}}
+
+
+/* ===== V19.4.2 Dashboard Polish ===== */
+.insightGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.focusCard{position:relative;overflow:hidden}
+.focusCard:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.13),rgba(37,99,235,.04));left:-60px;bottom:-80px;pointer-events:none}
+.focusSummary{display:flex;align-items:center;gap:18px;margin:18px 0;position:relative;z-index:1}
+.focusRing{width:88px;height:88px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:conic-gradient(var(--purple,#7c3aed) var(--focus-pct,35%),#e8eaf4 0);position:relative;flex:0 0 auto}
+.focusRing:before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--card,#fff)}
+.focusRing b,.focusRing small{position:relative;z-index:1}.focusRing b{font-size:24px}.focusRing small{color:var(--muted)}
+.recentTopicsList{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.recentTopicItem{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border,#e5e7eb);border-radius:14px;background:var(--card2,#f8fafc);cursor:pointer;transition:.2s}
+.recentTopicItem:hover{transform:translateY(-2px);border-color:#8b5cf6;box-shadow:0 8px 20px rgba(15,23,42,.08)}
+.recentTopicIcon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#ede9fe,#dbeafe);font-size:20px}
+.recentTopicItem strong{display:block}.recentTopicItem small{color:var(--muted)}
+.mobileBottomNav{display:none}
+@media(max-width:900px){
+  .insightGrid{grid-template-columns:1fr}
+  body{padding-bottom:76px}
+  .mobileBottomNav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;z-index:1200;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid #e5e7eb;box-shadow:0 -8px 24px rgba(15,23,42,.08);padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+  body.dark .mobileBottomNav{background:rgba(15,23,42,.95);border-color:#334155}
+  .mobileBottomNav button{border:0;background:transparent;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;padding:4px 2px}
+  .mobileBottomNav button span{font-size:20px}.mobileBottomNav button small{font-size:10px}
 }
 
-async function verifyMicrophone(){
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('SecurityError');
-  micStream = await navigator.mediaDevices.getUserMedia({audio:true});
-  return true;
+
+/* ===== V19.4.3 Premium UI ===== */
+.premiumSection{margin-top:20px;background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(124,58,237,.08));border:1px solid rgba(99,102,241,.18);border-radius:28px;padding:22px;box-shadow:var(--shadow-soft)}
+.premiumSectionHead{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px}.premiumSectionHead h2{margin:4px 0 5px;font-size:25px}.premiumSectionHead p{margin:0;color:var(--muted)}.darkEyebrow{color:#4f46e5}.premiumHeadActions{display:flex;gap:8px;flex-wrap:wrap}.softAction{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:14px;padding:10px 14px;font-weight:900;cursor:pointer;box-shadow:0 6px 18px rgba(15,23,42,.05)}.softAction:hover{transform:translateY(-2px);border-color:#8b5cf6}
+.skillProgressGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.skillProgressCard{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:20px;padding:15px;text-align:start;cursor:pointer;transition:.22s;box-shadow:0 8px 24px rgba(15,23,42,.05)}.skillProgressCard:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(15,23,42,.1)}.skillProgressCard b,.skillProgressCard small{display:block}.skillProgressCard small{color:var(--muted);margin-top:3px}.skillProgressCard em{font-style:normal;font-weight:1000;font-size:17px}.skillIcon{width:47px;height:47px;border-radius:15px;display:grid;place-items:center;font-size:23px}.blueGlow{background:#dbeafe;box-shadow:inset 0 0 0 1px #bfdbfe}.purpleGlow{background:#ede9fe;box-shadow:inset 0 0 0 1px #ddd6fe}.orangeGlow{background:#ffedd5;box-shadow:inset 0 0 0 1px #fed7aa}.greenGlow{background:#dcfce7;box-shadow:inset 0 0 0 1px #bbf7d0}
+.topicExplorer{margin-top:20px}.topicExplorerHead{display:flex;align-items:center;justify-content:space-between;gap:16px}.topicExplorerHead h3{font-size:22px;margin:4px 0}.topicExplorerHead small{color:var(--muted);font-weight:900;letter-spacing:.8px}.topicExplorerTools{display:flex;align-items:center;gap:8px;min-width:300px}.topicExplorerTools input{width:100%;border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:14px;padding:11px 13px;font:inherit;font-weight:700}.topicChips{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.topicChips button{border:1px solid var(--line);background:var(--soft);color:var(--muted);border-radius:999px;padding:8px 13px;font-weight:900;cursor:pointer}.topicChips button.active{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border-color:transparent}.premiumTopicsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.premiumTopicCard{position:relative;border:1px solid var(--line);background:linear-gradient(180deg,var(--card),var(--soft));border-radius:20px;padding:16px;cursor:pointer;transition:.22s;overflow:hidden;min-height:145px}.premiumTopicCard:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;background:var(--topic-accent,#dbeafe);opacity:.42;left:-28px;bottom:-34px}.premiumTopicCard:hover{transform:translateY(-4px);border-color:#818cf8;box-shadow:0 16px 30px rgba(15,23,42,.1)}.premiumTopicTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.premiumTopicIcon{width:45px;height:45px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:var(--topic-accent,#dbeafe)}.premiumTopicNumber{font-size:11px;font-weight:1000;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 8px}.premiumTopicCard h4{margin:13px 0 3px;font-size:16px;direction:ltr;text-align:left}.premiumTopicCard p{margin:0;color:var(--muted);font-size:12px}.premiumTopicMeta{display:flex;align-items:center;justify-content:space-between;margin-top:14px;position:relative;z-index:1}.premiumTopicMeta span{font-size:11px;color:var(--muted)}.premiumTopicProgress{height:6px;background:rgba(148,163,184,.24);border-radius:99px;overflow:hidden;flex:1;margin-inline-start:10px}.premiumTopicProgress i{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#1cb0f6);border-radius:99px}.premiumMoreBtn{margin-top:14px}.premiumEmpty{grid-column:1/-1;text-align:center;padding:35px;color:var(--muted);border:1px dashed var(--line);border-radius:18px}
+.premiumMotivation{margin-top:20px;display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#111827,#312e81);color:#fff;border-radius:24px;padding:18px 20px;box-shadow:0 18px 35px rgba(49,46,129,.22)}.motivationIcon{width:52px;height:52px;border-radius:17px;background:rgba(255,255,255,.13);display:grid;place-items:center;font-size:27px}.premiumMotivation div:nth-child(2){flex:1}.premiumMotivation b,.premiumMotivation span{display:block}.premiumMotivation span{color:#c7d2fe;margin-top:4px;font-size:12px}
+.freeChatPanel{border-radius:24px!important;overflow:hidden;box-shadow:var(--shadow-soft)}#freeChatMessages{background:radial-gradient(circle at 10% 0%,rgba(37,99,235,.06),transparent 35%),var(--soft)!important}.chatMsg{border-radius:18px!important;box-shadow:0 6px 18px rgba(15,23,42,.05)}.chatMsg.user{background:linear-gradient(135deg,#2563eb,#4f46e5)!important}.chatMsg.correction{border:1px solid #bbf7d0!important;background:#f0fdf4!important}
+body.dark .chatMsg.correction{background:#153322!important;border-color:#166534!important}
+@media(max-width:1180px){.skillProgressGrid{grid-template-columns:1fr 1fr}.premiumTopicsGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.premiumSection,.topicExplorer{padding:16px;border-radius:22px}.premiumSectionHead,.topicExplorerHead{display:block}.premiumHeadActions{margin-top:12px}.skillProgressGrid,.premiumTopicsGrid{grid-template-columns:1fr}.topicExplorerTools{min-width:0;margin-top:12px}.premiumMotivation{align-items:flex-start;flex-wrap:wrap}.premiumMotivation .btn{width:100%}.skillProgressCard{grid-template-columns:auto 1fr auto}.premiumTopicCard{min-height:132px}}
+
+
+/* ===== V19.4.4 Focus Session ===== */
+.focusSessionPanel{margin-top:20px;display:grid;grid-template-columns:1.35fr .65fr;gap:22px;align-items:center;padding:24px;background:linear-gradient(135deg,rgba(16,185,129,.09),rgba(37,99,235,.08));border:1px solid rgba(16,185,129,.2);overflow:hidden;position:relative}
+.focusSessionPanel:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 68%);left:-80px;bottom:-110px;pointer-events:none}
+.focusSessionInfo{position:relative;z-index:1}.focusSessionInfo h3{font-size:25px;margin:5px 0 7px}.focusSessionInfo p{margin:0;color:var(--muted)}
+.focusPresetRow,.focusSessionActions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.focusPreset{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font-weight:900;cursor:pointer}.focusPreset.active{background:linear-gradient(135deg,#059669,#2563eb);color:#fff;border-color:transparent}
+.focusTimerCard{display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;z-index:1}.focusTimerRing{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#10b981 var(--timer-pct),rgba(148,163,184,.22) 0);position:relative;box-shadow:0 18px 38px rgba(16,185,129,.16)}.focusTimerRing:before{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--card);border:1px solid var(--line)}.focusTimerRing>div{position:relative;z-index:1;text-align:center}.focusTimerRing b{display:block;font-size:36px;letter-spacing:1px}.focusTimerRing small{display:block;color:var(--muted);font-weight:900;margin-top:4px}.focusTimerRing.running{animation:focusPulse 2s ease-in-out infinite}@keyframes focusPulse{50%{transform:scale(1.025);box-shadow:0 20px 45px rgba(16,185,129,.26)}}
+.focusTodayStat{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;max-width:220px;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.focusTodayStat span{color:var(--muted);font-size:12px}.focusTodayStat b{font-size:14px}
+@media(max-width:760px){.focusSessionPanel{grid-template-columns:1fr;text-align:center;padding:18px}.focusPresetRow,.focusSessionActions{justify-content:center}.focusTimerRing{width:150px;height:150px}.focusTimerRing b{font-size:31px}}
+
+
+/* V19.5 - Topic Manager & Sidebar balance */
+.side{min-height:calc(100vh - 130px)}
+.sidebarNav{max-height:38vh;flex:0 1 auto}
+.sidebarTools{flex:0 0 auto;margin-bottom:6px;padding-bottom:8px}
+.sidebarTopics{display:flex;flex-direction:column;flex:1 1 auto;min-height:310px;margin-top:4px;overflow:hidden}
+.sidebarTopics[open]{overflow:hidden}
+.sidebarTopics summary{flex:0 0 auto}
+.sidebarTopics .topicList{max-height:none;min-height:220px;flex:1 1 auto;overflow:auto;padding-inline-end:3px}
+.quickToolRow{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 0 8px}
+.quickToolRow button{border:1px solid var(--line);background:var(--soft);border-radius:11px;padding:8px;font-size:17px;cursor:pointer;transition:.18s}
+.quickToolRow button:hover{transform:translateY(-2px);background:#dbeafe}
+.quickAdvanced{display:grid;gap:7px}.quickAdvanced input,.quickAdvanced select{margin:0;padding:8px 9px;font-size:12px;border-radius:10px}
+.compactRange{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;font-size:11px;color:var(--muted)}.compactRange input{padding:0}
+.topicCountBadge{display:inline-grid;place-items:center;min-width:24px;height:22px;padding:0 7px;margin-inline-start:6px;border-radius:99px;background:var(--soft);color:var(--blue);font-size:11px}
+.topicToolbar{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:6px;margin:2px 0 7px}.topicTool{border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:10px;padding:7px;cursor:pointer;font-weight:900;font-size:16px}.topicTool.primary{background:var(--green);color:white;border-color:transparent}.topicTool:hover{filter:brightness(.97);transform:translateY(-1px)}
+.topicSearch{margin:0 0 7px!important;padding:9px 10px!important;border-radius:11px!important;font-size:12px!important}
+.topicCard{border:1px solid var(--line);background:var(--soft);border-radius:14px;margin:7px 0;overflow:hidden;transition:.18s}.topicCard:hover{transform:translateY(-1px);box-shadow:0 7px 18px #0f172a12}.topicCard.active{border-color:var(--green);box-shadow:0 0 0 3px #58cc0226}.topicCard.pinned{background:linear-gradient(135deg,#fff7d6,var(--soft))}
+.topicMain{border:0!important;background:transparent!important;margin:0!important;border-radius:0!important;display:flex!important;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px!important}.topicTitle{min-width:0}.topicTitle b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}.topicTitle small{font-size:10px}.topicPct{font-size:10px;font-weight:900;color:var(--blue);direction:ltr}
+.topicMiniProgress{height:4px;background:var(--card)}.topicMiniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px}
+.customTopicActions{display:flex;justify-content:flex-end;gap:4px;padding:5px 7px;border-top:1px solid var(--line)}.topicAction{border:0;background:var(--card);border-radius:8px;padding:5px 7px;cursor:pointer;font-size:12px}.topicAction:hover{background:#dbeafe}.topicDelete:hover{background:#fee2e2}.topicEmpty{text-align:center;color:var(--muted);padding:18px 8px;font-size:12px}
+@media(max-width:900px){.sidebarNav{max-height:34vh}.sidebarTopics{min-height:38vh}.sidebarTopics .topicList{min-height:240px}.quickAdvanced{display:none}.sidebarTools[open] .quickAdvanced{display:grid}}
+
+/* ===== V19.5.1 Sidebar proportional layout fix ===== */
+.side{
+  height:calc(100dvh - 132px);
+  min-height:560px;
+  display:grid;
+  grid-template-rows:auto minmax(150px,32%) auto minmax(260px,1fr) auto;
+  gap:8px;
+  overflow:hidden;
 }
-function stopMicStream(){
-  if(micStream){ micStream.getTracks().forEach(track=>track.stop()); micStream=null; }
+.sidebarHeader,.sidebarFooter{min-height:0}
+.sidebarNav{
+  min-height:0;
+  max-height:none!important;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
 }
-function pronunciationStats(){
-  const text=freeTranscript.trim();
-  const words=text ? text.split(/\s+/).filter(Boolean) : [];
-  const seconds=Math.max(1,Math.round((Date.now()-recognitionStartedAt)/1000));
-  const avgConfidence=confidenceValues.length ? Math.round(confidenceValues.reduce((a,b)=>a+b,0)/confidenceValues.length*100) : null;
-  const target=$('pronTarget').value.trim();
-  let html='<div class="grid">'+
-    '<div class="stat"><b>'+words.length+'</b>كلمة</div>'+
-    '<div class="stat"><b>'+seconds+'</b>ثانية</div>'+
-    '<div class="stat"><b>'+(avgConfidence===null?'—':avgConfidence+'%')+'</b>وضوح التعرف</div>'+
-    '</div>';
-  if(target && text){
-    const tw=clean(target).split(' ').filter(Boolean);
-    const hw=clean(text).split(' ').filter(Boolean);
-    const matched=tw.filter(w=>hw.includes(w)).length;
-    const score=Math.round(matched/Math.max(tw.length,1)*100);
-    html+='<div class="box"><h3>درجة المقارنة: '+score+'%</h3><small>النص المختار: '+target+'</small></div>';
-  }else{
-    html+='<small>الوضع الحر: لا توجد جملة ثابتة أو إجابة مطلوبة.</small>';
+.sidebarTools{
+  min-height:0;
+  max-height:22vh;
+  overflow:auto;
+  margin:0;
+}
+.sidebarTools:not([open]){max-height:52px;overflow:hidden}
+.sidebarTopics{
+  min-height:0!important;
+  height:auto!important;
+  margin:0;
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:auto auto auto minmax(0,1fr);
+  align-content:stretch;
+}
+.sidebarTopics:not([open]){
+  grid-template-rows:auto;
+}
+.sidebarTopics:not([open]) > :not(summary){display:none!important}
+.sidebarTopics summary{min-height:48px;display:flex;align-items:center;justify-content:space-between}
+.sidebarTopics .topicToolbar,.sidebarTopics .topicSearch{min-height:0}
+.sidebarTopics .topicList{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  padding:2px 3px 12px 1px;
+  scrollbar-width:thin;
+}
+.topicCard{flex:0 0 auto}
+.quickToolRow button{min-height:38px}
+
+/* Short screens: preserve the same proportions without hiding actions or topics */
+@media (max-height:760px) and (min-width:901px){
+  .side{
+    height:calc(100dvh - 112px);
+    min-height:470px;
+    grid-template-rows:auto minmax(115px,27%) auto minmax(230px,1fr) auto;
+    gap:5px;
   }
-  $('speechScore').innerHTML=html;
+  .sidebarNav{font-size:12px}
+  .navItem{padding-block:7px!important}
+  .navSectionTitle{margin-block:5px 2px!important}
+  .sidebarTools{max-height:18vh}
+  .quickAdvanced{display:none}
+  .sidebarTools[open] .quickAdvanced{display:grid}
 }
 
-if(!SR){
-  $('micBtn').disabled=true;
-  $('heard').textContent='التعرف على الكلام غير مدعوم. استخدمي Google Chrome أو Microsoft Edge.';
-}
-
-$('micBtn').onclick=async()=>{
-  if(!SR) return;
-  if(activeRecognition){
-    try{activeRecognition.stop();}catch(e){}
-    return;
+@media (max-width:900px){
+  .side{
+    height:100dvh;
+    min-height:0;
+    grid-template-rows:auto minmax(130px,28%) auto minmax(280px,1fr) auto;
   }
-  $('heard').textContent='جاري فحص الميكروفون...';
-  $('speechScore').innerHTML='';
-  $('micBtn').disabled=true;
-  freeTranscript='';
-  confidenceValues=[];
-  recognitionStartedAt=Date.now();
-  try{
-    await verifyMicrophone();
-    stopMicStream();
-    const rec=new SR();
-    activeRecognition=rec;
-    rec.lang='en-US';
-    rec.continuous=true;
-    rec.interimResults=true;
-    rec.maxAlternatives=1;
-    rec.onstart=()=>{
-      $('heard').textContent='🎤 اتكلمي الآن بأي موضوع...';
-      $('micBtn').textContent='⏹️ إيقاف';
-      $('micBtn').disabled=false;
-      toast('بدأ التدريب الحر');
-    };
-    rec.onresult=e=>{
-      let interim='';
-      for(let i=e.resultIndex;i<e.results.length;i++){
-        const result=e.results[i];
-        const piece=result[0].transcript.trim();
-        if(result.isFinal){
-          freeTranscript+=(freeTranscript?' ':'')+piece;
-          if(typeof result[0].confidence==='number' && result[0].confidence>0) confidenceValues.push(result[0].confidence);
-        }else interim+=(interim?' ':'')+piece;
-      }
-      $('heard').innerHTML='<b>كلامك:</b><br>'+((freeTranscript+(interim?' '+interim:'')).trim()||'جاري الاستماع...');
-    };
-    rec.onerror=e=>{
-      $('heard').textContent=micErrorMessage(e.error);
-    };
-    rec.onend=()=>{
-      activeRecognition=null;
-      stopMicStream();
-      $('micBtn').textContent='🎙️ ابدأ التحدث الحر';
-      $('micBtn').disabled=false;
-      if(freeTranscript){
-        $('heard').innerHTML='<b>كلامك:</b><br>'+freeTranscript;
-        pronunciationStats();
-      }
-    };
-    rec.start();
-  }catch(err){
-    const name=err&&(err.name||err.message)?(err.name||err.message):'UnknownError';
-    $('heard').textContent=micErrorMessage(name);
-    $('micBtn').disabled=false;
-    stopMicStream();
+  .sidebarNav{max-height:none!important}
+  .sidebarTools{max-height:20vh}
+  .sidebarTopics{min-height:0!important}
+  .sidebarTopics .topicList{min-height:0!important}
+}
+
+
+/* ===== V19.5.2 Topic Workspace ===== */
+.sidebarTools[open]{display:block;overflow:auto}
+.sidebarTools .quickToolRow{position:sticky;top:0;background:var(--card);z-index:2;padding-top:4px}
+.sidebarTopics .topicList::-webkit-scrollbar{width:7px}
+.sidebarTopics .topicList::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:20px}
+.sidebarTopics .topicList::-webkit-scrollbar-track{background:transparent}
+.topicLibraryToolbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.topicLibraryToolbar .btn{padding:9px 13px}
+.topicExplorerHeadFilters{display:none}
+.premiumTopicCard{padding-bottom:54px}
+.premiumTopicCard.pinned{box-shadow:0 0 0 2px rgba(245,158,11,.28),0 16px 30px rgba(15,23,42,.08)}
+.premiumTopicActions{position:absolute;bottom:12px;inset-inline:14px;display:flex;gap:7px;z-index:3;border-top:1px solid var(--line);padding-top:9px}
+.premiumTopicActions button{width:32px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;font-size:14px;transition:.16s}
+.premiumTopicActions button:hover{transform:translateY(-2px);background:#dbeafe}
+.premiumTopicActions button:nth-child(2):hover{background:#fee2e2}
+.customTopicActions{justify-content:space-between}
+.customTopicActions .topicAction{flex:1}
+@media(max-width:700px){.topicLibraryToolbar{display:grid;grid-template-columns:1fr 1fr}.topicLibraryToolbar .btn:first-child{grid-column:1/-1}.premiumTopicActions button{flex:1;width:auto}}
+
+
+/* ===== V19.5.3 Final Sidebar: quick tools + scrollable topics ===== */
+.side{
+  height:calc(100dvh - 132px);
+  min-height:560px;
+  display:grid;
+  grid-template-rows:auto minmax(150px,30%) auto minmax(300px,1fr) auto;
+  gap:8px;
+  overflow:hidden;
+}
+.sidebarNav{
+  min-height:0;
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.sidebarTools{
+  margin:0 10px;
+  min-height:52px;
+  max-height:22vh;
+  overflow:auto;
+  flex:0 0 auto;
+}
+.sidebarTools[open]{
+  display:block;
+}
+.sidebarTools .quickToolRow{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:var(--card);
+  padding-top:4px;
+}
+.sidebarTopics{
+  margin:0 10px 10px;
+  min-height:0!important;
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+}
+.sidebarTopics summary{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex:0 0 auto;
+}
+/* Keep topic management actions available in TOPIC LIBRARY, not duplicated in sidebar */
+.sidebarTopics .topicToolbar{
+  display:none!important;
+}
+.sidebarTopics .topicSearch{
+  margin:0 0 8px!important;
+  flex:0 0 auto;
+}
+.sidebarTopics .topicList{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  padding:2px 5px 14px 1px;
+  scrollbar-width:thin;
+  scrollbar-color:#94a3b8 transparent;
+}
+.sidebarTopics .topicList::-webkit-scrollbar{width:8px}
+.sidebarTopics .topicList::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:20px}
+.sidebarTopics .topicList::-webkit-scrollbar-track{background:transparent}
+/* Preserve the main TOPIC LIBRARY section exactly as the full management workspace */
+.topicExplorer{display:block}
+.topicLibraryToolbar{display:flex}
+.premiumTopicsGrid{display:grid}
+
+@media (max-height:760px) and (min-width:901px){
+  .side{
+    height:calc(100dvh - 112px);
+    min-height:470px;
+    grid-template-rows:auto minmax(110px,25%) auto minmax(250px,1fr) auto;
+    gap:5px;
   }
-};
-$('pronClear').onclick=()=>{
-  freeTranscript=''; confidenceValues=[]; $('pronTarget').value='';
-  $('heard').textContent='سيظهر كلامك هنا...'; $('speechScore').innerHTML='';
-};
-$('pronListen').onclick=()=>{
-  const text=$('pronTarget').value.trim()||freeTranscript.trim();
-  if(!text){toast('اكتبي نصًا أو سجلي كلامك أولًا');return;}
-  speak(text,0.82);
-};
-$('pronCopy').onclick=async()=>{
-  if(!freeTranscript.trim()){toast('لا يوجد كلام لنسخه');return;}
-  try{await navigator.clipboard.writeText(freeTranscript);toast('تم نسخ كلامك');}
-  catch(e){toast('تعذر النسخ');}
-};
-
-const stop=new Set('i am is are the a an to for of in on at it this that you we my your and or but do does did can could would should have has with me from'); function wordsOf(s){return [...new Set(clean(s).split(' ').filter(w=>w.length>2&&!stop.has(w)))].slice(0,12);} function renderWords(){const words=wordsOf(S[state.i].english); $('wordList').innerHTML=words.map(w=>`<span class="word">${w}</span>`).join(''); $('savedWords').innerHTML=(state.words||[]).slice(-50).reverse().map(w=>`<span class="word">${w}</span>`).join('');}
-$('saveWords').onclick=()=>{ state.words=[...(state.words||[]),...wordsOf(S[state.i].english)]; state.words=[...new Set(state.words)].slice(-500); if($('wordNote').value.trim()) state.notes.push({sentence:S[state.i].number,note:$('wordNote').value.trim(),date:Date.now()}); save(); renderWords(); toast('تم الحفظ'); };
-$('wordQuiz').onclick=()=>{ const w=rand(wordsOf(S[state.i].english)); alert('استخدمي الكلمة في جملة: '+w); };
-$('exportProgress').onclick=()=>{saveAllData(); const payload=safeParse(localStorage.getItem(APP_DATA_KEY),{version:'19.5',state,customTopics}); download('Nada_English_Academy_Backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(payload,null,2),'application/json'); toast('تم تنزيل النسخة الاحتياطية');}; $('importProgress').onchange=e=>{const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{try{const imported=JSON.parse(r.result); if(!imported||typeof imported!=='object')throw new Error('ملف غير صالح'); state=imported.state||state; customTopics=Array.isArray(imported.customTopics)?imported.customTopics:customTopics; hiddenBuiltInTopicIds=Array.isArray(imported.hiddenBuiltInTopicIds)?imported.hiddenBuiltInTopicIds:hiddenBuiltInTopicIds; pinnedBuiltInTopicIds=Array.isArray(imported.pinnedBuiltInTopicIds)?imported.pinnedBuiltInTopicIds:pinnedBuiltInTopicIds; if(imported.dark)localStorage.setItem('nada_v13_dark',imported.dark); if(imported.freeChatScenario)localStorage.setItem('nada_freechat_scenario',imported.freeChatScenario); if(Array.isArray(imported.freeChatHistory))localStorage.setItem('nada_freechat_history',JSON.stringify(imported.freeChatHistory)); localStorage.setItem('nada_custom_topics_v1',JSON.stringify(customTopics)); localStorage.setItem('nada_hidden_topics_v1',JSON.stringify(hiddenBuiltInTopicIds)); localStorage.setItem('nada_pinned_topics_v1',JSON.stringify(pinnedBuiltInTopicIds)); localStorage.setItem('nada_v12_state',JSON.stringify(state)); saveAllData(); rebuildCustomData(); render(); updateStorageStatus(); toast('تم استرجاع كل البيانات ✅');}catch(err){alert('تعذر استيراد النسخة الاحتياطية: '+err.message);} e.target.value='';}; r.readAsText(f,'UTF-8');}; $('exportCsv').onclick=()=>download('nada_1000_sentences.csv','number,topic,english,arabic\n'+S.map(x=>`"${x.number}","${x.topic_en}","${x.english.replaceAll('"','""')}","${x.arabic.replaceAll('"','""')}"`).join('\n'),'text/csv'); $('resetBtn').onclick=()=>{ if(confirm('مسح كل التقدم؟')){state={i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]}; save(); render();} };
-function download(name,text,type){const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:type||'text/plain'})); a.download=name; a.click();}
-
-// ===== Custom Topics =====
-let editingCustomTopicIndex=null;
-function openTopicModal(index=null){
-  editingCustomTopicIndex=Number.isInteger(index)?index:null;
-  const topic=editingCustomTopicIndex===null?null:customTopics[editingCustomTopicIndex];
-  $('topicModalTitle').textContent=topic?'✏️ تعديل الموضوع':'➕ إضافة موضوع جديد';
-  $('saveTopicBtn').textContent=topic?'💾 حفظ التعديلات':'💾 حفظ الموضوع';
-  $('newTopicEn').value=topic?.title_en||'';
-  $('newTopicAr').value=topic?.title_ar||'';
-  $('newTopicLines').value=topic?(topic.sentences||[]).map(x=>`${x.english||''} | ${x.arabic||''}`).join('\n'):'';
-  $('topicModal').classList.add('show'); $('newTopicEn').focus();
+  .sidebarTools{max-height:18vh}
 }
-function closeTopicModal(){ $('topicModal').classList.remove('show'); editingCustomTopicIndex=null; }
-function addCustomTopic(){
-  const titleEn=$('newTopicEn').value.trim();
-  const titleAr=$('newTopicAr').value.trim();
-  const rows=$('newTopicLines').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-  if(!titleEn){ alert('اكتبي اسم الموضوع بالإنجليزية'); return; }
-  const sentences=[];
-  for(const row of rows){
-    const parts=row.split('|');
-    const english=(parts.shift()||'').trim();
-    const arabic=parts.join('|').trim();
-    if(english) sentences.push({english,arabic});
+@media (max-width:900px){
+  .side{
+    height:100dvh;
+    min-height:0;
+    grid-template-rows:auto minmax(130px,26%) auto minmax(320px,1fr) auto;
   }
-  if(!sentences.length){ alert('أضيفي جملة واحدة على الأقل بالشكل English | العربية'); return; }
-  if(editingCustomTopicIndex!==null && customTopics[editingCustomTopicIndex]){
-    const current=customTopics[editingCustomTopicIndex];
-    customTopics[editingCustomTopicIndex]={...current,title_en:titleEn,title_ar:titleAr||titleEn,sentences,updated_at:Date.now()};
-  }else{
-    customTopics.push({title_en:titleEn,title_ar:titleAr||titleEn,sentences,created_at:Date.now(),pinned:false});
-  }
-  const targetIndex=editingCustomTopicIndex;
-  saveCustomTopics(); rebuildCustomData();
-  const targetTopic=targetIndex!==null?T.find(t=>t.custom&&t.custom_index===targetIndex):T[T.length-1];
-  if(targetTopic) state.i=targetTopic.start_index;
-  save(); render(); closeTopicModal(); toast(targetIndex!==null?'تم تعديل الموضوع ✅':'تمت إضافة الموضوع ✅');
-}
-function duplicateCustomTopic(index){
-  const topic=customTopics[index]; if(!topic)return;
-  customTopics.push({...JSON.parse(JSON.stringify(topic)),title_en:`${topic.title_en} Copy`,title_ar:`${topic.title_ar} - نسخة`,created_at:Date.now(),pinned:false});
-  saveCustomTopics(); rebuildCustomData(); render(); toast('تم نسخ الموضوع ✅');
-}
-function togglePinCustomTopic(index){
-  const topic=customTopics[index]; if(!topic)return;
-  topic.pinned=!topic.pinned; saveCustomTopics(); rebuildCustomData(); render(); toast(topic.pinned?'تم تثبيت الموضوع 📌':'تم إلغاء التثبيت');
-}
-function deleteCustomTopic(index){
-  const topic=customTopics[index]; if(!topic) return;
-  if(!confirm(`حذف موضوع: ${topic.title_en}؟`)) return;
-  customTopics.splice(index,1); saveCustomTopics(); rebuildCustomData(); state.i=Math.min(state.i,S.length-1); save(); render(); toast('تم حذف الموضوع');
-}
-$('addTopicBtn') && ($('addTopicBtn').onclick=openTopicModal);
-$('cancelTopicBtn').onclick=closeTopicModal;
-$('saveTopicBtn').onclick=addCustomTopic;
-$('topicModal').onclick=e=>{if(e.target===$('topicModal')) closeTopicModal();};
-$('sidebarTopicSearch').oninput=renderTopics;
-$('importTopicBtn') && ($('importTopicBtn').onclick=()=>$('topicFileInput')?.click());
-$('exportTopicsBtn') && ($('exportTopicsBtn').onclick=()=>{
-  if(!customTopics.length){toast('لا توجد موضوعات مضافة للتصدير');return;}
-  download('Nada_Topics_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:'19.5',customTopics},null,2),'application/json');
-  toast('تم تصدير الموضوعات');
-});
-document.querySelectorAll('[data-quick-go]').forEach(btn=>btn.onclick=()=>openScreen(btn.dataset.quickGo));
-
-
-
-
-function topicSentencesSnapshot(topic){
-  return S.slice(topic.start_index,topic.start_index+topic.count).map(x=>({english:x.english||'',arabic:x.arabic||''}));
-}
-function duplicateAnyTopic(topic){
-  if(!topic)return;
-  customTopics.push({title_en:`${topic.title_en} Copy`,title_ar:`${topic.title_ar} - نسخة`,sentences:topicSentencesSnapshot(topic),created_at:Date.now(),pinned:false});
-  saveCustomTopics();rebuildCustomData();render();renderPremiumTopics();toast('تم نسخ الموضوع ✅');
-}
-function convertBuiltInToEditable(topic,openEditor=true){
-  if(!topic||topic.custom)return;
-  const sourceId=Number(topic.id);
-  const existing=customTopics.findIndex(x=>Number(x.source_topic_id)===sourceId);
-  let idx=existing;
-  if(idx<0){
-    customTopics.push({title_en:topic.title_en,title_ar:topic.title_ar,sentences:topicSentencesSnapshot(topic),source_topic_id:sourceId,created_at:Date.now(),pinned:Boolean(topic.pinned)});
-    idx=customTopics.length-1;
-  }
-  if(!hiddenBuiltInTopicIds.includes(sourceId))hiddenBuiltInTopicIds.push(sourceId);
-  saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();
-  if(openEditor)openTopicModal(idx);
-}
-function deleteAnyTopic(topic){
-  if(!topic)return;
-  if(topic.custom){deleteCustomTopic(Number(topic.custom_index));return;}
-  if(!confirm(`حذف موضوع: ${topic.title_en}؟ يمكنك استعادته لاحقًا.`))return;
-  const id=Number(topic.id);if(!hiddenBuiltInTopicIds.includes(id))hiddenBuiltInTopicIds.push(id);
-  pinnedBuiltInTopicIds=pinnedBuiltInTopicIds.filter(x=>Number(x)!==id);
-  saveTopicWorkspace();rebuildCustomData();state.i=Math.min(state.i,Math.max(0,S.length-1));render();renderPremiumTopics();toast('تم حذف الموضوع من العرض');
-}
-function togglePinAnyTopic(topic){
-  if(!topic)return;
-  if(topic.custom){togglePinCustomTopic(Number(topic.custom_index));renderPremiumTopics();return;}
-  const id=Number(topic.id);
-  if(pinnedBuiltInTopicIds.map(Number).includes(id))pinnedBuiltInTopicIds=pinnedBuiltInTopicIds.filter(x=>Number(x)!==id);else pinnedBuiltInTopicIds.push(id);
-  saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();toast('تم تحديث التثبيت');
-}
-function manageAnyTopic(topic){
-  if(!topic)return;
-  openTopicWorkspace(topic);
-}
-function restoreHiddenTopics(){
-  if(!hiddenBuiltInTopicIds.length){toast('لا توجد موضوعات محذوفة');return;}
-  if(!confirm(`استعادة ${hiddenBuiltInTopicIds.length} موضوع؟`))return;
-  hiddenBuiltInTopicIds=[];saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();toast('تمت استعادة الموضوعات ✅');
+  .sidebarTools{max-height:20vh}
+  .sidebarTopics .topicList{min-height:0!important}
 }
 
-// ===== V19.7 Topic Workspace Pro =====
-let workspaceCustomTopicIndex=null;
-function ensureEditableTopic(topic){
-  if(!topic)return null;
-  if(topic.custom)return Number(topic.custom_index);
-  const sourceId=Number(topic.id);
-  let idx=customTopics.findIndex(x=>Number(x.source_topic_id)===sourceId);
-  if(idx<0){
-    customTopics.push({title_en:topic.title_en,title_ar:topic.title_ar,sentences:topicSentencesSnapshot(topic),source_topic_id:sourceId,created_at:Date.now(),pinned:Boolean(topic.pinned)});
-    idx=customTopics.length-1;
-  }
-  if(!hiddenBuiltInTopicIds.includes(sourceId))hiddenBuiltInTopicIds.push(sourceId);
-  saveTopicWorkspace();rebuildCustomData();render();renderPremiumTopics();
-  return idx;
-}
-function openTopicWorkspace(topic){
-  const idx=ensureEditableTopic(topic); if(idx===null||!customTopics[idx])return;
-  workspaceCustomTopicIndex=idx;
-  const modal=$('topicWorkspaceModal'); if(!modal)return;
-  modal.classList.add('show');
-  $('workspaceSentenceSearch').value='';
-  renderTopicWorkspace();
-}
-function closeTopicWorkspace(){ $('topicWorkspaceModal')?.classList.remove('show'); workspaceCustomTopicIndex=null; }
-function workspaceTopic(){return Number.isInteger(workspaceCustomTopicIndex)?customTopics[workspaceCustomTopicIndex]:null;}
-function persistWorkspace(message){
-  saveCustomTopics();rebuildCustomData();render();renderPremiumTopics();renderTopicWorkspace();
-  if(message)toast(message);
-}
-function renderTopicWorkspace(){
-  const topic=workspaceTopic(); if(!topic)return;
-  const lines=Array.isArray(topic.sentences)?topic.sentences:(topic.sentences=[]);
-  $('workspaceTitle').textContent=topic.title_ar||topic.title_en||'إدارة الموضوع';
-  $('workspaceSubtitle').textContent=(topic.title_en||'')+' · '+lines.length+' جملة';
-  $('workspaceTitleEn').value=topic.title_en||''; $('workspaceTitleAr').value=topic.title_ar||'';
-  $('workspaceSentenceCount').textContent=lines.length;
-  const q=($('workspaceSentenceSearch').value||'').trim().toLowerCase();
-  const rows=lines.map((line,index)=>({...line,index})).filter(x=>!q||String(x.english||'').toLowerCase().includes(q)||String(x.arabic||'').includes(q));
-  $('workspaceSentenceList').innerHTML=rows.length?rows.map(x=>`<div class="workspaceSentenceRow" data-workspace-row="${x.index}">
-    <span class="workspaceSentenceNumber">${x.index+1}</span>
-    <input class="workspaceEnglish" dir="ltr" value="${escapeHtml(x.english||'')}">
-    <input class="workspaceArabic" value="${escapeHtml(x.arabic||'')}">
-    <div class="workspaceSentenceActions">
-      <button data-workspace-action="speak" title="استماع">🔊</button>
-      <button data-workspace-action="save" title="حفظ الجملة">💾</button>
-      <button data-workspace-action="up" title="لأعلى">↑</button>
-      <button data-workspace-action="down" title="لأسفل">↓</button>
-      <button class="danger" data-workspace-action="delete" title="حذف">🗑️</button>
-    </div></div>`).join(''):'<div class="workspaceEmpty">لا توجد جمل مطابقة. أضيفي جملة جديدة من الأعلى.</div>';
-  $('workspaceSentenceList').querySelectorAll('[data-workspace-action]').forEach(btn=>btn.onclick=()=>{
-    const row=btn.closest('[data-workspace-row]'); const index=Number(row.dataset.workspaceRow); const action=btn.dataset.workspaceAction;
-    if(action==='speak'){speak(lines[index]?.english||'');return;}
-    if(action==='save'){
-      const english=row.querySelector('.workspaceEnglish').value.trim(); const arabic=row.querySelector('.workspaceArabic').value.trim();
-      if(!english){toast('الجملة الإنجليزية مطلوبة');return;} lines[index]={english,arabic};persistWorkspace('تم حفظ الجملة ✅');return;
-    }
-    if(action==='delete'){if(confirm('حذف هذه الجملة؟')){lines.splice(index,1);persistWorkspace('تم حذف الجملة');}return;}
-    const target=action==='up'?index-1:index+1;
-    if(target>=0&&target<lines.length){[lines[index],lines[target]]=[lines[target],lines[index]];persistWorkspace();}
-  });
-}
-$('workspaceSaveMeta') && ($('workspaceSaveMeta').onclick=()=>{
-  const topic=workspaceTopic(); if(!topic)return;
-  const en=$('workspaceTitleEn').value.trim(), ar=$('workspaceTitleAr').value.trim();
-  if(!en){toast('اسم الموضوع بالإنجليزية مطلوب');return;}
-  topic.title_en=en;topic.title_ar=ar||en;topic.updated_at=Date.now();persistWorkspace('تم حفظ اسم الموضوع ✅');
-});
-$('workspaceAddSentence') && ($('workspaceAddSentence').onclick=()=>{
-  const topic=workspaceTopic(); if(!topic)return;
-  const english=$('workspaceNewEnglish').value.trim(),arabic=$('workspaceNewArabic').value.trim();
-  if(!english){toast('اكتبي الجملة الإنجليزية');return;}
-  (topic.sentences||(topic.sentences=[])).push({english,arabic});$('workspaceNewEnglish').value='';$('workspaceNewArabic').value='';persistWorkspace('تمت إضافة الجملة ✅');
-});
-$('workspaceSentenceSearch') && ($('workspaceSentenceSearch').oninput=renderTopicWorkspace);
-$('workspaceOpenLearn') && ($('workspaceOpenLearn').onclick=()=>{
-  const topic=workspaceTopic(); if(!topic)return; const current=T.find(t=>t.custom&&Number(t.custom_index)===workspaceCustomTopicIndex);
-  if(current){state.i=current.start_index;save();render();closeTopicWorkspace();openScreen('learn');}
-});
-$('workspaceExportTopic') && ($('workspaceExportTopic').onclick=()=>{const topic=workspaceTopic();if(topic)download((topic.title_en||'Topic').replace(/[^a-z0-9_-]+/gi,'_')+'.json',JSON.stringify(topic,null,2),'application/json');});
-$('closeTopicWorkspace') && ($('closeTopicWorkspace').onclick=closeTopicWorkspace);
-$('workspaceCloseBottom') && ($('workspaceCloseBottom').onclick=closeTopicWorkspace);
-$('topicWorkspaceModal') && ($('topicWorkspaceModal').onclick=e=>{if(e.target===$('topicWorkspaceModal'))closeTopicWorkspace();});
 
-
-
-// ===== Import Topics From File (CSV / JSON / TXT) =====
-function csvCells(line){
-  const out=[]; let cur=''; let quoted=false;
-  for(let i=0;i<line.length;i++){
-    const ch=line[i];
-    if(ch==='"'){
-      if(quoted && line[i+1]==='"'){cur+='"'; i++;}
-      else quoted=!quoted;
-    }else if(ch===',' && !quoted){out.push(cur.trim()); cur='';}
-    else cur+=ch;
-  }
-  out.push(cur.trim()); return out;
+/* V19.5.4 - balanced sidebar: premium quick tools + topics list scroll only */
+.side{
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
-function normalizeHeader(v){return String(v||'').replace(/^\uFEFF/,'').trim().toLowerCase().replace(/[ _-]+/g,'');}
-function importRows(rows){
-  const grouped=new Map();
-  rows.forEach(row=>{
-    const english=String(row.english||row.English||row.sentence||row.Sentence||'').trim();
-    const arabic=String(row.arabic||row.Arabic||row.translation||row.Translation||'').trim();
-    const topic=String(row.topic||row.Topic||row.topic_en||row['Topic English']||'Imported Topic').trim()||'Imported Topic';
-    const topicAr=String(row.topic_ar||row['Topic Arabic']||row.topicArabic||topic).trim()||topic;
-    if(!english) return;
-    const key=topic+'|||'+topicAr;
-    if(!grouped.has(key)) grouped.set(key,{title_en:topic,title_ar:topicAr,sentences:[],created_at:Date.now()});
-    grouped.get(key).sentences.push({english,arabic});
-  });
-  const added=[...grouped.values()].filter(t=>t.sentences.length);
-  if(!added.length) throw new Error('لم يتم العثور على جمل صالحة. تأكدي من أسماء الأعمدة.');
-  customTopics.push(...added); saveCustomTopics(); rebuildCustomData();
-  state.i=T[T.length-added.length].start_index; save(); render();
-  return {topics:added.length,sentences:added.reduce((n,t)=>n+t.sentences.length,0)};
+.sidebarNav{
+  flex:0 1 auto;
+  max-height:34vh;
+  min-height:150px;
+  overflow-y:auto;
 }
-function parseCsvTopics(text){
-  const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());
-  if(lines.length<2) throw new Error('ملف CSV فارغ أو لا يحتوي بيانات.');
-  const headers=csvCells(lines[0]).map(normalizeHeader);
-  return lines.slice(1).map(line=>{
-    const vals=csvCells(line), obj={}; headers.forEach((h,i)=>obj[h]=vals[i]||'');
-    return {english:obj.english||obj.sentence,arabic:obj.arabic||obj.translation,topic:obj.topic||obj.topicen||obj.topicenglish,topic_ar:obj.topicar||obj.topicarabic};
-  });
+.sidebarTools{
+  flex:0 0 auto;
+  max-height:none;
+  overflow:visible;
+  margin:8px 10px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:linear-gradient(180deg,var(--card),var(--soft));
+  box-shadow:0 8px 22px rgba(15,23,42,.06);
 }
-function parseTxtTopics(text){
-  return text.split(/\r?\n/).map(x=>x.trim()).filter(x=>x && !x.startsWith('#')).map(line=>{
-    const p=line.split('|').map(x=>x.trim());
-    return {english:p[0]||'',arabic:p[1]||'',topic:p[2]||'Imported Topic',topic_ar:p[3]||p[2]||'Imported Topic'};
-  });
+.sidebarSectionHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:2px 2px 9px;
+  font-weight:900;
+  color:var(--text);
 }
-function parseJsonTopics(text){
-  const data=JSON.parse(text);
-  if(Array.isArray(data)){
-    if(data.length && data[0] && Array.isArray(data[0].sentences)){
-      return data.flatMap(t=>(t.sentences||[]).map(x=>({english:x.english||x.English,arabic:x.arabic||x.Arabic,topic:t.title_en||t.topic||'Imported Topic',topic_ar:t.title_ar||t.topic_ar||t.title_en||t.topic})));
-    }
-    return data;
-  }
-  if(Array.isArray(data.topics)){
-    return data.topics.flatMap(t=>(t.sentences||[]).map(x=>({english:x.english||x.English,arabic:x.arabic||x.Arabic,topic:t.title_en||t.topic||'Imported Topic',topic_ar:t.title_ar||t.topic_ar||t.title_en||t.topic})));
-  }
-  if(Array.isArray(data.sentences)) return data.sentences;
-  if(Array.isArray(data.customTopics)){
-    return data.customTopics.flatMap(t=>(t.sentences||[]).map(x=>({english:x.english,arabic:x.arabic,topic:t.title_en,topic_ar:t.title_ar})));
-  }
-  throw new Error('صيغة JSON غير مدعومة.');
+.sidebarSectionHead small{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
 }
-$('topicFileInput').onchange=e=>{
-  const file=e.target.files[0]; if(!file) return;
-  $('topicFileStatus').textContent='جارٍ قراءة الملف...';
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try{
-      const name=file.name.toLowerCase(); let rows;
-      if(name.endsWith('.json')) rows=parseJsonTopics(reader.result);
-      else if(name.endsWith('.csv')) rows=parseCsvTopics(reader.result);
-      else rows=parseTxtTopics(reader.result);
-      const result=importRows(rows);
-      $('topicFileStatus').textContent=`تمت إضافة ${result.topics} موضوع و${result.sentences} جملة ✅`;
-      closeTopicModal(); toast(`تم رفع ${result.topics} موضوع ✅`);
-    }catch(err){ $('topicFileStatus').textContent='خطأ: '+err.message; alert('تعذر رفع الملف:\n'+err.message); }
-    e.target.value='';
-  };
-  reader.onerror=()=>{ $('topicFileStatus').textContent='تعذر قراءة الملف'; };
-  reader.readAsText(file,'UTF-8');
-};
-$('downloadTopicTemplate').onclick=()=>download('nada_topics_upload_template.csv','English,Arabic,Topic,Topic Arabic\n"How can I help you?","كيف يمكنني مساعدتك؟","Customer Support","خدمة العملاء"\n"Please explain the problem.","من فضلك اشرح المشكلة.","Customer Support","خدمة العملاء"','text/csv;charset=utf-8');
-
-document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return; if(e.code==='Space'){e.preventDefault(); speak();} if(e.code==='Enter'){state.i++; render();}});
-
-// ===== V13 enhancements =====
-let flashItem=null, flashSide='en';
-function showAchievements(){
-  const known=Object.keys(state.known||{}).length, rev=Object.keys(state.review||{}).length, fav=Object.keys(state.fav||{}).length, xp=state.xp||0;
-  const items=[
-    ['أول 10 جمل', known>=10, known+'/10'],['أول 100 جملة', known>=100, known+'/100'],['أول 500 جملة', known>=500, known+'/500'],['كل الجمل', known>=1000, known+'/1000'],
-    ['مراجعة نشطة', rev>=10, rev+'/10'],['مفضلات', fav>=20, fav+'/20'],['Level 5', xp>=400, xp+'/400 XP'],['Level 10', xp>=900, xp+'/900 XP']
-  ];
-  const el=$('achGrid'); if(el) el.innerHTML=items.map(x=>`<div class="stat"><b>${x[1]?'✅':'🔒'}</b>${x[0]}<br><small>${x[2]}</small></div>`).join('');
+.quickToolGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
 }
-function nextFlash(){ const pool=[...Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean), ...S.filter(x=>!state.known[x.number]).slice(0,200)]; flashItem=pool.length?rand(pool):rand(S); flashSide='en'; renderFlash(); }
-function renderFlash(){ if(!flashItem) nextFlash(); $('flashText').textContent=flashSide==='en'?flashItem.english:flashItem.arabic; $('flashHint').textContent=flashSide==='en'?'اضغطي اقلب الكارت لرؤية الترجمة':'English: '+flashItem.english; }
-function makeWeeklyPlan(){ const d=Number($('dailyTarget').value)||20, mins=Number($('minutesTarget').value)||25; const start=state.i; let rows=''; for(let day=1;day<=7;day++){ const from=start+(day-1)*d+1, to=Math.min(start+day*d,S.length); rows+=`<tr><td>اليوم ${day}</td><td>${from} - ${to}</td><td>${mins} دقيقة</td><td>استماع + قراءة + اختبار قصير</td></tr>`; } $('planOut').innerHTML=`<table class="miniTable"><tr><th>اليوم</th><th>الجمل</th><th>الوقت</th><th>المهمة</th></tr>${rows}</table>`; }
-function buildConversation(){ const cur=S[state.i]; const topic=S.filter(x=>x.topic_id===cur.topic_id).slice(0,20); const lines=topic.slice(0,8).map((x,k)=>`<div class="row"><b>${k%2?'You':'Coach'}: ${x.english}</b><small>${x.arabic}</small></div>`).join(''); $('convOut').innerHTML=lines; }
-function playConversation(){ const texts=[...document.querySelectorAll('#convOut b')].map(b=>b.textContent.replace(/^(Coach|You): /,'')); let i=0; function go(){ if(i>=texts.length) return; speak(texts[i], i%2?0.82:0.92); i++; setTimeout(go,2200); } go(); }
-function refreshV13(){ showAchievements(); if($('flashText') && !flashItem) nextFlash(); }
-$('flashSpeak') && ($('flashSpeak').onclick=()=>flashItem&&speak(flashItem.english));
-$('flashFlip') && ($('flashFlip').onclick=()=>{flashSide=flashSide==='en'?'ar':'en'; renderFlash();});
-$('flashKnown') && ($('flashKnown').onclick=()=>{if(flashItem){markKnown(flashItem.number); nextFlash();}});
-$('flashAgain') && ($('flashAgain').onclick=()=>{if(flashItem){markReview(flashItem.number); nextFlash();}});
-$('flashNext') && ($('flashNext').onclick=nextFlash);
-$('makePlan') && ($('makePlan').onclick=makeWeeklyPlan);
-$('focusMode') && ($('focusMode').onclick=()=>document.documentElement.classList.toggle('focus'));
-$('buildConv') && ($('buildConv').onclick=buildConversation);
-$('playConv') && ($('playConv').onclick=playConversation);
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>setTimeout(refreshV13,0)));
-
-
-
-// ===== Free Conversation Mode =====
-const FREE_CHAT_SCENARIOS={
-  general:{start:'Hello Nada! How are you today?',hints:['I am fine, thank you.','I am a little tired today.','I am doing well.'],questions:['What did you do today?','What do you like to do in your free time?','What are you learning now?','Tell me something about your work.']},
-  work:{start:'Good morning. What are you working on today?',hints:['I am working on a client request.','I am reviewing the project requirements.','I have a meeting with the client.'],questions:['What is the current project status?','Is there any issue you need to discuss?','What is the next action?','When can you complete this task?']},
-  odoo:{start:'Let us practice Odoo English. Which module are you working on?',hints:['I am working on the Payroll module.','I am testing the Real Estate module.','I need to review the Accounting configuration.'],questions:['What issue did you find?','How should the system behave?','Did you test it on the staging environment?','What information do you need from the client?']},
-  travel:{start:'Welcome! Where would you like to travel?',hints:['I would like to travel to Saudi Arabia.','I need to book a hotel room.','I am looking for the airport.'],questions:['How long will you stay?','Do you have a reservation?','What type of room do you need?','What time is your flight?']},
-  shopping:{start:'Hello! What would you like to buy?',hints:['I am looking for a new dress.','How much does this cost?','Do you have this in another size?'],questions:['What size do you need?','Which color do you prefer?','Would you like to try it on?','Do you want to pay by cash or card?']},
-  interview:{start:'Welcome to the interview. Could you introduce yourself?',hints:['My name is Nada, and I work as an Odoo Functional Consultant.','I have experience in Odoo implementation and support.','I am looking for a remote opportunity.'],questions:['What are your main strengths?','Tell me about a project you worked on.','Why are you interested in this role?','What Odoo modules have you implemented?']}
-};
-let freeChatScenario=localStorage.getItem('nada_freechat_scenario')||'general';
-let freeChatHistory=JSON.parse(localStorage.getItem('nada_freechat_history')||'[]');
-let freeChatLastBot='';
-let freeChatLastCorrection='';
-function saveFreeChat(){localStorage.setItem('nada_freechat_scenario',freeChatScenario);localStorage.setItem('nada_freechat_history',JSON.stringify(freeChatHistory.slice(-100)));}
-function freeChatAdd(role,text,note=''){freeChatHistory.push({role,text,note,time:Date.now()});freeChatLastBot=role==='bot'?text:freeChatLastBot;saveFreeChat();renderFreeChat();}
-function renderFreeChat(){const box=$('freeChatMessages');if(!box)return;if(!freeChatHistory.length){const sc=FREE_CHAT_SCENARIOS[freeChatScenario];freeChatHistory=[{role:'bot',text:sc.start,note:'ابدئي بالرد بالإنجليزية',time:Date.now()}];freeChatLastBot=sc.start;saveFreeChat();}box.innerHTML=freeChatHistory.map(m=>`<div class="chatMsg ${m.role}">${escapeHtml(m.text)}${m.note?`<small>${escapeHtml(m.note)}</small>`:''}</div>`).join('');box.scrollTop=box.scrollHeight;document.querySelectorAll('.scenarioBtn').forEach(b=>b.classList.toggle('active',b.dataset.scenario===freeChatScenario));}
-function escapeHtml(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
-function correctFreeChatSentence(rawText){
-  const original=String(rawText||'').trim();
-  let corrected=original;
-  const reasons=[];
-  const apply=(pattern,replacement,reason)=>{const before=corrected;corrected=corrected.replace(pattern,replacement);if(corrected!==before&&reason)reasons.push(reason);};
-
-  apply(/\bi am agree\b/gi,'I agree','نقول I agree بدون am.');
-  apply(/\bi am understand\b/gi,'I understand','نقول I understand بدون am.');
-  apply(/\bi am know\b/gi,'I know','نقول I know بدون am.');
-  apply(/\bi has\b/gi,'I have','مع I نستخدم have.');
-  apply(/\b(he|she|it) have\b/gi,(m,p)=>p+' has','مع he / she / it نستخدم has.');
-  apply(/\b(he|she|it) don't\b/gi,(m,p)=>p+" doesn't",'مع he / she / it نستخدم doesn’t.');
-  apply(/\bi didn't went\b/gi,"I didn't go",'بعد didn’t نستخدم المصدر go.');
-  apply(/\bi didn't saw\b/gi,"I didn't see",'بعد didn’t نستخدم المصدر see.');
-  apply(/\bi can to\b/gi,'I can','بعد can نستخدم الفعل مباشرة بدون to.');
-  apply(/\bi am work\b/gi,'I am working','بعد am نستخدم صيغة -ing.');
-  apply(/\bi am study\b/gi,'I am studying','بعد am نستخدم صيغة -ing.');
-  apply(/\bi have (\d+) years old\b/gi,'I am $1 years old','للعمر نستخدم am وليس have.');
-  apply(/\bpeople is\b/gi,'people are','People جمع، لذلك نستخدم are.');
-  apply(/\bthere is (two|three|four|five|many|several|a lot of)\b/gi,'there are $1','مع الجمع نستخدم there are.');
-
-  const pastMarker=/\b(yesterday|last night|last week|last month|last year|ago)\b/i;
-  if(pastMarker.test(corrected)){
-    apply(/\bI go\b/g,'I went','مع زمن ماضٍ مثل yesterday نستخدم went.');
-    apply(/\bI come\b/g,'I came','مع زمن ماضٍ نستخدم came.');
-    apply(/\bI see\b/g,'I saw','مع زمن ماضٍ نستخدم saw.');
-    apply(/\bI work\b/g,'I worked','مع زمن ماضٍ نستخدم worked.');
-    apply(/\bI visit\b/g,'I visited','مع زمن ماضٍ نستخدم visited.');
-    apply(/\bI finish\b/g,'I finished','مع زمن ماضٍ نستخدم finished.');
-  }
-
-  corrected=corrected.replace(/\bi\b/g,'I').replace(/\s+/g,' ').trim();
-  if(corrected){corrected=corrected.charAt(0).toUpperCase()+corrected.slice(1);if(!/[.!?]$/.test(corrected))corrected+='.';}
-  const changed=corrected!==original;
-  if(!changed&&original&&reasons.length===0)reasons.push('الجملة واضحة. راجعي فقط النطق وعلامة النهاية.');
-  return {original,corrected,changed,reasons};
+.quickToolGrid button{
+  min-width:0;
+  min-height:62px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:13px;
+  padding:9px 7px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  transition:.18s ease;
+  box-shadow:0 4px 12px rgba(15,23,42,.04);
 }
-function freeChatFeedback(text){const result=correctFreeChatSentence(text);return result.changed?'تم اكتشاف تصحيح للجملة.':'Excellent! Your sentence is clear.';}
-function freeChatReply(text){const sc=FREE_CHAT_SCENARIOS[freeChatScenario];const lower=text.toLowerCase();if(/hello|hi|good morning|good evening/.test(lower))return 'Hello! It is nice to talk with you. '+rand(sc.questions);if(/thank/.test(lower))return 'You are welcome. '+rand(sc.questions);if(/don.t understand|do not understand/.test(lower))return 'No problem. I will ask a simpler question. '+sc.questions[0];if(/yes|sure|of course/.test(lower))return 'Great! '+rand(sc.questions);if(/no|not really/.test(lower))return 'That is okay. '+rand(sc.questions);return rand(sc.questions);}
-function sendFreeChat(source='typed'){
-  const input=$('freeChatText');
-  const text=(input.value||'').trim();
-  if(!text)return;
-  const correction=correctFreeChatSentence(text);
-  freeChatAdd('user',text,source==='voice'?'🎤 الجملة المنطوقة':'الجملة المكتوبة');
-  if(correction.changed){
-    freeChatLastCorrection=correction.corrected;
-    freeChatAdd('correction','✅ Correct: '+correction.corrected,'💡 '+correction.reasons.join(' '));
-  }else{
-    freeChatLastCorrection=correction.corrected;
-    freeChatAdd('correction','✅ Your sentence is correct: '+correction.corrected,'ممتاز، الجملة واضحة.');
-  }
-  const correctionBtn=$('freeChatSpeakCorrection');
-  if(correctionBtn)correctionBtn.disabled=!freeChatLastCorrection;
-  input.value='';
-  saveAllData();
-  setTimeout(()=>freeChatAdd('bot',freeChatReply(correction.corrected),'استمري في المحادثة بالإنجليزية'),350);
+.quickToolGrid button:hover{
+  transform:translateY(-2px);
+  border-color:#93c5fd;
+  background:#eff6ff;
+  box-shadow:0 8px 18px rgba(37,99,235,.12);
 }
-function setFreeChatScenario(name){freeChatScenario=name;freeChatHistory=[];saveFreeChat();renderFreeChat();}
-document.querySelectorAll('.scenarioBtn').forEach(b=>b.onclick=()=>setFreeChatScenario(b.dataset.scenario));
-$('freeChatSend')&&($('freeChatSend').onclick=sendFreeChat);
-$('freeChatText')&&($('freeChatText').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();sendFreeChat();}});
-$('freeChatSpeak')&&($('freeChatSpeak').onclick=()=>{if(freeChatLastBot)speak(freeChatLastBot);});
-$('freeChatSpeakCorrection')&&($('freeChatSpeakCorrection').onclick=()=>{if(freeChatLastCorrection)speak(freeChatLastCorrection);});
-$('freeChatHint')&&($('freeChatHint').onclick=()=>{const sc=FREE_CHAT_SCENARIOS[freeChatScenario];const hint=rand(sc.hints);$('freeChatText').value=hint;$('freeChatText').focus();});
-$('freeChatClear')&&($('freeChatClear').onclick=()=>{if(confirm('مسح المحادثة الحالية؟')){freeChatHistory=[];saveFreeChat();renderFreeChat();}});
+.quickToolGrid button span{font-size:20px;line-height:1}
+.quickToolGrid button b{
+  width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  line-height:1.2;
+}
+.quickSettings{
+  margin-top:8px;
+  border-top:1px solid var(--line);
+  padding-top:6px;
+}
+.quickSettings summary{
+  cursor:pointer;
+  list-style:none;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+  padding:5px 2px;
+}
+.quickSettings summary::-webkit-details-marker{display:none}
+.quickSettings summary::after{content:'⌄';float:left}
+.quickSettings[open] summary::after{content:'⌃'}
+.quickSettings .quickAdvanced{padding-top:6px}
 
-// Voice input for Free Conversation
-let freeChatRecognition=null;
-function setFreeChatMicStatus(message){const el=$('freeChatMicStatus');if(el)el.textContent=message;}
-function resetFreeChatMicButton(){const btn=$('freeChatMic');if(btn){btn.disabled=false;btn.textContent='🎤 اتكلمي';}}
-async function startFreeChatVoice(){
-  if(!SR){
-    setFreeChatMicStatus('التعرف على الكلام غير مدعوم. استخدمي Chrome أو Edge.');
-    return;
-  }
-  if(freeChatRecognition){
-    try{freeChatRecognition.stop();}catch(e){}
-    return;
-  }
-  const btn=$('freeChatMic');
-  if(btn){btn.disabled=true;btn.textContent='جاري الفحص...';}
-  setFreeChatMicStatus('جاري فحص الميكروفون...');
-  try{
-    await verifyMicrophone();
-    stopMicStream();
-    const rec=new SR();
-    freeChatRecognition=rec;
-    rec.lang='en-US';
-    rec.continuous=false;
-    rec.interimResults=true;
-    rec.maxAlternatives=1;
-    rec.onstart=()=>{
-      if(btn){btn.disabled=false;btn.textContent='⏹ إيقاف';}
-      setFreeChatMicStatus('🎤 أتكلمي الآن بالإنجليزية...');
-    };
-    rec.onresult=e=>{
-      let transcript='';
-      let finalText='';
-      for(let i=e.resultIndex;i<e.results.length;i++){
-        const part=e.results[i][0].transcript.trim();
-        transcript+=(transcript?' ':'')+part;
-        if(e.results[i].isFinal)finalText+=(finalText?' ':'')+part;
-      }
-      if($('freeChatText'))$('freeChatText').value=transcript;
-      setFreeChatMicStatus(transcript?'سمعت: '+transcript:'جاري الاستماع...');
-      if(finalText){
-        if($('freeChatText'))$('freeChatText').value=finalText;
-        setFreeChatMicStatus('تم سماع الجملة. يتم الآن تصحيحها وإرسالها...');
-        setTimeout(()=>sendFreeChat('voice'),250);
-      }
-    };
-    rec.onerror=e=>{
-      setFreeChatMicStatus(micErrorMessage(e.error));
-    };
-    rec.onend=()=>{
-      freeChatRecognition=null;
-      resetFreeChatMicButton();
-    };
-    rec.start();
-  }catch(err){
-    stopMicStream();
-    const name=err&&err.name?err.name:(err&&err.message?err.message:'UnknownError');
-    setFreeChatMicStatus(micErrorMessage(name));
-    freeChatRecognition=null;
-    resetFreeChatMicButton();
-  }
+.sidebarTopics{
+  flex:1 1 0;
+  min-height:210px!important;
+  margin:0 10px 10px;
+  padding:10px 9px 9px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--card);
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  box-shadow:0 8px 22px rgba(15,23,42,.05);
 }
-$('freeChatMic')&&($('freeChatMic').onclick=startFreeChatVoice);
-if(!SR&&$('freeChatMic')){
-  $('freeChatMic').disabled=true;
-  setFreeChatMicStatus('التعرف على الكلام غير مدعوم. استخدمي Chrome أو Edge.');
+.topicSectionHead{padding-bottom:8px}
+.sidebarTopics .topicSearch{
+  position:static;
+  margin:0 0 8px!important;
+  padding:9px 10px!important;
+  border:1px solid var(--line)!important;
+  background:var(--soft)!important;
+  border-radius:11px!important;
+  font-size:12px!important;
+}
+.sidebarTopics .topicList{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  padding:1px 5px 12px 0;
+}
+.sidebarTopics .topicList::-webkit-scrollbar{width:7px}
+.sidebarTopics .topicList::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:20px}
+.sidebarTopics .topicList::-webkit-scrollbar-track{background:transparent}
+
+@media(max-width:900px){
+  .sidebarNav{max-height:27vh;min-height:120px}
+  .sidebarTools{margin:7px 9px;padding:9px}
+  .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .quickToolGrid button{min-height:55px;padding:7px 4px}
+  .quickToolGrid button b{font-size:9px}
+  .sidebarTopics{min-height:34vh!important;margin:0 9px 9px}
 }
 
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{if(tab.dataset.screen==='freechat')setTimeout(renderFreeChat,0);}));
-
-// ===== V15 enhancements =====
-const ERP_PHRASES=[
-  {en:'I will review the requirement and get back to you.', ar:'سأراجع المتطلب وأعود إليك.'},
-  {en:'Could you please share the steps to reproduce the issue?', ar:'هل يمكنك مشاركة خطوات إعادة ظهور المشكلة؟'},
-  {en:'The issue is related to the configuration, not the code.', ar:'المشكلة مرتبطة بالإعدادات وليست بالكود.'},
-  {en:'We need to test this scenario on the staging environment first.', ar:'نحتاج لاختبار هذا السيناريو على بيئة الاختبار أولاً.'},
-  {en:'The payroll rule should calculate the deduction automatically.', ar:'قاعدة الرواتب يجب أن تحسب الخصم تلقائيًا.'},
-  {en:'Please confirm if this behavior is expected.', ar:'يرجى تأكيد هل هذا السلوك متوقع.'},
-  {en:'I have updated the file based on your feedback.', ar:'قمت بتحديث الملف بناءً على ملاحظاتك.'},
-  {en:'The invoice was created successfully, but it has not been posted yet.', ar:'تم إنشاء الفاتورة بنجاح لكنها لم تُرحّل بعد.'},
-  {en:'We can add a new field to show the current leave balance.', ar:'يمكننا إضافة حقل جديد لإظهار رصيد الإجازة الحالي.'},
-  {en:'Let us schedule a short meeting to clarify the process.', ar:'دعنا نحدد اجتماعًا قصيرًا لتوضيح العملية.'}
-];
-let erpCurrent=null;
-function simpleGrammar(s){
-  const t=s.english; let notes=[];
-  if(/^Can|^Could|^Would|^Do|^Does|^Did|^Are|^Is|^What|^Where|^When|^Why|^How/i.test(t)) notes.push('هذه جملة سؤال. لاحظي ترتيب السؤال في الإنجليزية.');
-  if(/\b(am|is|are)\b/i.test(t)) notes.push('تحتوي على verb to be: am / is / are.');
-  if(/\b(will|going to)\b/i.test(t)) notes.push('تتحدث عن المستقبل.');
-  if(/\b(yesterday|last|ago|was|were|did)\b/i.test(t)) notes.push('تتحدث عن الماضي.');
-  if(/\bplease\b/i.test(t)) notes.push('كلمة please تجعل الطلب أكثر أدبًا.');
-  if(!notes.length) notes.push('احفظي الجملة كما هي وركزي على ترتيب الكلمات.');
-  return notes;
+@media(max-height:760px) and (min-width:901px){
+  .sidebarNav{max-height:29vh}
+  .quickToolGrid button{min-height:52px}
+  .quickSettings{display:none}
+  .sidebarTopics{min-height:190px!important}
 }
-function explainGrammar(){ const x=S[state.i]; const notes=simpleGrammar(x); $('grammarOut').innerHTML=`<div class="erpCard"><b>${x.english}</b><br><span class="arabic">${x.arabic}</span></div>`+notes.map(n=>`<span class="badge2">${n}</span>`).join(''); }
-function grammarQuiz(){ const x=S[state.i]; const words=x.english.split(' '); const missing=words.find(w=>w.length>3) || words[0]; const q=x.english.replace(missing,'_____'); $('grammarOut').innerHTML=`<h3>اكتبي الكلمة الناقصة:</h3><div class="big">${q}</div><input id="gAns" placeholder="Write the missing word"><button class="btn green" id="gCheck">تحقق</button><div id="gFeed"></div>`; const check=$('gCheck'); if(check) check.onclick=()=>{ const ok=clean($('gAns')?.value||'')===clean(missing); if($('gFeed')) $('gFeed').innerHTML=ok?'✅ صح':'❌ الإجابة: <b>'+missing+'</b>'; ok?markKnown(x.number):markReview(x.number); }; }
-function randomErp(){ erpCurrent=rand(ERP_PHRASES); $('erpEn').textContent=erpCurrent.en; $('erpAr').textContent=erpCurrent.ar; }
-function buildMistakesReport(){ const rev=Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean); if(!rev.length){$('mistakesOut').innerHTML='لا توجد جمل في المراجعة حاليًا ✅'; return;} const byTopic={}; rev.forEach(x=>{byTopic[x.topic_en]=(byTopic[x.topic_en]||0)+1;}); const rows=Object.entries(byTopic).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join(''); const sample=rev.slice(0,20).map(x=>`<div class="row"><b>${x.number}. ${x.english}</b><small>${x.arabic}</small></div>`).join(''); $('mistakesOut').innerHTML=`<h3>أكثر موضوعات تحتاج مراجعة</h3><table class="miniTable"><tr><th>الموضوع</th><th>عدد الجمل</th></tr>${rows}</table><h3>أول 20 جملة للمراجعة</h3>${sample}`; }
-$('grammarExplain') && ($('grammarExplain').onclick=explainGrammar);
-$('grammarQuiz') && ($('grammarQuiz').onclick=grammarQuiz);
-$('erpRandom') && ($('erpRandom').onclick=randomErp);
-$('erpSpeak') && ($('erpSpeak').onclick=()=>{ if(!erpCurrent) randomErp(); speak(erpCurrent.en); });
-$('erpSave') && ($('erpSave').onclick=()=>{ if(!erpCurrent) randomErp(); state.words=[...(state.words||[]), ...wordsOf(erpCurrent.en)]; state.words=[...new Set(state.words)].slice(-500); save(); toast('تم حفظ كلمات الجملة'); });
-$('buildMistakes') && ($('buildMistakes').onclick=buildMistakesReport);
-$('clearReview') && ($('clearReview').onclick=()=>{ if(confirm('مسح كل جمل المراجعة؟')){state.review={}; save(); buildMistakesReport(); updateStats();} });
 
 
-// ===== V15 real additions =====
-state.notes = state.notes || {};
-let labItems=[], labPos=0, playStop=false;
-function similarity(a,b){ a=clean(a); b=clean(b); if(!a&&!b)return 1; const aw=a.split(' '), bw=b.split(' '); let hits=0; aw.forEach(w=>{ if(bw.includes(w)) hits++; }); return Math.round((hits/Math.max(aw.length,1))*100); }
-function makeLabPool(){ const cur=S[state.i]; const same=S.filter(x=>x.topic_id===cur.topic_id); const review=Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean); const pool=[...review,...same].filter((x,i,a)=>a.findIndex(y=>y.number===x.number)===i); labItems=shuffle(pool).slice(0,10); if(!labItems.length) labItems=shuffle(S).slice(0,10); labPos=0; renderLab(); }
-function renderLab(){ const x=labItems[labPos]; const pct=labItems.length?Math.round((labPos/labItems.length)*100):0; if($('labBar')) $('labBar').style.width=pct+'%'; if(!x){ $('labEn').textContent='انتهى التدريب ✅'; $('labAr').textContent=''; $('labResult').innerHTML='<b>ممتاز! اختاري تدريب جديد.</b>'; return; } $('labEn').textContent=x.english; $('labAr').textContent=x.arabic; $('labAnswer').value=''; $('labResult').innerHTML=`<span class="modePill">${labPos+1} / ${labItems.length}</span><span class="modePill">${x.topic_en}</span>`; }
-function checkLab(){ const x=labItems[labPos]; if(!x) return; const score=similarity($('labAnswer').value,x.english); $('labResult').innerHTML=`<div class="stat"><b>${score}%</b>مطابقة</div><div class="noteBox"><b>الصحيح:</b><br>${x.english}</div>`; if(score>=80){ markKnown(x.number); } else { markReview(x.number); } }
-function nextLab(){ if(!labItems.length) makeLabPool(); else {labPos++; renderLab();} }
-function currentPlaylist(mode){ const cur=S[state.i]; if(mode==='topic') return S.filter(x=>x.topic_id===cur.topic_id); if(mode==='review') return Object.keys(state.review||{}).map(n=>S[Number(n)-1]).filter(Boolean); if(mode==='fav') return Object.keys(state.fav||{}).map(n=>S[Number(n)-1]).filter(Boolean); return []; }
-function showPlaylist(list){ $('playlistOut').innerHTML=list.slice(0,60).map(x=>`<div class="playItem"><b>${x.number}. ${x.english}</b><small>${x.arabic}</small></div>`).join('') || '<p>لا توجد جمل في هذه القائمة.</p>'; }
-function playList(mode){
-  const list=currentPlaylist(mode);
-  showPlaylist(list);
-  playStop=true;
-  speechSynthesis.cancel();
-  if(!list.length){ toast('لا توجد جمل في هذه القائمة'); return; }
-  playStop=false;
-  const reps=Math.max(1,Number($('repeatCount').value)||1);
-  const gap=Math.max(1,Number($('gapSeconds').value)||2)*1000;
-  let i=0, r=0;
-  const playNext=()=>{
-    if(playStop) return;
-    if(i>=list.length){
-      playStop=true;
-      toast('تم تشغيل القائمة كاملة ✅');
-      return;
-    }
-    const item=list[i];
-    const u=new SpeechSynthesisUtterance(item.english);
-    u.lang='en-US';
-    u.rate=Number($('rate')?.value)||0.85;
-    const v=voices[Number($('voice')?.value)];
-    if(v) u.voice=v;
-    document.querySelectorAll('#playlistOut .playItem').forEach((el,index)=>el.classList.toggle('playing',index===i));
-    u.onend=()=>{
-      if(playStop) return;
-      r++;
-      if(r>=reps){r=0;i++;}
-      setTimeout(playNext,gap);
-    };
-    u.onerror=()=>{
-      if(playStop) return;
-      r=0;i++;
-      setTimeout(playNext,300);
-    };
-    speechSynthesis.speak(u);
-  };
-  playNext();
+/* ===== V19.5.5 Final working sidebar ===== */
+.side{
+  display:flex!important;
+  flex-direction:column!important;
+  height:calc(100vh - 112px)!important;
+  min-height:560px!important;
+  overflow:hidden!important;
 }
-function refreshNotes(){ const x=S[state.i]; if($('noteSentence')){ $('noteSentence').textContent=x.english; $('noteArabic').textContent=x.arabic; $('sentenceNote').value=state.notes[x.number]||''; } }
-function saveCurrentNote(){ const x=S[state.i]; const val=$('sentenceNote').value.trim(); if(val) state.notes[x.number]=val; else delete state.notes[x.number]; save(); showAllNotes(); }
-function showAllNotes(){ const entries=Object.entries(state.notes||{}); $('notesOut').innerHTML=entries.length?entries.slice(-100).reverse().map(([n,t])=>{const x=S[Number(n)-1]; return `<div class="noteBox"><b>${n}. ${x?x.english:''}</b><br><small>${x?x.arabic:''}</small><p>${t}</p></div>`}).join(''):'<p>لا توجد ملاحظات محفوظة بعد.</p>'; }
-function exportNotesFile(){ const rows=['Number,English,Arabic,Note', ...Object.entries(state.notes||{}).map(([n,t])=>{const x=S[Number(n)-1]||{}; return [n,x.english||'',x.arabic||'',t].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',');})]; download('nada_notes.csv', rows.join('\n'), 'text/csv'); }
-$('labStart') && ($('labStart').onclick=makeLabPool); $('labSpeak') && ($('labSpeak').onclick=()=>labItems[labPos]&&speak(labItems[labPos].english)); $('labCheck') && ($('labCheck').onclick=checkLab); $('labNext') && ($('labNext').onclick=nextLab);
-$('playTopic') && ($('playTopic').onclick=()=>playList('topic')); $('playReview') && ($('playReview').onclick=()=>playList('review')); $('playFav') && ($('playFav').onclick=()=>playList('fav')); $('stopPlay') && ($('stopPlay').onclick=()=>{playStop=true; speechSynthesis.cancel();});
-$('saveNote') && ($('saveNote').onclick=saveCurrentNote); $('showNotes') && ($('showNotes').onclick=showAllNotes); $('exportNotes') && ($('exportNotes').onclick=exportNotesFile);
-document.addEventListener('keydown', e=>{ if(['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) return; if(e.code==='Space'){e.preventDefault(); speak(S[state.i].english);} if(e.key==='ArrowRight') $('next').click(); if(e.key==='ArrowLeft') $('prev').click(); if(e.key.toLowerCase()==='k') $('known').click(); if(e.key.toLowerCase()==='r') $('reviewBtn').click(); });
-const oldRenderV15 = render; render = function(){ oldRenderV15(); refreshNotes(); };
-
-buildDaily(); render(); refreshV13();
-
-function updateStorageStatus(){
-  const status=document.getElementById('storageStatus'), details=document.getElementById('storageDetails');
-  if(!status||!details)return;
-  if(!storageAvailable()){status.textContent='❌';details.textContent='الحفظ غير متاح في هذا المتصفح.';return;}
-  const saved=safeParse(localStorage.getItem(APP_DATA_KEY),{});
-  status.textContent='✅';
-  details.textContent=`محفوظ: ${customTopics.length} موضوع مرفوع | XP: ${state.xp||0} | آخر حفظ: ${saved.savedAt?new Date(saved.savedAt).toLocaleString('ar-EG'):'الآن'}`;
+.sidebarHeader{flex:0 0 auto!important}
+.sidebarNav{
+  flex:0 1 30%!important;
+  min-height:120px!important;
+  max-height:30%!important;
+  overflow-y:auto!important;
 }
-window.addEventListener('beforeunload',saveAllData);
-setInterval(saveAllData,15000);
-setTimeout(()=>{saveAllData();updateStorageStatus();},300);
-
-
-// V19 mobile sidebar controls
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const appSidebar = document.getElementById('appSidebar');
-const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-const sidebarClose = document.getElementById('sidebarClose');
-function openSidebar(){ appSidebar?.classList.add('open'); sidebarBackdrop?.classList.add('show'); document.body.style.overflow='hidden'; }
-function closeSidebar(){ appSidebar?.classList.remove('open'); sidebarBackdrop?.classList.remove('show'); document.body.style.overflow=''; }
-mobileMenuBtn?.addEventListener('click', openSidebar);
-sidebarClose?.addEventListener('click', closeSidebar);
-sidebarBackdrop?.addEventListener('click', closeSidebar);
-document.querySelectorAll('.navItem').forEach(btn=>btn.addEventListener('click',()=>{ if(window.innerWidth<=900) closeSidebar(); }));
-window.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSidebar(); });
-
-// ===== V19.4 Modern Dashboard =====
-function openScreen(screen){
-  const btn=document.querySelector(`.navItem[data-screen="${screen}"]`);
-  if(btn){ btn.click(); if(screen==='favorites') setTimeout(renderFavoritesScreen,0); return; }
-  document.querySelectorAll('.tab,.screen').forEach(e=>e.classList.remove('active'));
-  const target=document.getElementById(screen); if(target) target.classList.add('active');
-  if(screen==='favorites') renderFavoritesScreen();
+.sidebarTools{
+  display:block!important;
+  flex:0 0 auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin:7px 10px!important;
+  padding:10px!important;
+  visibility:visible!important;
+  opacity:1!important;
 }
-function refreshDashboard(){
-  const known=Object.keys(state.known||{}).length;
-  const review=Object.keys(state.review||{}).length;
-  const fav=Object.keys(state.fav||{}).length;
-  const xp=state.xp||0;
-  const pct=S.length?Math.round((known/S.length)*100):0;
-  const cur=S[state.i]||{};
-  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
-  set('dashXP',xp); set('dashKnown',known); set('dashReviewCount',review); set('dashFav',fav);
-  set('dashGoalPct',Math.min(100,pct)+'%'); set('dashProgressText',pct+'%');
-  set('dashSentence',cur.english||'ابدئي رحلتك الآن'); set('dashSentenceAr',cur.arabic||'');
-  set('streakPill','🔥 '+(state.streak||1)+' يوم');
-  const bar=document.getElementById('dashProgressBar'); if(bar) bar.style.width=pct+'%';
+.sidebarTools .quickToolGrid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;
+  min-height:198px!important;
+  visibility:visible!important;
+  opacity:1!important;
 }
-['dashContinue','dashResume'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>openScreen('learn')));
-document.getElementById('dashDaily')?.addEventListener('click',()=>openScreen('daily'));
-document.getElementById('dashReview')?.addEventListener('click',()=>openScreen('review'));
-document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
-document.querySelectorAll('.navItem').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.screen==='dashboard')setTimeout(refreshDashboard,0);}));
-setTimeout(refreshDashboard,350);
+.sidebarTools .quickToolGrid>button{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  min-height:58px!important;
+  position:relative!important;
+  z-index:1!important;
+}
+.sidebarTools .quickSettings{display:none!important}
+.sidebarTopics{
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  flex:1 1 auto!important;
+  min-height:190px!important;
+  overflow:hidden!important;
+  margin:0 10px 10px!important;
+}
+.sidebarTopics .topicList{
+  display:block!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-gutter:stable!important;
+}
+.sidebarTopics .topicCard{display:block!important}
+.premiumTopicsGrid{min-height:160px!important}
+.premiumMoreBtn{display:block;cursor:pointer}
+@media(max-height:820px) and (min-width:901px){
+  .side{height:calc(100vh - 98px)!important;min-height:500px!important}
+  .sidebarNav{flex-basis:23%!important;max-height:23%!important}
+  .sidebarTools .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;min-height:112px!important}
+  .sidebarTools .quickToolGrid>button{min-height:50px!important}
+}
+@media(max-width:900px){
+  .side{height:100dvh!important;min-height:0!important}
+  .sidebarNav{flex-basis:25%!important;max-height:25%!important}
+  .sidebarTools .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;min-height:112px!important}
+  .sidebarTopics{min-height:32vh!important}
+}
 
 
-// ===== V19.4.1 Visible UI Upgrade =====
-const sidebarCollapseBtn=document.getElementById('sidebarCollapse');
-function applySidebarState(){
-  const collapsed=localStorage.getItem('nea_sidebar_collapsed')==='1';
-  document.body.classList.toggle('sidebar-collapsed',collapsed && window.innerWidth>900);
+/* ===== V19.5.6 stable proportional sidebar ===== */
+.side{
+  display:grid!important;
+  grid-template-rows:auto minmax(100px,22vh) auto minmax(230px,1fr) auto!important;
+  height:calc(100vh - 112px)!important;
+  min-height:560px!important;
+  overflow:hidden!important;
 }
-sidebarCollapseBtn?.addEventListener('click',()=>{
-  const next=!document.body.classList.contains('sidebar-collapsed');
-  localStorage.setItem('nea_sidebar_collapsed',next?'1':'0');
-  applySidebarState();
-});
-window.addEventListener('resize',applySidebarState);applySidebarState();
-
-const globalSearch=document.getElementById('globalSearch');
-function runGlobalSearch(){
-  const q=(globalSearch?.value||'').trim();
-  if(!q)return;
-  const old=document.getElementById('search');
-  if(old){old.value=q;old.dispatchEvent(new Event('input',{bubbles:true}));old.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));}
-  const match=S.findIndex(x=>String(x.number)===q||x.english.toLowerCase().includes(q.toLowerCase())||x.arabic.includes(q)||x.topic_en.toLowerCase().includes(q.toLowerCase()));
-  if(match>=0){state.i=match;save();openScreen('learn');render();document.querySelector('#learn .card')?.classList.add('searchFlash');setTimeout(()=>document.querySelector('#learn .card')?.classList.remove('searchFlash'),1200);}
-  else toast('لم يتم العثور على نتيجة');
+.sidebarHeader{min-height:76px!important}
+.sidebarNav{
+  min-height:100px!important;
+  max-height:none!important;
+  height:auto!important;
+  overflow-y:auto!important;
+  flex:none!important;
 }
-globalSearch?.addEventListener('keydown',e=>{if(e.key==='Enter')runGlobalSearch();});
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();globalSearch?.focus();globalSearch?.select();}});
-
-const oldRefreshDashboardV1941=refreshDashboard;
-refreshDashboard=function(){
-  oldRefreshDashboardV1941();
-  const known=Object.keys(state.known||{}).length;
-  const pct=S.length?Math.round((known/S.length)*100):0;
-  const sg=document.getElementById('sideGoal');if(sg)sg.textContent=Math.min(100,pct)+'%';
-  const sgb=document.getElementById('sideGoalBar');if(sgb)sgb.style.width=Math.min(100,pct)+'%';
-};
-setTimeout(refreshDashboard,500);
-
-
-// ===== V19.4.2 Dashboard Intelligence + Mobile Navigation =====
-function refreshDashboardInsights(){
-  const reviewCount=Object.keys(state.review||{}).length;
-  const knownCount=Object.keys(state.known||{}).length;
-  const focusCount=document.getElementById('focusCount');
-  const focusTitle=document.getElementById('focusTitle');
-  const focusText=document.getElementById('focusText');
-  const focusAction=document.getElementById('focusAction');
-  const ring=document.querySelector('.focusRing');
-  let count=0,title='',desc='',screen='learn';
-  if(reviewCount>0){count=Math.min(reviewCount,12);title='راجعي الجمل الصعبة';desc='لديكِ '+reviewCount+' جملة تحتاج مراجعة اليوم.';screen='review';}
-  else if(knownCount<10){count=Math.min(10,Math.max(1,S.length-knownCount));title='ابدئي 10 جمل جديدة';desc='خطوة صغيرة اليوم ستصنع فرقًا كبيرًا.';screen='learn';}
-  else{count=5;title='تدريب نطق سريع';desc='اختاري 5 جمل وتدرّبي عليها بصوتك.';screen='speak';}
-  if(focusCount)focusCount.textContent=count;
-  if(focusTitle)focusTitle.textContent=title;
-  if(focusText)focusText.textContent=desc;
-  if(ring)ring.style.setProperty('--focus-pct',Math.min(100,count*8)+'%');
-  if(focusAction)focusAction.onclick=()=>openScreen(screen);
-
-  const list=document.getElementById('recentTopicsList');
-  if(list){
-    const current=S[state.i]||{};
-    const seen=new Set();
-    const recent=[];
-    [current,...S.slice(Math.max(0,state.i-20),state.i).reverse()].forEach(item=>{
-      if(!item||seen.has(item.topic_en))return;
-      seen.add(item.topic_en);recent.push(item);
-    });
-    list.innerHTML=recent.slice(0,4).map((item,i)=>`<button class="recentTopicItem" data-topic-id="${item.topic_id}"><span class="recentTopicIcon">${['📚','💼','🌍','🗣️'][i%4]}</span><span><strong>${item.topic_en||'Topic'}</strong><small>${item.topic_ar||''}</small></span></button>`).join('')||'<p class="mutedText">ابدئي أي درس ليظهر هنا.</p>';
-    list.querySelectorAll('[data-topic-id]').forEach(btn=>btn.addEventListener('click',()=>{
-      const idx=S.findIndex(x=>String(x.topic_id)===String(btn.dataset.topicId));
-      if(idx>=0){state.i=idx;save();openScreen('learn');render();}
-    }));
-  }
+.sidebarTools{
+  display:block!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin:7px 10px!important;
+  padding:10px!important;
 }
-const oldRefreshDashboardV1942=refreshDashboard;
-refreshDashboard=function(){oldRefreshDashboardV1942();refreshDashboardInsights();};
-document.getElementById('mobileMoreBtn')?.addEventListener('click',openSidebar);
-document.querySelectorAll('.mobileBottomNav [data-go]').forEach(btn=>btn.addEventListener('click',()=>openScreen(btn.dataset.go)));
-setTimeout(refreshDashboardInsights,650);
+.sidebarTools .quickToolGrid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+  min-height:0!important;
+}
+.sidebarTools .quickToolGrid>button{
+  display:flex!important;
+  min-height:54px!important;
+  padding:7px 4px!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.sidebarTools .quickToolGrid>button b{font-size:10px!important;line-height:1.25!important}
+.voiceSettingsPanel{
+  margin-top:9px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--soft);
+  display:grid;
+  gap:8px;
+}
+.voiceSettingsTitle{display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:13px}
+.voiceSettingsTitle small{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--blue)}
+.voiceField{display:grid;gap:5px;font-size:11px;font-weight:800;color:var(--muted)}
+.voiceField select{width:100%;min-height:38px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);padding:6px 8px}
+.voiceField input[type="range"]{width:100%}
+.voiceTestBtn{min-height:36px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer}
+.hiddenLegacySearch{display:none!important}
+.sidebarTopics{
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  min-height:230px!important;
+  height:auto!important;
+  margin:0 10px 8px!important;
+  overflow:hidden!important;
+  flex:none!important;
+}
+.sidebarTopics .topicList{
+  display:block!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-gutter:stable!important;
+  padding-inline-end:5px!important;
+}
+.sidebarTopics .topicCard{display:block!important}
+.sidebarFooter{min-height:52px!important}
+@media(max-height:820px) and (min-width:901px){
+  .side{grid-template-rows:auto minmax(90px,18vh) auto minmax(180px,1fr) auto!important;height:calc(100vh - 98px)!important;min-height:500px!important}
+  .sidebarTools .quickToolGrid>button{min-height:48px!important}
+  .voiceSettingsPanel{grid-template-columns:1fr 1fr;align-items:end}
+  .voiceSettingsTitle{grid-column:1/-1}
+  .voiceTestBtn{grid-column:1/-1}
+}
+@media(max-width:900px){
+  .side{grid-template-rows:auto minmax(100px,22vh) auto minmax(220px,1fr) auto!important;height:100dvh!important;min-height:0!important}
+  .sidebarTools .quickToolGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .sidebarTopics{min-height:220px!important}
+}
 
-
-// ===== V19.4.3 Premium UI =====
-let premiumTopicFilter='all';
-let premiumTopicLimit=9;
-const premiumTopicIcons=['👋','🙋','🪪','👨‍👩‍👧','⏰','🏠','🍽️','☕','🛍️','💰','🕒','📅','🌤️','🧭','🚗','✈️','🏨','🏫','📝','💼','🤝','🎯','✉️','📱','🌐','🆘','💡','🙏','🗣️','⚖️','😊','🩺','🚨','🛠️','🎯','🕰️','🚀','🔓','🎨','🏃','👗','🧹','🏙️','🏦','💊','🧳','🤗','📚','🔗','❓'];
-const premiumTopicAccents=['#dbeafe','#ede9fe','#dcfce7','#ffedd5','#fce7f3','#cffafe'];
-function topicKnownCount(t){
-  const start=Number(t.start_index||0), end=start+Number(t.count||0);
-  return S.slice(start,end).filter(x=>state.known?.[x.number]).length;
-}
-function getPremiumTopicRows(){
-  const q=(document.getElementById('premiumTopicSearch')?.value||'').trim().toLowerCase();
-  let rows=T.map((t,i)=>({...t,_i:i,_known:topicKnownCount(t)}));
-  if(premiumTopicFilter==='custom') rows=rows.filter(t=>t.custom);
-  if(premiumTopicFilter==='progress') rows=rows.filter(t=>t._known>0&&t._known<t.count);
-  if(premiumTopicFilter==='recent') rows=rows.sort((a,b)=>Math.abs((state.i||0)-a.start_index)-Math.abs((state.i||0)-b.start_index));
-  if(q) rows=rows.filter(t=>String(t.title_en||'').toLowerCase().includes(q)||String(t.title_ar||'').includes(q));
-  return rows;
-}
-function renderPremiumTopics(){
-  const grid=document.getElementById('premiumTopicsGrid'); if(!grid)return;
-  const rows=getPremiumTopicRows(); const visible=rows.slice(0,premiumTopicLimit);
-  grid.innerHTML=visible.length?visible.map((t,i)=>{
-    const pct=t.count?Math.round((t._known/t.count)*100):0;
-    const icon=t.custom?'⭐':premiumTopicIcons[(t.id||t._i||i)%premiumTopicIcons.length];
-    const accent=premiumTopicAccents[(t.id||t._i||i)%premiumTopicAccents.length];
-    return `<article class="premiumTopicCard ${t.pinned?'pinned':''}" data-topic-start="${t.start_index}" data-topic-id="${t.id}" style="--topic-accent:${accent}"><div class="premiumTopicTop"><span class="premiumTopicIcon">${icon}</span><span class="premiumTopicNumber">${t.custom?'CUSTOM':('TOPIC '+(t.number||t.id||i+1))}</span></div><h4>${t.pinned?'📌 ':''}${escapeHtml(t.title_en||'Topic')}</h4><p>${escapeHtml(t.title_ar||'')}</p><div class="premiumTopicMeta"><span>${t._known}/${t.count||0} جملة</span><div class="premiumTopicProgress"><i style="width:${pct}%"></i></div><span>${pct}%</span></div><div class="premiumTopicActions"><button data-topic-action="manage" title="تعديل الموضوع وإضافة جمل">✏️</button><button data-topic-action="delete" title="حذف">🗑️</button><button data-topic-action="duplicate" title="نسخ">📋</button><button data-topic-action="pin" title="تثبيت">${t.pinned?'📍':'📌'}</button></div></article>`;
-  }).join(''):'<div class="premiumEmpty">لا توجد موضوعات مطابقة للبحث.</div>';
-  grid.querySelectorAll('[data-topic-start]').forEach(card=>card.addEventListener('click',e=>{if(e.target.closest('[data-topic-action]'))return;state.i=Number(card.dataset.topicStart)||0;render();openScreen('learn');}));
-  grid.querySelectorAll('[data-topic-action]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const card=btn.closest('[data-topic-id]');const topic=T.find(t=>String(t.id)===String(card?.dataset.topicId));const action=btn.dataset.topicAction;if(action==='manage')manageAnyTopic(topic);if(action==='delete')deleteAnyTopic(topic);if(action==='duplicate')duplicateAnyTopic(topic);if(action==='pin')togglePinAnyTopic(topic);}));
-  const more=document.getElementById('premiumTopicsMore'); if(more){more.style.display=rows.length>premiumTopicLimit?'block':'none';more.textContent=premiumTopicLimit>=rows.length?'تم عرض كل الموضوعات':'عرض المزيد من الموضوعات';}
-}
-function refreshPremiumDashboard(){
-  const known=Object.keys(state.known||{}).length;
-  const review=Object.keys(state.review||{}).length;
-  const words=(state.words||[]).length;
-  const base=Math.max(1,S.length);
-  const setPct=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=Math.min(100,Math.max(0,Math.round(v)))+'%';};
-  setPct('premiumListeningPct',(known/base)*100);
-  setPct('premiumSpeakingPct',Math.min(100,(state.xp||0)/12));
-  setPct('premiumWordsPct',Math.min(100,words*3));
-  setPct('premiumGrammarPct',Math.min(100,((state.xp||0)+review*4)/15));
-  renderPremiumTopics();
-}
-const oldRefreshDashboardV1943=refreshDashboard;
-refreshDashboard=function(){oldRefreshDashboardV1943();refreshPremiumDashboard();};
-document.getElementById('premiumTopicSearch')?.addEventListener('input',()=>{premiumTopicLimit=9;renderPremiumTopics();});
-document.getElementById('premiumTopicClear')?.addEventListener('click',()=>{const el=document.getElementById('premiumTopicSearch');if(el)el.value='';premiumTopicLimit=9;renderPremiumTopics();});
-document.querySelectorAll('[data-topic-filter]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-topic-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');premiumTopicFilter=btn.dataset.topicFilter;premiumTopicLimit=9;renderPremiumTopics();}));
-document.getElementById('premiumTopicsMore')?.addEventListener('click',()=>{premiumTopicLimit+=9;renderPremiumTopics();});
-document.querySelectorAll('.premiumSection [data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
-document.getElementById('libraryAddTopic')?.addEventListener('click',()=>openTopicModal());
-document.getElementById('libraryImportTopics')?.addEventListener('click',()=>document.getElementById('topicFileInput')?.click());
-document.getElementById('libraryExportTopics')?.addEventListener('click',()=>document.getElementById('exportTopicsBtn')?.click());
-document.getElementById('restoreHiddenTopics')?.addEventListener('click',restoreHiddenTopics);
-setTimeout(refreshPremiumDashboard,450);
+/* ===== V19.5.7 clean sidebar: voice tools only ===== */
+.voiceOnlyTools{flex:0 0 auto;min-height:auto;overflow:visible}
+.voiceOnlyTools .sidebarSectionHead{margin-bottom:8px}
+.voiceSettingsAlways{display:grid!important;gap:9px;background:linear-gradient(145deg,#f8fbff,#eef6ff);border:1px solid #dbe7f5;border-radius:16px;padding:12px}
+body.dark .voiceSettingsAlways{background:linear-gradient(145deg,#111827,#172033);border-color:#334155}
+.voiceSettingsAlways .voiceField{margin:0}
+.voiceSettingsAlways .voiceTestBtn{width:100%}
+.sidebarTopics{min-height:220px;flex:1 1 auto;overflow:hidden}
+.sidebarTopics .topicList{min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain}
+.favoritesList{display:grid;gap:10px}
+.favoriteSentence{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
+.favoriteSentence b{display:block;font-size:16px;direction:ltr;text-align:left}
+.favoriteSentence small{display:block;color:var(--muted);margin-top:4px}
+.favoriteSentence .favActions{display:flex;gap:6px}
+.favoriteSentence button{border:0;border-radius:10px;padding:8px 10px;cursor:pointer}
 
 
-// ===== V19.4.4 Focus Session =====
-const FOCUS_STORAGE_KEY='nada_focus_session_v1';
-let focusDurationMin=10;
-let focusRemainingSec=focusDurationMin*60;
-let focusTimerHandle=null;
-let focusRunning=false;
-function focusTodayKey(){return new Date().toISOString().slice(0,10);}
-function readFocusStats(){
-  try{return JSON.parse(localStorage.getItem(FOCUS_STORAGE_KEY)||'{}')||{};}catch(e){return {};}
-}
-function writeFocusStats(stats){localStorage.setItem(FOCUS_STORAGE_KEY,JSON.stringify(stats));}
-function focusFormat(sec){const m=Math.floor(sec/60),s=sec%60;return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
-function renderFocusTimer(){
-  const text=document.getElementById('focusTimerText');
-  const stateEl=document.getElementById('focusTimerState');
-  const ring=document.getElementById('focusTimerRing');
-  const total=Math.max(1,focusDurationMin*60);
-  const done=Math.max(0,total-focusRemainingSec);
-  if(text)text.textContent=focusFormat(Math.max(0,focusRemainingSec));
-  if(stateEl)stateEl.textContent=focusRunning?'مستمرة':'جاهزة';
-  if(ring){ring.style.setProperty('--timer-pct',Math.min(100,(done/total)*100)+'%');ring.classList.toggle('running',focusRunning);}
-  const stats=readFocusStats();
-  const mins=Math.round(Number(stats[focusTodayKey()]||0));
-  const today=document.getElementById('focusTodayMinutes');if(today)today.textContent=mins+' دقيقة';
-}
-function setFocusDuration(min){
-  if(focusRunning)return;
-  focusDurationMin=Number(min)||10;focusRemainingSec=focusDurationMin*60;
-  document.querySelectorAll('.focusPreset').forEach(b=>b.classList.toggle('active',Number(b.dataset.focusMin)===focusDurationMin));
-  renderFocusTimer();
-}
-function finishFocusSession(){
-  clearInterval(focusTimerHandle);focusTimerHandle=null;focusRunning=false;focusRemainingSec=0;
-  const stats=readFocusStats();const key=focusTodayKey();stats[key]=Number(stats[key]||0)+focusDurationMin;writeFocusStats(stats);
-  state.xp=(state.xp||0)+focusDurationMin;save();renderFocusTimer();refreshDashboard();
-  toast('أحسنتِ! اكتملت جلسة التركيز +'+focusDurationMin+' XP 🎉');
-  if('Notification' in window&&Notification.permission==='granted')new Notification('Nada English Academy',{body:'اكتملت جلسة التركيز بنجاح 🎉'});
-}
-function startFocusTimer(){
-  if(focusRunning)return;
-  if(focusRemainingSec<=0)focusRemainingSec=focusDurationMin*60;
-  focusRunning=true;renderFocusTimer();
-  focusTimerHandle=setInterval(()=>{focusRemainingSec--;if(focusRemainingSec<=0)finishFocusSession();else renderFocusTimer();},1000);
-}
-function pauseFocusTimer(){clearInterval(focusTimerHandle);focusTimerHandle=null;focusRunning=false;renderFocusTimer();}
-function resetFocusTimer(){pauseFocusTimer();focusRemainingSec=focusDurationMin*60;renderFocusTimer();}
-document.querySelectorAll('.focusPreset').forEach(b=>b.addEventListener('click',()=>setFocusDuration(b.dataset.focusMin)));
-document.getElementById('focusTimerStart')?.addEventListener('click',()=>{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission().catch(()=>{});startFocusTimer();});
-document.getElementById('focusTimerPause')?.addEventListener('click',pauseFocusTimer);
-document.getElementById('focusTimerReset')?.addEventListener('click',resetFocusTimer);
-window.addEventListener('beforeunload',()=>{if(focusRunning)pauseFocusTimer();});
-setTimeout(renderFocusTimer,500);
+/* ===== V20.0.1 Learning Summary restored ===== */
+.progressInsightsPanel{margin-top:18px;overflow:hidden}.insightStatsRow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px}.insightMiniCard{display:flex;align-items:center;gap:12px;padding:16px;border:1px solid var(--border,#e5e7eb);border-radius:18px;background:linear-gradient(145deg,#fff,#f8fafc)}.insightMiniCard>span{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:#eef2ff;font-size:22px}.insightMiniCard small{display:block;color:var(--muted,#64748b);font-size:11px;margin-bottom:4px}.insightMiniCard b{font-size:21px;color:var(--text,#0f172a)}.weeklyTimeline{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin:18px 0}.weekDayCard{padding:12px 8px;border-radius:15px;background:#f8fafc;border:1px solid var(--border,#e5e7eb);text-align:center}.weekDayCard.today{background:linear-gradient(135deg,#eff6ff,#eef2ff);border-color:#93c5fd}.weekDayCard strong{display:block;font-size:15px;margin-bottom:4px}.weekDayCard small{display:block;color:var(--muted,#64748b);font-size:10px}.weekDayCard .dayActivity{height:6px;border-radius:999px;background:#e2e8f0;margin-top:9px;overflow:hidden}.weekDayCard .dayActivity span{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#7c3aed);border-radius:inherit}.insightActions{display:flex;gap:10px;flex-wrap:wrap}body.dark .insightMiniCard,body.dark .weekDayCard{background:#111827;border-color:#334155}body.dark .insightMiniCard b,body.dark .weekDayCard strong{color:#f8fafc}@media(max-width:900px){.insightStatsRow{grid-template-columns:repeat(2,minmax(0,1fr))}.weeklyTimeline{grid-template-columns:repeat(7,minmax(52px,1fr));overflow-x:auto;padding-bottom:4px}}@media(max-width:560px){.insightStatsRow{grid-template-columns:1fr}.progressInsightsPanel{padding:14px}.weeklyTimeline{gap:7px}.weekDayCard{min-width:58px}}
 
 
-// ===== V19.5.5 Sidebar Runtime Fix =====
-function v1955OpenScreen(screen){
-  try{
-    if(typeof openScreen==='function'){ openScreen(screen); return; }
-    const tab=document.querySelector(`.tab[data-screen="${screen}"]`);
-    if(tab) tab.click();
-  }catch(err){ console.error('Navigation error:',err); }
-}
-function v1955BindQuickTools(){
-  document.querySelectorAll('[data-quick-go]').forEach(btn=>{
-    btn.onclick=()=>v1955OpenScreen(btn.dataset.quickGo);
-  });
-}
-function v1955RefreshSidebar(){
-  try{ if(typeof renderTopics==='function') renderTopics(); }catch(err){console.error('Topics render error:',err);}
-  try{ if(typeof renderPremiumTopics==='function') renderPremiumTopics(); }catch(err){console.error('Library render error:',err);}
-  v1955BindQuickTools();
-}
-window.addEventListener('DOMContentLoaded',()=>{
-  v1955RefreshSidebar();
-  setTimeout(v1955RefreshSidebar,250);
-  setTimeout(v1955RefreshSidebar,900);
-});
+/* V20.0.2 Topic Workspace Pro */
+.workspaceHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding-bottom:14px}
+.workspaceHeader h2{margin:4px 0}.workspaceHeader small{font-weight:1000;letter-spacing:1px;color:var(--muted)}
+.workspaceMetaGrid{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;padding:14px 0;border-bottom:1px solid var(--line)}
+.workspaceMetaGrid label{display:grid;gap:6px;font-size:12px;font-weight:900;color:var(--muted)}
+.workspaceMetaGrid input,.workspaceSentenceInputs input,.workspaceListHead input,.workspaceSentenceRow input{border:1px solid var(--line);background:var(--soft);color:var(--text);border-radius:12px;padding:10px 12px;font:inherit}
+.workspaceAddSentence{padding:14px 0}.workspaceAddSentence h3,.workspaceListHead h3{margin:0 0 9px}
+.workspaceSentenceInputs{display:grid;grid-template-columns:1fr 1fr auto;gap:9px}
+.workspaceListHead{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+.workspaceListHead input{width:min(340px,48%)}
+.workspaceSentenceList{min-height:160px;overflow:auto;padding:8px 3px 8px 0;display:grid;gap:9px;flex:1}
+.workspaceSentenceRow{display:grid;grid-template-columns:42px minmax(180px,1fr) minmax(180px,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:15px;padding:9px}
+.workspaceSentenceNumber{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--soft);font-weight:1000;color:var(--muted)}
+.workspaceSentenceActions{display:flex;gap:5px;flex-wrap:wrap}.workspaceSentenceActions button{border:1px solid var(--line);background:var(--soft);border-radius:9px;width:34px;height:34px;cursor:pointer}
+.workspaceSentenceActions button:hover{background:#dbeafe}.workspaceSentenceActions .danger:hover{background:#fee2e2}
+.workspaceEmpty{text-align:center;padding:28px;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
+.workspaceFooter{padding-top:12px;border-top:1px solid var(--line);margin-top:4px}
+@media(max-width:800px){.topicWorkspaceCard{padding:15px;max-height:95vh}.workspaceMetaGrid{grid-template-columns:1fr 1fr}.workspaceMetaGrid .btn{width:100%}.workspaceSentenceInputs{grid-template-columns:1fr}.workspaceListHead{display:block}.workspaceListHead input{width:100%;box-sizing:border-box}.workspaceSentenceRow{grid-template-columns:34px 1fr}.workspaceSentenceRow input:nth-of-type(2){grid-column:2}.workspaceSentenceActions{grid-column:1/-1;justify-content:flex-end}}
 
-
-// V19.5.6: defensive sidebar initialization
-setTimeout(()=>{
-  try{
-    renderTopics();
-    loadVoices();
-    updateRateValue();
-    const list=$('topics');
-    if(list && !list.children.length && T.length){ renderTopics(); }
-  }catch(err){ console.error('Sidebar initialization error',err); }
-},120);
-
-// ===== V19.5.7 Favorites screen and clean sidebar =====
-function renderFavoritesScreen(){
-  const out=document.getElementById('favoritesList');
-  if(!out) return;
-  const items=Object.keys(state.fav||{}).map(n=>S[Number(n)-1]).filter(Boolean);
-  out.innerHTML=items.length?items.map(x=>`<article class="favoriteSentence"><div><b>${x.english}</b><small>${x.arabic}</small></div><div class="favActions"><button type="button" data-fav-open="${x.number}" title="فتح">فتح</button><button type="button" data-fav-remove="${x.number}" title="إزالة">🗑️</button></div></article>`).join(''):'<div class="topicEmpty">لا توجد جمل في المفضلة حتى الآن.</div>';
-  out.querySelectorAll('[data-fav-open]').forEach(btn=>btn.onclick=()=>{state.i=Number(btn.dataset.favOpen)-1;render();openScreen('learn');});
-  out.querySelectorAll('[data-fav-remove]').forEach(btn=>btn.onclick=()=>{delete state.fav[btn.dataset.favRemove];save();renderFavoritesScreen();updateStats();});
-}
-document.querySelectorAll('.navItem[data-screen="favorites"]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(renderFavoritesScreen,0)));
-
-
-// ===== Learning activity service (refactored in V26.4) =====
-const LEARNING_ACTIVITY_KEY='nada_v2001_daily_activity';
-function activityDateKey(date=new Date()){return date.toISOString().slice(0,10);}
-function readLearningActivity(){
-  try{return JSON.parse(localStorage.getItem(LEARNING_ACTIVITY_KEY)||localStorage.getItem('nada_v199_daily_activity')||'{}')||{};}
-  catch(error){console.warn('Could not read learning activity.',error);return {};}
-}
-function writeLearningActivity(data){localStorage.setItem(LEARNING_ACTIVITY_KEY,JSON.stringify(data));}
-function trackLearningActivity(type,amount=1){
-  const data=readLearningActivity();
-  const key=activityDateKey();
-  data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};
-  data[key][type]=Number(data[key][type]||0)+Number(amount||0);
-  data[key].visits=Math.max(1,Number(data[key].visits||0));
-  writeLearningActivity(data);
-  refreshLearningSummary();
-}
-function ensureDailyVisit(){
-  const data=readLearningActivity();
-  const key=activityDateKey();
-  data[key]=data[key]||{known:0,review:0,minutes:0,visits:0};
-  if(!data[key].visits)data[key].visits=1;
-  writeLearningActivity(data);
-}
-function calculateLearningStreak(data){
-  let count=0;
-  const day=new Date();
-  for(let i=0;i<365;i++){
-    const entry=data[activityDateKey(day)];
-    const active=entry&&(Number(entry.known||0)+Number(entry.review||0)+Number(entry.minutes||0)+Number(entry.visits||0)>0);
-    if(active){count++;day.setDate(day.getDate()-1);}
-    else if(i===0){day.setDate(day.getDate()-1);}
-    else break;
-  }
-  return Math.max(1,count);
-}
-function refreshLearningSummary(){
-  const data=readLearningActivity();
-  const today=data[activityDateKey()]||{};
-  const focusStats=(typeof readFocusStats==='function'?readFocusStats():{})||{};
-  const todayMinutes=Math.round(Number(today.minutes||0)+Number(focusStats[activityDateKey()]||0));
-  const set=(id,value)=>{const element=document.getElementById(id);if(element)element.textContent=value;};
-  set('insightKnownToday',Number(today.known||0));
-  set('insightReviewToday',Number(today.review||0));
-  set('insightMinutesToday',todayMinutes+' د');
-  set('insightStreak',calculateLearningStreak(data)+' يوم');
-}
-ensureDailyVisit();
-window.addEventListener('focus',refreshLearningSummary);
-setTimeout(refreshLearningSummary,700);
