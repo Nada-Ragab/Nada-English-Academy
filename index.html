@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V25.6 - Weekly AI Coach</title>
+<title>Nada English Academy V25.8 - Dashboard Order</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V25.6</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V25.8</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side" id="appSidebar">
   <div class="sidebarHeader">
@@ -90,11 +90,45 @@
     <div class="dashCard"><div class="dashIcon orange">🔁</div><div><small>تحتاج مراجعة</small><b id="dashReviewCount">0</b><span>جاهزة للتدريب</span></div></div>
     <div class="dashCard"><div class="dashIcon purple">❤️</div><div><small>المفضلة</small><b id="dashFav">0</b><span>جملك المهمة</span></div></div>
   </div>
-  <div class="dashboardColumns">
-    <div class="panelCard"><div class="panelHead"><div><small>CONTINUE LEARNING</small><h3>آخر درس</h3></div><span class="panelIcon">📖</span></div><div class="continueSentence" id="dashSentence">ابدئي رحلتك الآن</div><div class="mutedText" id="dashSentenceAr"></div><button class="btn green wide" id="dashResume">متابعة من آخر نقطة</button></div>
-    <div class="panelCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="freechat">💬<span>محادثة حرة</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
+  <div class="homeDayGrid">
+    <div class="panelCard homeContinueCard">
+      <div class="panelHead"><div><small>MY DAY</small><h3>ابدئي من أفضل خطوة</h3></div><span class="panelIcon">🎯</span></div>
+      <div class="homeContinueMain"><div><span class="homeContinueIcon" id="homeNextIcon">▶️</span></div><div><b id="homeNextTitle">متابعة آخر درس</b><p id="homeNextText">سنختار لكِ النشاط الأنسب حسب تقدمك.</p></div></div>
+      <div class="homeDayActions"><button class="btn green" id="homeContinueLearning">▶ متابعة التعلّم</button><button class="btn blue" id="homeContinueOdoo">💼 متابعة Odoo</button><button class="btn purple" id="homeContinueAi">🤖 متابعة المحادثة</button></div>
+      <div class="homeDayMini"><span>🔥 <b id="homeStreak">1 يوم</b></span><span>⭐ <b id="homeXp">0 XP</b></span><span>⏱️ <b id="homeMinutes">0 دقيقة</b></span></div>
+    </div>
+    <div class="panelCard homeQuickCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="aiteacher">🤖<span>AI Teacher</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
   </div>
   <div class="panelCard goalPanel"><div class="panelHead"><div><small>WEEKLY PROGRESS</small><h3>تقدمك الحالي</h3></div><b id="dashProgressText">0%</b></div><div class="modernProgress"><span id="dashProgressBar"></span></div><p class="mutedText">كل جملة تتقنيها تقرّبك خطوة من هدفك.</p></div>
+  <div class="topicExplorer panelCard">
+    <div class="topicExplorerHead">
+      <div><small>TOPIC LIBRARY</small><h3>استكشفي الموضوعات</h3></div>
+      <div class="topicExplorerTools"><input id="premiumTopicSearch" placeholder="ابحثي عن موضوع..."><button class="iconAction" id="premiumTopicClear" title="مسح البحث">×</button></div>
+    </div>
+    <div class="topicLibraryToolbar">
+      <button class="btn green" id="libraryAddTopic" type="button">＋ إضافة موضوع جديد</button>
+      <button class="btn blue" id="libraryImportTopics" type="button">⇧ استيراد</button>
+      <button class="btn purple" id="libraryExportTopics" type="button">⇩ تصدير</button>
+      <button class="btn" id="restoreHiddenTopics" type="button">↺ استعادة المحذوف</button>
+    </div>
+    <div class="topicExplorerHead topicExplorerHeadFilters">
+    </div>
+    <div class="topicChips"><button class="active" data-topic-filter="all">الكل</button><button data-topic-filter="recent">الأخيرة</button><button data-topic-filter="custom">المرفوعة</button><button data-topic-filter="progress">قيد الدراسة</button></div>
+    <div class="premiumTopicsGrid" id="premiumTopicsGrid"></div>
+    <button class="btn blue wide premiumMoreBtn" id="premiumTopicsMore">عرض المزيد من الموضوعات</button>
+  </div>
+  <div class="premiumSection">
+    <div class="premiumSectionHead">
+      <div><span class="eyebrow darkEyebrow">PREMIUM LEARNING HUB</span><h2>مسارك الذكي اليوم</h2><p>اختاري مهارة أو موضوع وابدئي مباشرة.</p></div>
+      <div class="premiumHeadActions"><button class="softAction" data-go="daily">📅 خطة اليوم</button><button class="softAction" data-go="stats">📊 تقريري</button></div>
+    </div>
+    <div class="skillProgressGrid">
+      <button class="skillProgressCard" data-go="dictation"><span class="skillIcon blueGlow">🎧</span><span><b>Listening</b><small>الاستماع والفهم</small></span><em id="premiumListeningPct">0%</em></button>
+      <button class="skillProgressCard" data-go="speak"><span class="skillIcon purpleGlow">🎙️</span><span><b>Speaking</b><small>النطق والطلاقة</small></span><em id="premiumSpeakingPct">0%</em></button>
+      <button class="skillProgressCard" data-go="words"><span class="skillIcon orangeGlow">📖</span><span><b>Vocabulary</b><small>الكلمات المحفوظة</small></span><em id="premiumWordsPct">0%</em></button>
+      <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
+    </div>
+  </div>
   <div class="activityCard"><div class="panelHead"><div><small>THIS WEEK</small><h3>نشاطك الأسبوعي</h3></div><span class="activityBadge">7 DAYS</span></div><div class="activityBars" id="activityBars"><div><span style="--h:38%"></span><small>س</small></div><div><span style="--h:55%"></span><small>ح</small></div><div><span style="--h:30%"></span><small>ن</small></div><div><span style="--h:74%"></span><small>ث</small></div><div><span style="--h:62%"></span><small>ر</small></div><div><span style="--h:86%"></span><small>خ</small></div><div class="today"><span style="--h:48%"></span><small>ج</small></div></div></div>
   <div class="panelCard smartCoachPreview"><div class="panelHead"><div><small>AI SMART COACH</small><h3>برنامجك الذكي هذا الأسبوع</h3></div><span class="panelIcon">🚀</span></div><div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div><button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button></div>
   <div class="dashExecutiveGrid">
@@ -118,6 +152,7 @@
       <div class="dashOdooProgress"><div><b id="dashOdooPct">0%</b><span>إجمالي المسار</span></div><i><span id="dashOdooBar"></span></i></div>
       <div class="dashOdooStats"><div><b id="dashOdooLessons">0/35</b><small>دروس مكتملة</small></div><div><b id="dashOdooWords">0</b><small>مصطلحات متقنة</small></div><div><b id="dashOdooPractice">0</b><small>جلسات تدريب</small></div><div><b id="dashOdooBest">—</b><small>أفضل اختبار</small></div></div>
     </div>
+    <div id="homeOdooModules" class="homeOdooModules"></div>
   </div>
   <div class="panelCard dashActivityPro">
     <div class="panelHead"><div><small>LAST 7 DAYS</small><h3>نشاط آخر 7 أيام</h3></div><span class="activityBadge">WEEK</span></div>
@@ -199,35 +234,6 @@
       </div>
       <div class="focusTodayStat"><span>وقت اليوم</span><b id="focusTodayMinutes">0 دقيقة</b></div>
     </div>
-  </div>
-  <div class="premiumSection">
-    <div class="premiumSectionHead">
-      <div><span class="eyebrow darkEyebrow">PREMIUM LEARNING HUB</span><h2>مسارك الذكي اليوم</h2><p>اختاري مهارة أو موضوع وابدئي مباشرة.</p></div>
-      <div class="premiumHeadActions"><button class="softAction" data-go="daily">📅 خطة اليوم</button><button class="softAction" data-go="stats">📊 تقريري</button></div>
-    </div>
-    <div class="skillProgressGrid">
-      <button class="skillProgressCard" data-go="dictation"><span class="skillIcon blueGlow">🎧</span><span><b>Listening</b><small>الاستماع والفهم</small></span><em id="premiumListeningPct">0%</em></button>
-      <button class="skillProgressCard" data-go="speak"><span class="skillIcon purpleGlow">🎙️</span><span><b>Speaking</b><small>النطق والطلاقة</small></span><em id="premiumSpeakingPct">0%</em></button>
-      <button class="skillProgressCard" data-go="words"><span class="skillIcon orangeGlow">📖</span><span><b>Vocabulary</b><small>الكلمات المحفوظة</small></span><em id="premiumWordsPct">0%</em></button>
-      <button class="skillProgressCard" data-go="grammar"><span class="skillIcon greenGlow">✍️</span><span><b>Grammar</b><small>القواعد والتطبيق</small></span><em id="premiumGrammarPct">0%</em></button>
-    </div>
-  </div>
-  <div class="topicExplorer panelCard">
-    <div class="topicExplorerHead">
-      <div><small>TOPIC LIBRARY</small><h3>استكشفي الموضوعات</h3></div>
-      <div class="topicExplorerTools"><input id="premiumTopicSearch" placeholder="ابحثي عن موضوع..."><button class="iconAction" id="premiumTopicClear" title="مسح البحث">×</button></div>
-    </div>
-    <div class="topicLibraryToolbar">
-      <button class="btn green" id="libraryAddTopic" type="button">＋ إضافة موضوع جديد</button>
-      <button class="btn blue" id="libraryImportTopics" type="button">⇧ استيراد</button>
-      <button class="btn purple" id="libraryExportTopics" type="button">⇩ تصدير</button>
-      <button class="btn" id="restoreHiddenTopics" type="button">↺ استعادة المحذوف</button>
-    </div>
-    <div class="topicExplorerHead topicExplorerHeadFilters">
-    </div>
-    <div class="topicChips"><button class="active" data-topic-filter="all">الكل</button><button data-topic-filter="recent">الأخيرة</button><button data-topic-filter="custom">المرفوعة</button><button data-topic-filter="progress">قيد الدراسة</button></div>
-    <div class="premiumTopicsGrid" id="premiumTopicsGrid"></div>
-    <button class="btn blue wide premiumMoreBtn" id="premiumTopicsMore">عرض المزيد من الموضوعات</button>
   </div>
   <div class="premiumMotivation">
     <div class="motivationIcon">🚀</div><div><b>خطوة صغيرة كل يوم تصنع فرقًا كبيرًا.</b><span id="premiumMotivationText">ابدئي الآن بجملة واحدة فقط.</span></div>
@@ -740,9 +746,10 @@
 <script src="js/cloud-ai.js?v=24.0"></script>
 <script src="js/smart-coach.js?v=24.0"></script>
 <script src="js/odoo-academy.js?v=25.2"></script>
-<script src="js/dashboard-v253.js?v=25.4"></script>
+<script src="js/dashboard-v253.js?v=25.8"></script>
+<script src="js/dashboard-v258.js?v=25.8"></script>
 <script src="js/ui-v254.js?v=25.5"></script>
-<script src="js/my-day-v255.js?v=25.6"></script>
-<script src="js/my-week-v256.js?v=25.6"></script>
+<script src="js/my-day-v255.js?v=25.7"></script>
+<script src="js/my-week-v256.js?v=25.7"></script>
 </body>
 </html>
