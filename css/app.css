@@ -844,3 +844,9 @@ body.dark .sideNextTop>span{background:#111827}.sideNextTop div{display:grid}.si
 body.dark .dashFocusStrip button{background:linear-gradient(135deg,#111827,#172033);border-color:#334155}
 @media(max-width:900px){.dashFocusStrip{grid-template-columns:1fr}.sidebarSyncPill{display:none}.sideNextCard{margin-bottom:2px}}
 body.sidebar-collapsed .sidebarSyncPill{display:none!important}
+
+/* V26.2 Dashboard Declutter */
+.dashMasterCard,.dashLastSession,.recentTopicsCard{margin-top:16px}
+.homeQuickCard .quickGrid{grid-template-columns:repeat(2,minmax(0,1fr));height:auto}
+.homeQuickCard .quickGrid button:last-child:nth-child(odd){grid-column:1/-1}
+@media(min-width:1100px){.homeQuickCard .quickGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}

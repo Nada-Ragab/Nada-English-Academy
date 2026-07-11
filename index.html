@@ -153,9 +153,8 @@
       <div class="homeDayActions"><button class="btn green" id="homeContinueLearning">▶ متابعة التعلّم</button><button class="btn blue" id="homeContinueOdoo">💼 متابعة Odoo</button><button class="btn purple" id="homeContinueAi">🤖 متابعة المحادثة</button></div>
       <div class="homeDayMini"><span>🔥 <b id="homeStreak">1 يوم</b></span><span>⭐ <b id="homeXp">0 XP</b></span><span>⏱️ <b id="homeMinutes">0 دقيقة</b></span></div>
     </div>
-    <div class="panelCard homeQuickCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="aiteacher">🤖<span>AI Teacher</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
+    <div class="panelCard homeQuickCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="aiteacher">🤖<span>AI Teacher</span></button><button data-go="odooacademy">💼<span>Odoo Academy</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
   </div>
-  <div class="panelCard goalPanel"><div class="panelHead"><div><small>WEEKLY PROGRESS</small><h3>تقدمك الحالي</h3></div><b id="dashProgressText">0%</b></div><div class="modernProgress"><span id="dashProgressBar"></span></div><p class="mutedText">كل جملة تتقنيها تقرّبك خطوة من هدفك.</p></div>
   <div class="dashFocusStrip" aria-label="اختصارات التقدم">
     <button type="button" data-go="myweek"><span>📆</span><div><small>هذا الأسبوع</small><b id="focusWeekText">راجعي تقريرك</b></div><em>←</em></button>
     <button type="button" data-go="odooacademy"><span>💼</span><div><small>Odoo Academy</small><b id="focusOdooText">كمّلي المسار المهني</b></div><em>←</em></button>
@@ -196,19 +195,11 @@
     <button class="btn purple wide" id="dashAiRecAction">ابدئي النشاط المقترح</button>
   </div>
   <div class="panelCard smartCoachPreview"><div class="panelHead"><div><small>AI SMART COACH</small><h3>برنامجك الذكي هذا الأسبوع</h3></div><span class="panelIcon">🚀</span></div><div class="smartPreviewGrid"><div><b id="dashPlanDone">0/5</b><small>مهام مكتملة</small></div><div><b id="dashPronScore">—</b><small>أفضل نطق</small></div><div><b id="dashRoleplays">0</b><small>Role Plays</small></div><div><b id="dashWeeklyScore">—</b><small>تقييم أسبوعي</small></div></div><button class="btn purple wide" data-go="smartcoach">افتحي Smart Coach</button></div>
-  <div class="dashExecutiveGrid">
-    <div class="panelCard dashMasterCard">
-      <div class="panelHead"><div><small>LEARNING OVERVIEW</small><h3>ملخص تقدمك</h3></div><span id="dashTodayDate" class="dashDate"></span></div>
-      <div class="dashMasterBody">
-        <div class="dashMasterRing" id="dashMasterRing"><div><b id="dashMasterPct">0%</b><small>التقدم العام</small></div></div>
-        <div id="dashMilestones" class="dashMilestones"></div>
-      </div>
-    </div>
-    <div class="panelCard dashNextCard">
-      <div class="panelHead"><div><small>BEST NEXT STEP</small><h3>خطوتك التالية</h3></div><span class="panelIcon" id="dashNextIcon">🧭</span></div>
-      <div class="dashNextContent"><h2 id="dashNextTitle">كمّلي خطة الأسبوع</h2><p id="dashNextText">سنحدد لكِ أفضل نشاط حسب تقدمك.</p></div>
-      <button class="btn green wide" id="dashNextAction">ابدئي الآن</button>
-      <div class="dashMiniRow"><span>🔥 <b id="dashMainStreak">1 يوم</b></span><span>⭐ تقييمك <b id="dashStudyScore">0%</b></span></div>
+  <div class="panelCard dashMasterCard">
+    <div class="panelHead"><div><small>LEARNING OVERVIEW</small><h3>ملخص تقدمك</h3></div><span id="dashTodayDate" class="dashDate"></span></div>
+    <div class="dashMasterBody">
+      <div class="dashMasterRing" id="dashMasterRing"><div><b id="dashMasterPct">0%</b><small>التقدم العام</small></div></div>
+      <div id="dashMilestones" class="dashMilestones"></div>
     </div>
   </div>
   <div class="panelCard dashOdooSnapshot">
@@ -226,16 +217,10 @@
       <div id="dashMissionList" class="dashMissionList"></div>
     </div>
   </div>
-  <div class="dashSkillsGrid">
-    <div class="panelCard">
-      <div class="panelHead"><div><small>SKILLS TREND</small><h3>تطور مهاراتك</h3></div><span class="activityBadge">30 DAYS</span></div>
-      <div id="dashSkillTrend" class="dashSkillTrend"></div>
-    </div>
-    <div class="panelCard dashLastSession">
-      <div class="panelHead"><div><small>LAST AI SESSION</small><h3>آخر جلسة مع المدرّس</h3></div><span class="panelIcon">🎙️</span></div>
-      <div id="dashLastSessionBody" class="dashLastSessionBody"></div>
-      <button class="btn blue wide" data-go="aiteacher">متابعة المحادثة</button>
-    </div>
+  <div class="panelCard dashLastSession">
+    <div class="panelHead"><div><small>LAST AI SESSION</small><h3>آخر جلسة مع المدرّس</h3></div><span class="panelIcon">🎙️</span></div>
+    <div id="dashLastSessionBody" class="dashLastSessionBody"></div>
+    <button class="btn blue wide" data-go="aiteacher">متابعة المحادثة</button>
   </div>
   <div class="dashReviewAchievements">
     <div class="panelCard">
@@ -247,26 +232,9 @@
       <div id="dashAchievements" class="dashAchievements"></div>
     </div>
   </div>
-  <div class="panelCard dashQuickLaunch">
-    <div class="panelHead"><div><small>QUICK ACTIONS</small><h3>ابدئي بسرعة</h3></div><span class="panelIcon">⚡</span></div>
-    <div class="dashQuickLaunchGrid">
-      <button data-go="learn"><span>▶️</span><b>متابعة التعلّم</b><small>آخر موضوع</small></button>
-      <button data-go="smartcoach"><span>🎙️</span><b>Speaking Lab</b><small>نطق وShadowing</small></button>
-      <button data-go="odooacademy"><span>💼</span><b>Odoo Academy</b><small>تدريب وظيفي</small></button>
-      <button data-go="aiteacher"><span>🤖</span><b>AI Teacher</b><small>محادثة وتصحيح</small></button>
-      <button data-go="flashcards"><span>🃏</span><b>Flashcards</b><small>مراجعة سريعة</small></button>
-    </div>
-  </div>
-  <div class="insightGrid">
-    <div class="panelCard focusCard">
-      <div class="panelHead"><div><small>SMART FOCUS</small><h3>تركيز اليوم</h3></div><span class="panelIcon">🎯</span></div>
-      <div class="focusSummary"><div class="focusRing"><b id="focusCount">0</b><small>جمل</small></div><div><strong id="focusTitle">ابدئي مراجعة ذكية</strong><p id="focusText" class="mutedText">سنختار لكِ أفضل خطوة بناءً على تقدمك.</p></div></div>
-      <button class="btn purple wide" id="focusAction">ابدئي الآن</button>
-    </div>
-    <div class="panelCard recentTopicsCard">
-      <div class="panelHead"><div><small>RECENT TOPICS</small><h3>موضوعاتك الأخيرة</h3></div><span class="panelIcon">🕘</span></div>
-      <div id="recentTopicsList" class="recentTopicsList"></div>
-    </div>
+  <div class="panelCard recentTopicsCard">
+    <div class="panelHead"><div><small>RECENT TOPICS</small><h3>موضوعاتك الأخيرة</h3></div><span class="panelIcon">🕘</span></div>
+    <div id="recentTopicsList" class="recentTopicsList"></div>
   </div>
   <div class="focusSessionPanel panelCard">
     <div class="focusSessionInfo">
@@ -291,22 +259,7 @@
       <div class="focusTodayStat"><span>وقت اليوم</span><b id="focusTodayMinutes">0 دقيقة</b></div>
     </div>
   </div>
-  <div class="premiumMotivation">
-    <div class="motivationIcon">🚀</div><div><b>خطوة صغيرة كل يوم تصنع فرقًا كبيرًا.</b><span id="premiumMotivationText">ابدئي الآن بجملة واحدة فقط.</span></div>
-    <button class="btn green" data-go="learn">ابدئي التعلّم</button>
-  </div>
 
-  <div class="progressInsightsPanel panelCard">
-    <div class="panelHead"><div><small>PROGRESS INSIGHTS</small><h3>ملخص التعلّم</h3></div><span class="panelIcon">📈</span></div>
-    <div class="insightStatsRow">
-      <div class="insightMiniCard"><span>✅</span><div><small>تم إتقانها اليوم</small><b id="insightKnownToday">0</b></div></div>
-      <div class="insightMiniCard"><span>🔁</span><div><small>أضيفت للمراجعة</small><b id="insightReviewToday">0</b></div></div>
-      <div class="insightMiniCard"><span>⏱️</span><div><small>وقت المذاكرة اليوم</small><b id="insightMinutesToday">0 د</b></div></div>
-      <div class="insightMiniCard"><span>🔥</span><div><small>سلسلة النشاط</small><b id="insightStreak">1 يوم</b></div></div>
-    </div>
-    <div class="weeklyTimeline" id="weeklyTimeline"></div>
-    <div class="insightActions"><button class="btn blue" id="insightOpenStats">📊 عرض التقرير الكامل</button><button class="btn purple" id="insightStartReview">🔁 بدء مراجعة اليوم</button></div>
-  </div>
 </section>
 <section class="screen" id="learn"><div class="card"><div class="num" id="badge"></div><div class="en" id="en"></div><div class="ar" id="ar"></div><div class="note" id="tip">Space = اسمعي، Enter = التالي</div><div class="controls"><button class="btn blue" id="speakBtn">🔊 اسمع</button><button class="btn" id="slowBtn">🐢 بطيء</button><button class="btn" id="toggleBtn">إخفاء/إظهار الترجمة</button><button class="btn green" id="knowBtn">✅ عرفتها</button><button class="btn orange" id="againBtn">🔁 راجعيها</button><button class="btn purple" id="favBtn">⭐ مفضلة</button><button class="btn" id="prevBtn">السابق</button><button class="btn" id="nextBtn">التالي</button></div></div></section>
 <section class="screen" id="daily"><h2>📅 درس اليوم</h2><div class="grid"><div class="stat"><b id="dNew">0</b>جمل جديدة</div><div class="stat"><b id="dRev">0</b>مراجعة</div><div class="stat"><b>15</b>دقيقة</div></div><div class="controls"><button class="btn green" id="buildDaily">تجهيز درس اليوم</button><button class="btn blue" id="startDaily">ابدئي الدرس</button><button class="btn orange" id="printDaily">طباعة</button></div><div class="resultBox" id="dailyList"></div></section>
