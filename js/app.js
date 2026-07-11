@@ -949,8 +949,6 @@ function refreshPremiumDashboard(){
   setPct('premiumSpeakingPct',Math.min(100,(state.xp||0)/12));
   setPct('premiumWordsPct',Math.min(100,words*3));
   setPct('premiumGrammarPct',Math.min(100,((state.xp||0)+review*4)/15));
-  const msg=document.getElementById('premiumMotivationText');
-  if(msg)msg.textContent=review?`لديكِ ${review} جملة جاهزة للمراجعة اليوم.`:`أتقنتِ ${known} جملة حتى الآن. استمري!`;
   renderPremiumTopics();
 }
 const oldRefreshDashboardV1943=refreshDashboard;
@@ -959,7 +957,7 @@ document.getElementById('premiumTopicSearch')?.addEventListener('input',()=>{pre
 document.getElementById('premiumTopicClear')?.addEventListener('click',()=>{const el=document.getElementById('premiumTopicSearch');if(el)el.value='';premiumTopicLimit=9;renderPremiumTopics();});
 document.querySelectorAll('[data-topic-filter]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-topic-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');premiumTopicFilter=btn.dataset.topicFilter;premiumTopicLimit=9;renderPremiumTopics();}));
 document.getElementById('premiumTopicsMore')?.addEventListener('click',()=>{premiumTopicLimit+=9;renderPremiumTopics();});
-document.querySelectorAll('.premiumSection [data-go],.premiumMotivation [data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
+document.querySelectorAll('.premiumSection [data-go]').forEach(b=>b.addEventListener('click',()=>openScreen(b.dataset.go)));
 document.getElementById('libraryAddTopic')?.addEventListener('click',()=>openTopicModal());
 document.getElementById('libraryImportTopics')?.addEventListener('click',()=>document.getElementById('topicFileInput')?.click());
 document.getElementById('libraryExportTopics')?.addEventListener('click',()=>document.getElementById('exportTopicsBtn')?.click());

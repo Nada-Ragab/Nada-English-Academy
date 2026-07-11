@@ -1,7 +1,7 @@
 {
-  "name": "Nada English Academy V20.0.2",
-  "short_name": "Nada V20",
-  "description": "English learning app with topics, flashcards, listening, speaking, Business English and Odoo English.",
+  "name": "Nada English Academy V26.3",
+  "short_name": "Nada Academy",
+  "description": "English learning academy with AI Teacher, Odoo Academy, speaking, review, and smart dashboards.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
