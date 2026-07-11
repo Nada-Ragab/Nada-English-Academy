@@ -964,3 +964,12 @@ body.dark .odooModuleCard .topicsScreenStart{background:color-mix(in srgb,var(--
 .topicsScreenCard:hover,.premiumTopicCard:hover,.odooModuleCard:hover{transform:none!important}
 .topicsScreenCard:active,.premiumTopicCard:active,.odooModuleCard:active{transform:none!important}
 #playlistOut .playItem.playing{outline:3px solid rgba(28,176,246,.35);background:rgba(28,176,246,.10)}
+
+/* ===== V28.1 definitive topic stability fix ===== */
+.topicCard,.topicMain,.premiumTopicCard,.topicsScreenCard,.topicsScreenStart,.topicsScreenCardActions button{
+  transform:none!important;animation:none!important;transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease!important;
+}
+.topicCard:hover,.topicMain:hover,.premiumTopicCard:hover,.topicsScreenCard:hover,.topicsScreenStart:hover,.topicsScreenCardActions button:hover{
+  transform:none!important;animation:none!important;
+}
+.topicsScreenCard{will-change:auto!important;}

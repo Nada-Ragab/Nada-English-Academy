@@ -1,10 +1,10 @@
-const CACHE_NAME = 'nada-academy-v280-stability';
+const CACHE_NAME = 'nada-academy-v282-topics-fix';
 const ASSETS = [
   './','./index.html','./css/app.css','./js/storage.js','./js/app.js','./js/cloud-ai.js','./js/smart-coach.js',
   './js/odoo-academy.js','./js/odoo-editor-v274.js','./js/odoo-excel-import-v278.js',
   './js/dashboard-v253.js','./js/dashboard-v258.js','./js/ui-v254.js','./js/my-day-v255.js','./js/my-week-v256.js',
   './js/sidebar-v260.js','./js/dashboard-v262.js','./js/dashboard-v265.js','./js/dashboard-v270.js',
-  './js/topics-screen-v272.js','./js/odoo-modules-screen-v276.js','./js/stability-v280.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'
+  './js/topics-screen-v272.js','./js/odoo-modules-screen-v276.js','./js/stability-v281.js','./js/stability-v282.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'
 ];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
