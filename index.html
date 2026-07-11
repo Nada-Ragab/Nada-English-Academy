@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nada English Academy V26.0 - Smart Sidebar</title>
+<title>Nada English Academy V26.2 - Dashboard & Sidebar Pro</title>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V26.0</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
+<header class="top"><div class="topin"><button class="mobileMenuBtn" id="mobileMenuBtn" aria-label="فتح القائمة">☰</button><div class="brandBlock"><div class="brand">Nada English Academy <span>V26.2</span></div><small>Modern Learning Workspace</small></div><div class="headerSearch"><span>⌕</span><input id="globalSearch" placeholder="ابحثي عن جملة أو موضوع..." autocomplete="off"><kbd>Ctrl K</kbd></div><div class="headerStats"><span class="pill" id="streakPill">🔥 1 يوم</span><span class="pill" id="levelPill">Level 1</span><span class="pill" id="xpPill">0 XP</span></div><button class="iconAction" id="sidebarCollapse" aria-label="تصغير القائمة">⇥</button><button class="iconAction" id="darkBtn" aria-label="الوضع الليلي">🌙</button><div class="profileChip"><span class="profileAvatar">N</span><span><b>Nada</b><small>English Learner</small></span></div><div class="progress headerProgress"><span id="progressBar"></span></div></div></header><div class="sidebarBackdrop" id="sidebarBackdrop"></div>
 <div class="layout">
 <aside class="side sidebarV260" id="appSidebar">
   <div class="sidebarHeader">
     <div class="sidebarLogo">🦉</div>
-    <div class="sidebarBrandText"><strong>Nada Academy</strong><small>Learn English smarter</small></div>
+    <div class="sidebarBrandText"><strong>Nada Academy</strong><small>Learn English smarter</small></div><span class="sidebarSyncPill" id="sidebarSyncPill">☁️ جاهز</span>
     <button class="sidebarClose" id="sidebarClose" aria-label="إغلاق القائمة">×</button>
   </div>
 
@@ -119,6 +119,11 @@
       <div class="sideChallengeBar"><span id="sidebarChallengeBar"></span></div>
       <button type="button" class="tab sideChallengeBtn" data-screen="learn">🎁 ابدئي التحدي</button>
     </article>
+    <article class="sideNextCard">
+      <div class="sideNextTop"><span id="sideNextIcon">🧭</span><div><small>خطوتك التالية</small><b id="sideNextTitle">متابعة التعلّم</b></div></div>
+      <p id="sideNextText">سنختار النشاط الأنسب حسب تقدمك الحالي.</p>
+      <button type="button" class="sideNextBtn" id="sideNextBtn">ابدئي الآن ←</button>
+    </article>
     <blockquote class="sideQuote">❝ الطريق إلى إتقان اللغة يبدأ بخطوة واحدة. كل يوم فرصة جديدة للتحسن. ❞</blockquote>
   </section>
 
@@ -151,6 +156,11 @@
     <div class="panelCard homeQuickCard"><div class="panelHead"><div><small>QUICK START</small><h3>اختصارات سريعة</h3></div><span class="panelIcon">⚡</span></div><div class="quickGrid"><button data-go="speak">🎙️<span>تدريب النطق</span></button><button data-go="aiteacher">🤖<span>AI Teacher</span></button><button data-go="flashcards">🃏<span>Flashcards</span></button><button data-go="grammar">📘<span>Grammar</span></button></div></div>
   </div>
   <div class="panelCard goalPanel"><div class="panelHead"><div><small>WEEKLY PROGRESS</small><h3>تقدمك الحالي</h3></div><b id="dashProgressText">0%</b></div><div class="modernProgress"><span id="dashProgressBar"></span></div><p class="mutedText">كل جملة تتقنيها تقرّبك خطوة من هدفك.</p></div>
+  <div class="dashFocusStrip" aria-label="اختصارات التقدم">
+    <button type="button" data-go="myweek"><span>📆</span><div><small>هذا الأسبوع</small><b id="focusWeekText">راجعي تقريرك</b></div><em>←</em></button>
+    <button type="button" data-go="odooacademy"><span>💼</span><div><small>Odoo Academy</small><b id="focusOdooText">كمّلي المسار المهني</b></div><em>←</em></button>
+    <button type="button" data-go="review"><span>🧠</span><div><small>Needs Review</small><b id="focusReviewText">لا توجد مراجعات</b></div><em>←</em></button>
+  </div>
   <div class="topicExplorer panelCard">
     <div class="topicExplorerHead">
       <div><small>TOPIC LIBRARY</small><h3>استكشفي الموضوعات</h3></div>
@@ -208,10 +218,6 @@
       <div class="dashOdooStats"><div><b id="dashOdooLessons">0/35</b><small>دروس مكتملة</small></div><div><b id="dashOdooWords">0</b><small>مصطلحات متقنة</small></div><div><b id="dashOdooPractice">0</b><small>جلسات تدريب</small></div><div><b id="dashOdooBest">—</b><small>أفضل اختبار</small></div></div>
     </div>
     <div id="homeOdooModules" class="homeOdooModules"></div>
-  </div>
-  <div class="panelCard dashActivityPro">
-    <div class="panelHead"><div><small>LAST 7 DAYS</small><h3>نشاط آخر 7 أيام</h3></div><span class="activityBadge">WEEK</span></div>
-    <div id="dashWeekActivity" class="dashWeekActivity"></div>
   </div>
   <div class="dashAiProGrid dashAiProGridSingle">
     <div class="panelCard dashTodayMission">
@@ -801,6 +807,7 @@
 <script src="js/ui-v254.js?v=25.5"></script>
 <script src="js/my-day-v255.js?v=25.7"></script>
 <script src="js/my-week-v256.js?v=25.7"></script>
-<script src="js/sidebar-v260.js"></script>
+<script src="js/sidebar-v260.js?v=26.2"></script>
+<script src="js/dashboard-v262.js?v=26.2"></script>
 </body>
 </html>
