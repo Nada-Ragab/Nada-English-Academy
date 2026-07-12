@@ -36,6 +36,7 @@ function rebuildCustomData(){
 function saveCustomTopics(){ localStorage.setItem('nada_custom_topics_v1', JSON.stringify(customTopics)); saveAllData(); }
 rebuildCustomData();
 let state = consolidatedData?.state || safeParse(localStorage.getItem('nada_v12_state'), {i:0,known:{},review:{},fav:{},xp:0,words:[],notes:[]});
+window.NadaAcademyData={get sentences(){return S;},get topics(){return T;},get state(){return state;}};
 let voices = [], currentQuiz = null, currentReview = null, daily = [];
 const $ = id => document.getElementById(id);
 function saveAllData(){ if(!storageAvailable()) return; const payload={version:APP_VERSION,savedAt:new Date().toISOString(),state,customTopics,hiddenBuiltInTopicIds,pinnedBuiltInTopicIds,dark:localStorage.getItem('nada_v13_dark')||'0',freeChatScenario:typeof freeChatScenario!=='undefined'?freeChatScenario:(localStorage.getItem('nada_freechat_scenario')||'general'),freeChatHistory:typeof freeChatHistory!=='undefined'?freeChatHistory:safeParse(localStorage.getItem('nada_freechat_history'),[])}; localStorage.setItem(APP_DATA_KEY,JSON.stringify(payload)); window.dispatchEvent(new CustomEvent('nada:data-changed')); }

@@ -973,3 +973,26 @@ body.dark .odooModuleCard .topicsScreenStart{background:color-mix(in srgb,var(--
   transform:none!important;animation:none!important;
 }
 .topicsScreenCard{will-change:auto!important;}
+
+/* V29.11 Playlist topic list and sentence audio buttons */
+.playlistLayout{display:grid;grid-template-columns:minmax(240px,320px) 1fr;gap:18px;align-items:start;margin-top:14px}
+.playlistTopicsPanel,.playlistSentencesPanel{border:1px solid #dce6f2;border-radius:18px;background:#fff;padding:14px}
+.playlistTopicsPanel{position:sticky;top:95px}
+.playlistTopicsPanel>label{display:block;font-weight:800;margin-bottom:8px}
+#playlistTopicSearch{width:100%;margin-bottom:10px}
+.playlistTopicList{display:flex;flex-direction:column;gap:7px;max-height:540px;overflow:auto;padding:3px}
+.playlistTopicRow{width:100%;border:1px solid #dce6f2;background:#f8fbff;border-radius:12px;padding:11px 12px;text-align:right;cursor:pointer;font:inherit;line-height:1.45}
+.playlistTopicRow:hover{border-color:#8b5cf6;background:#f4f0ff}
+.playlistTopicRow.active{border-color:#6d42e8;background:#ede7ff;box-shadow:0 0 0 2px rgba(109,66,232,.12)}
+.playlistSelectedHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px;padding:12px 14px;border-radius:14px;background:#f2f7fd}
+.playlistSettings{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.playlistSettings label{font-weight:700}
+.playlistSettings input{display:block;width:100%;margin-top:6px}
+#playlistOut{display:flex;flex-direction:column;gap:8px;max-height:620px;overflow:auto;padding:3px}
+#playlistOut .playItem{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;border:1px solid #dce6f2;border-radius:13px;padding:10px 12px;background:#fff}
+#playlistOut .playItem.playing{border-color:#2f6fed;background:#eaf3ff;box-shadow:0 0 0 2px rgba(47,111,237,.14)}
+.sentenceAudioBtn{width:42px;height:42px;border:none;border-radius:50%;background:#e8f1ff;color:#175cd3;cursor:pointer;font-size:19px;display:grid;place-items:center}
+.sentenceAudioBtn:hover{background:#d5e6ff}
+.sentenceText b,.sentenceText small{display:block}
+.sentenceText small{margin-top:4px;color:#5f6f85}
+@media(max-width:850px){.playlistLayout{grid-template-columns:1fr}.playlistTopicsPanel{position:static}.playlistTopicList{max-height:260px}.playlistSettings{grid-template-columns:1fr}}
